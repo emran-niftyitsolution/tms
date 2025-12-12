@@ -131,10 +131,10 @@ export default function EditCompanyPage() {
         requiredMark="optional"
       >
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-          <div className="space-y-8 lg:col-span-2">
+          <div className="lg:col-span-2">
             <Card
               bordered={false}
-              className="shadow-sm ring-1 ring-slate-100 dark:ring-slate-800"
+              className="mb-8 shadow-sm ring-1 ring-slate-100 dark:ring-slate-800"
               title={
                 <div className="flex items-center gap-2 text-slate-900 dark:text-white">
                   <FiInfo className="text-indigo-500" /> Basic Information
