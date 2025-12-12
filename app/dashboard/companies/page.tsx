@@ -1,17 +1,7 @@
 "use client";
 
-import {
-  Button,
-  Form,
-  Input,
-  InputNumber,
-  Modal,
-  Popconfirm,
-  Select,
-  Space,
-  Table,
-  Tag,
-} from "antd";
+import { Button, Popconfirm, Space, Table, Tag } from "antd";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { FiEdit2, FiPlus, FiTrash2 } from "react-icons/fi";
 import { toast } from "sonner";
@@ -28,9 +18,6 @@ type Company = {
 export default function CompaniesPage() {
   const [companies, setCompanies] = useState<Company[]>([]);
   const [loading, setLoading] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [form] = Form.useForm();
 
   const fetchCompanies = async () => {
     setLoading(true);
@@ -50,12 +37,6 @@ export default function CompaniesPage() {
     fetchCompanies();
   }, []);
 
-  const handleEdit = (record: Company) => {
-    setEditingId(record._id);
-    form.setFieldsValue(record);
-    setIsModalOpen(true);
-  };
-
   const handleDelete = async (id: string) => {
     try {
       const res = await fetch(`/api/companies/${id}`, {
@@ -69,45 +50,19 @@ export default function CompaniesPage() {
     }
   };
 
-  const handleFinish = async (values: any) => {
-    try {
-      const method = editingId ? "PUT" : "POST";
-      const url = editingId ? `/api/companies/${editingId}` : "/api/companies";
-
-      const res = await fetch(url, {
-        method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
-      });
-
-      if (!res.ok) throw new Error("Failed to save company");
-
-      toast.success(
-        editingId
-          ? "Company updated successfully"
-          : "Company created successfully"
-      );
-      setIsModalOpen(false);
-      form.resetFields();
-      setEditingId(null);
-      fetchCompanies();
-    } catch (error) {
-      toast.error("Operation failed");
-    }
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-    setEditingId(null);
-    form.resetFields();
-  };
-
   const columns = [
     {
       title: "Company Name",
       dataIndex: "name",
       key: "name",
-      render: (text: string) => <span style={{ fontWeight: 500 }}>{text}</span>,
+      render: (text: string, record: Company) => (
+        <Link
+          href={`/dashboard/companies/${record._id}`}
+          className="font-medium text-slate-900 hover:text-indigo-600 dark:text-white"
+        >
+          {text}
+        </Link>
+      ),
     },
     {
       title: "Type",
@@ -130,9 +85,10 @@ export default function CompaniesPage() {
     },
     {
       title: "Contact",
-      dataIndex: "contact",
+      dataIndex: "email", // Changed to show email or phone if available
       key: "contact",
-      render: (text: string) => text || "-",
+      render: (text: string, record: any) =>
+        record.email || record.phone || "-",
     },
     {
       title: "Status",
@@ -148,11 +104,9 @@ export default function CompaniesPage() {
       key: "action",
       render: (_: any, record: Company) => (
         <Space size="middle">
-          <Button
-            type="text"
-            icon={<FiEdit2 />}
-            onClick={() => handleEdit(record)}
-          />
+          <Link href={`/dashboard/companies/${record._id}`}>
+            <Button type="text" icon={<FiEdit2 />} />
+          </Link>
           <Popconfirm
             title="Delete the company"
             description="Are you sure to delete this company?"
@@ -174,33 +128,34 @@ export default function CompaniesPage() {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          marginBottom: 16,
+          marginBottom: 24,
         }}
       >
         <div>
-          <h2 style={{ margin: 0, fontSize: 20, fontWeight: 600 }}>
+          <h2 className="text-xl font-bold text-slate-900 dark:text-white">
             Companies
           </h2>
-          <p style={{ margin: 0, color: "#666", fontSize: 14 }}>
+          <p className="text-sm text-slate-500">
             Manage transport operators and partners
           </p>
         </div>
-        <Button
-          type="primary"
-          icon={<FiPlus />}
-          onClick={() => setIsModalOpen(true)}
-          style={{
-            background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
-            border: "none",
-            boxShadow: "0 4px 14px 0 rgba(99, 102, 241, 0.39)",
-            height: 40,
-            borderRadius: 8,
-            fontWeight: 600,
-            paddingInline: 24,
-          }}
-        >
-          Add Company
-        </Button>
+        <Link href="/dashboard/companies/new">
+          <Button
+            type="primary"
+            icon={<FiPlus />}
+            style={{
+              background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
+              border: "none",
+              boxShadow: "0 4px 14px 0 rgba(99, 102, 241, 0.39)",
+              height: 40,
+              borderRadius: 8,
+              fontWeight: 600,
+              paddingInline: 24,
+            }}
+          >
+            Add Company
+          </Button>
+        </Link>
       </div>
 
       <Table
@@ -210,86 +165,6 @@ export default function CompaniesPage() {
         loading={loading}
         pagination={{ pageSize: 8 }}
       />
-
-      <Modal
-        title={editingId ? "Edit Company" : "Add Company"}
-        open={isModalOpen}
-        onCancel={handleCancel}
-        footer={null}
-      >
-        <Form
-          form={form}
-          layout="vertical"
-          onFinish={handleFinish}
-          initialValues={{ status: "Active", routes: 0 }}
-        >
-          <Form.Item
-            name="name"
-            label="Company Name"
-            rules={[{ required: true, message: "Please enter company name" }]}
-          >
-            <Input placeholder="e.g. Green Line Paribahan" />
-          </Form.Item>
-
-          <div
-            style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}
-          >
-            <Form.Item
-              name="type"
-              label="Transport Type"
-              rules={[{ required: true, message: "Please select type" }]}
-            >
-              <Select placeholder="Select Type">
-                <Select.Option value="Bus">Bus</Select.Option>
-                <Select.Option value="Train">Train</Select.Option>
-                <Select.Option value="Air">Air</Select.Option>
-                <Select.Option value="Ship">Ship</Select.Option>
-              </Select>
-            </Form.Item>
-
-            <Form.Item name="status" label="Status">
-              <Select>
-                <Select.Option value="Active">Active</Select.Option>
-                <Select.Option value="Inactive">Inactive</Select.Option>
-              </Select>
-            </Form.Item>
-          </div>
-
-          <div
-            style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: 16 }}
-          >
-            <Form.Item name="routes" label="No. of Routes">
-              <InputNumber min={0} style={{ width: "100%" }} />
-            </Form.Item>
-
-            <Form.Item name="contact" label="Contact Info (Optional)">
-              <Input placeholder="Phone or Email" />
-            </Form.Item>
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "flex-end",
-              gap: 8,
-              marginTop: 16,
-            }}
-          >
-            <Button onClick={handleCancel}>Cancel</Button>
-            <Button
-              type="primary"
-              htmlType="submit"
-              style={{
-                background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
-                border: "none",
-                fontWeight: 600,
-              }}
-            >
-              {editingId ? "Update" : "Create"}
-            </Button>
-          </div>
-        </Form>
-      </Modal>
     </div>
   );
 }

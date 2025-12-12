@@ -21,9 +21,28 @@ const CompanySchema = new Schema(
       type: Number,
       default: 0,
     },
+    email: {
+      type: String,
+      trim: true,
+    },
+    phone: {
+      type: String,
+      trim: true,
+    },
+    // Detailed Address Fields
+    street: { type: String },
+    city: { type: String },
+    state: { type: String },
+    country: { type: String },
+    zip: { type: String },
+    
+    // Legacy single string (optional/computed)
     contact: {
       type: String,
       default: "",
+    },
+    license: {
+      type: String,
     },
   },
   {
@@ -35,4 +54,3 @@ const CompanySchema = new Schema(
 const Company = models.Company || model("Company", CompanySchema);
 
 export default Company;
-
