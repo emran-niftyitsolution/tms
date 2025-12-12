@@ -9,6 +9,7 @@ import {
   Menu,
   theme,
 } from "antd";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useMemo, useState } from "react";
@@ -32,6 +33,7 @@ export default function DashboardShell({
   const pathname = usePathname();
   const activeKey = getActiveKey(pathname);
   const [collapsed, setCollapsed] = useState(false);
+  const { data: session, status } = useSession();
 
   const { token } = theme.useToken();
   const siderWidth = collapsed ? 80 : 260;
@@ -41,6 +43,10 @@ export default function DashboardShell({
     if (activeKey === "companies") return [...base, { title: "Companies" }];
     return base;
   }, [activeKey]);
+
+  const userInitials = session?.user?.name
+    ? session.user.name.charAt(0).toUpperCase()
+    : "G";
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
@@ -57,85 +63,85 @@ export default function DashboardShell({
           height: "100vh",
           overflow: "auto",
           zIndex: 20,
-          background: token.colorBgElevated,
-          borderRight: `1px solid ${token.colorBorderSecondary}`,
+          background: "#0f172a", // Slate 900
+          borderRight: "1px solid #1e293b", // Slate 800
         }}
       >
-        <div style={{ padding: 16 }}>
+        <div style={{ padding: 24 }}>
           <Link
             href="/"
             style={{
               display: "flex",
               alignItems: "center",
-              gap: 10,
-              color: token.colorText,
+              gap: 12,
+              color: "#ffffff",
               textDecoration: "none",
             }}
           >
             <div
               style={{
-                width: 36,
-                height: 36,
-                borderRadius: 10,
+                width: 32,
+                height: 32,
+                borderRadius: 8,
                 display: "grid",
                 placeItems: "center",
                 fontWeight: 800,
                 color: "white",
-                background:
-                  "linear-gradient(135deg, rgb(99,102,241), rgb(34,211,238))",
+                background: "#6366f1", // Indigo 500
+                fontSize: 18,
               }}
             >
               T
             </div>
             {!collapsed ? (
-              <div style={{ lineHeight: 1.1 }}>
-                <div style={{ fontWeight: 700 }}>TMS Portal</div>
-                <div style={{ fontSize: 12, color: token.colorTextSecondary }}>
-                  Admin dashboard
-                </div>
+              <div style={{ lineHeight: 1.2 }}>
+                <div style={{ fontWeight: 600, fontSize: 16 }}>TMS Portal</div>
               </div>
             ) : null}
           </Link>
         </div>
 
         <Menu
+          theme="dark"
           mode="inline"
           selectedKeys={[activeKey]}
-          style={{ borderRight: 0 }}
+          style={{ borderRight: 0, background: "transparent" }}
           items={[
             {
               key: "dashboard",
-              icon: <LuLayoutDashboard size={18} />,
-              label: <Link href="/dashboard">Dashboard</Link>,
+              icon: <LuLayoutDashboard size={20} />,
+              label: <Link href="/dashboard">Overview</Link>,
             },
             {
               key: "companies",
-              icon: <LuBuilding2 size={18} />,
+              icon: <LuBuilding2 size={20} />,
               label: <Link href="/dashboard/companies">Companies</Link>,
             },
           ]}
         />
       </Sider>
 
-      <Layout style={{ marginInlineStart: siderWidth }}>
+      <Layout style={{ marginInlineStart: siderWidth, transition: "all 0.2s" }}>
         <Header
           style={{
             position: "sticky",
             top: 0,
             zIndex: 10,
-            padding: "0 16px",
+            padding: "0 24px",
             background: "#ffffff",
             borderBottom: `1px solid ${token.colorBorderSecondary}`,
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
+            height: 64,
           }}
         >
           <Button
             type="text"
             aria-label="Toggle sidebar"
-            icon={<FiMenu />}
+            icon={<FiMenu size={20} />}
             onClick={() => setCollapsed((v) => !v)}
+            style={{ marginLeft: -8 }}
           />
 
           <Dropdown
@@ -144,59 +150,75 @@ export default function DashboardShell({
                 { key: "profile", label: "Profile" },
                 { key: "settings", label: "Settings" },
                 { type: "divider" },
-                { key: "logout", label: "Logout" },
+                {
+                  key: "logout",
+                  label: "Logout",
+                  onClick: () => signOut({ callbackUrl: "/login" }),
+                },
               ],
             }}
             trigger={["click"]}
+            overlayStyle={{ minWidth: 160 }}
           >
             <Button
               type="text"
               aria-label="Open profile menu"
-              style={{ paddingInline: 10 }}
+              style={{ paddingInline: 8, height: 40 }}
             >
-              <span style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                <Avatar
-                  size="small"
-                  style={{
-                    background:
-                      "linear-gradient(135deg, rgb(99,102,241), rgb(34,211,238))",
-                  }}
-                >
-                  A
-                </Avatar>
-                <span
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    lineHeight: 1.1,
-                    textAlign: "left",
-                  }}
-                >
-                  <span style={{ fontWeight: 700, color: token.colorText }}>
-                    Admin
-                  </span>
-                  <span
-                    style={{ fontSize: 12, color: token.colorTextSecondary }}
+              <span style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                <div className="text-right hidden sm:block">
+                  <div
+                    style={{
+                      fontWeight: 600,
+                      color: token.colorText,
+                      fontSize: 13,
+                      lineHeight: 1.2,
+                    }}
                   >
-                    admin@tms.com
-                  </span>
-                </span>
+                    {status === "loading"
+                      ? "Loading..."
+                      : session?.user?.name || "Guest"}
+                  </div>
+                  <div
+                    style={{
+                      fontSize: 11,
+                      color: token.colorTextSecondary,
+                      lineHeight: 1.2,
+                    }}
+                  >
+                    {status === "loading" ? "..." : "Admin"}
+                  </div>
+                </div>
+                <Avatar
+                  size="default"
+                  src={session?.user?.image}
+                  style={{
+                    background: "#e0e7ff",
+                    color: "#4f46e5",
+                    verticalAlign: "middle",
+                    border: "2px solid #fff",
+                    boxShadow: "0 0 0 1px #e2e8f0",
+                  }}
+                >
+                  {userInitials}
+                </Avatar>
               </span>
             </Button>
           </Dropdown>
         </Header>
 
-        <Content style={{ padding: 16 }}>
-          <div style={{ marginBottom: 12 }}>
+        <Content
+          style={{
+            padding: "24px",
+            width: "100%",
+          }}
+        >
+          <div style={{ marginBottom: 24 }}>
             <Breadcrumb items={breadcrumbItems} />
           </div>
 
           <div
             style={{
-              borderRadius: 14,
-              background: token.colorBgContainer,
-              border: `1px solid ${token.colorBorderSecondary}`,
-              padding: 16,
               minHeight: "calc(100vh - 160px)",
             }}
           >
@@ -205,9 +227,14 @@ export default function DashboardShell({
         </Content>
 
         <Footer
-          style={{ textAlign: "center", color: token.colorTextSecondary }}
+          style={{
+            textAlign: "center",
+            color: token.colorTextSecondary,
+            background: "transparent",
+            padding: "24px 0",
+          }}
         >
-          © {new Date().getFullYear()} TMS Portal • Next.js + Ant Design
+          © {new Date().getFullYear()} TMS Portal
         </Footer>
       </Layout>
     </Layout>

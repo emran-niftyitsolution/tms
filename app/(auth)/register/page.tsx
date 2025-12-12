@@ -2,9 +2,57 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { FiGithub, FiLock, FiMail, FiUser } from "react-icons/fi";
+import { toast } from "sonner";
 
 export default function RegisterPage() {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setIsLoading(true);
+
+    const formData = new FormData(event.currentTarget);
+    const firstName = formData.get("firstName") as string;
+    const lastName = formData.get("lastName") as string;
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+
+    try {
+      const res = await fetch("/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: `${firstName} ${lastName}`.trim(),
+          email,
+          password,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || "Something went wrong");
+      }
+
+      toast.success("Account created! Redirecting to login...");
+      setTimeout(() => {
+        router.push("/login");
+      }, 1500);
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("An unknown error occurred");
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   return (
     <>
       <motion.div
@@ -33,26 +81,49 @@ export default function RegisterPage() {
         className="mt-8"
       >
         <div className="grid gap-6">
-          <form action="#" method="POST">
+          <form onSubmit={handleSubmit}>
             <div className="space-y-6">
-              <div className="group relative">
-                <label
-                  htmlFor="name"
-                  className="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1 ml-1"
-                >
-                  Full Name
-                </label>
-                <div className="relative flex items-center">
-                  <FiUser className="absolute left-4 h-5 w-5 text-slate-400 transition-colors group-focus-within:text-indigo-500" />
-                  <input
-                    id="name"
-                    name="name"
-                    type="text"
-                    autoComplete="name"
-                    required
-                    className="block w-full rounded-2xl border-0 bg-slate-50/50 py-4 pl-12 pr-4 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-200 placeholder:text-slate-400 focus:bg-white focus:ring-2 focus:ring-inset focus:ring-indigo-500 dark:bg-white/5 dark:text-white dark:ring-white/10 dark:focus:bg-white/10 dark:focus:ring-indigo-500 sm:text-sm sm:leading-6 transition-all"
-                    placeholder="John Doe"
-                  />
+              <div className="grid grid-cols-2 gap-4">
+                <div className="group relative">
+                  <label
+                    htmlFor="firstName"
+                    className="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1 ml-1"
+                  >
+                    First Name
+                  </label>
+                  <div className="relative flex items-center">
+                    <FiUser className="absolute left-4 h-5 w-5 text-slate-400 transition-colors group-focus-within:text-indigo-500" />
+                    <input
+                      id="firstName"
+                      name="firstName"
+                      type="text"
+                      autoComplete="given-name"
+                      required
+                      className="block w-full rounded-2xl border-0 bg-slate-50/50 py-4 pl-12 pr-4 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-200 placeholder:text-slate-400 focus:bg-white focus:ring-2 focus:ring-inset focus:ring-indigo-500 dark:bg-white/5 dark:text-white dark:ring-white/10 dark:focus:bg-white/10 dark:focus:ring-indigo-500 sm:text-sm sm:leading-6 transition-all"
+                      placeholder="John"
+                    />
+                  </div>
+                </div>
+
+                <div className="group relative">
+                  <label
+                    htmlFor="lastName"
+                    className="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1 ml-1"
+                  >
+                    Last Name
+                  </label>
+                  <div className="relative flex items-center">
+                    <FiUser className="absolute left-4 h-5 w-5 text-slate-400 transition-colors group-focus-within:text-indigo-500" />
+                    <input
+                      id="lastName"
+                      name="lastName"
+                      type="text"
+                      autoComplete="family-name"
+                      required
+                      className="block w-full rounded-2xl border-0 bg-slate-50/50 py-4 pl-12 pr-4 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-200 placeholder:text-slate-400 focus:bg-white focus:ring-2 focus:ring-inset focus:ring-indigo-500 dark:bg-white/5 dark:text-white dark:ring-white/10 dark:focus:bg-white/10 dark:focus:ring-indigo-500 sm:text-sm sm:leading-6 transition-all"
+                      placeholder="Doe"
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -103,9 +174,10 @@ export default function RegisterPage() {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   type="submit"
-                  className="flex w-full justify-center rounded-2xl bg-indigo-600 px-4 py-4 text-sm font-bold text-white shadow-lg shadow-indigo-500/30 hover:bg-indigo-700 hover:shadow-indigo-500/40 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900 transition-all"
+                  disabled={isLoading}
+                  className="flex w-full justify-center rounded-2xl bg-indigo-600 px-4 py-4 text-sm font-bold text-white shadow-lg shadow-indigo-500/30 hover:bg-indigo-700 hover:shadow-indigo-500/40 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Sign up
+                  {isLoading ? "Creating account..." : "Sign up"}
                 </motion.button>
               </div>
             </div>
@@ -123,11 +195,11 @@ export default function RegisterPage() {
           </div>
 
           <div className="flex flex-col gap-3">
-            <motion.a
+            <motion.button
               whileHover={{ scale: 1.01 }}
               whileTap={{ scale: 0.99 }}
-              href="#"
               className="relative flex items-center justify-center gap-3 rounded-2xl bg-white px-4 py-4 text-sm font-semibold text-slate-700 shadow-sm ring-1 ring-inset ring-slate-200 hover:bg-slate-50 dark:bg-white/5 dark:text-white dark:ring-white/10 dark:hover:bg-white/10 transition-all"
+              onClick={() => toast.info("Google login not implemented yet")}
             >
               <svg className="h-5 w-5" viewBox="0 0 24 24">
                 <path
@@ -148,17 +220,17 @@ export default function RegisterPage() {
                 />
               </svg>
               Sign up with Google
-            </motion.a>
+            </motion.button>
 
-            <motion.a
+            <motion.button
               whileHover={{ scale: 1.01 }}
               whileTap={{ scale: 0.99 }}
-              href="#"
               className="relative flex items-center justify-center gap-3 rounded-2xl bg-[#24292F] px-4 py-4 text-sm font-semibold text-white shadow-sm hover:bg-[#24292F]/90 dark:bg-white dark:text-black dark:hover:bg-white/90 transition-all"
+              onClick={() => toast.info("GitHub login not implemented yet")}
             >
               <FiGithub className="h-5 w-5" />
               Sign up with GitHub
-            </motion.a>
+            </motion.button>
           </div>
         </div>
       </motion.div>

@@ -2,9 +2,45 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { FiGithub, FiLock, FiMail } from "react-icons/fi";
+import { toast } from "sonner";
+import { signIn } from "next-auth/react";
 
 export default function LoginPage() {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setIsLoading(true);
+
+    const formData = new FormData(event.currentTarget);
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+
+    try {
+      const result = await signIn("credentials", {
+        redirect: false,
+        email,
+        password,
+      });
+
+      if (result?.error) {
+        toast.error("Invalid email or password");
+      } else {
+        toast.success("Welcome back!");
+        router.push("/dashboard");
+        router.refresh();
+      }
+    } catch (error) {
+      toast.error("An unknown error occurred");
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   return (
     <>
       <motion.div
@@ -33,7 +69,7 @@ export default function LoginPage() {
         className="mt-8"
       >
         <div className="grid gap-6">
-          <form action="#" method="POST">
+          <form onSubmit={handleSubmit}>
             <div className="space-y-6">
               <div className="group relative">
                 <label
@@ -108,9 +144,10 @@ export default function LoginPage() {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   type="submit"
-                  className="flex w-full justify-center rounded-2xl bg-indigo-600 px-4 py-4 text-sm font-bold text-white shadow-lg shadow-indigo-500/30 hover:bg-indigo-700 hover:shadow-indigo-500/40 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900 transition-all"
+                  disabled={isLoading}
+                  className="flex w-full justify-center rounded-2xl bg-indigo-600 px-4 py-4 text-sm font-bold text-white shadow-lg shadow-indigo-500/30 hover:bg-indigo-700 hover:shadow-indigo-500/40 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Sign in
+                  {isLoading ? "Signing in..." : "Sign in"}
                 </motion.button>
               </div>
             </div>
@@ -128,11 +165,11 @@ export default function LoginPage() {
           </div>
 
           <div className="flex flex-col gap-3">
-            <motion.a
+            <motion.button
               whileHover={{ scale: 1.01 }}
               whileTap={{ scale: 0.99 }}
-              href="#"
               className="relative flex items-center justify-center gap-3 rounded-2xl bg-white px-4 py-4 text-sm font-semibold text-slate-700 shadow-sm ring-1 ring-inset ring-slate-200 hover:bg-slate-50 dark:bg-white/5 dark:text-white dark:ring-white/10 dark:hover:bg-white/10 transition-all"
+              onClick={() => toast.info("Google login not implemented yet")}
             >
               <svg className="h-5 w-5" viewBox="0 0 24 24">
                 <path
@@ -153,17 +190,17 @@ export default function LoginPage() {
                 />
               </svg>
               Continue with Google
-            </motion.a>
+            </motion.button>
 
-            <motion.a
+            <motion.button
               whileHover={{ scale: 1.01 }}
               whileTap={{ scale: 0.99 }}
-              href="#"
               className="relative flex items-center justify-center gap-3 rounded-2xl bg-[#24292F] px-4 py-4 text-sm font-semibold text-white shadow-sm hover:bg-[#24292F]/90 dark:bg-white dark:text-black dark:hover:bg-white/90 transition-all"
+              onClick={() => toast.info("GitHub login not implemented yet")}
             >
               <FiGithub className="h-5 w-5" />
               Continue with GitHub
-            </motion.a>
+            </motion.button>
           </div>
         </div>
       </motion.div>

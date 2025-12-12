@@ -1,3 +1,8 @@
+"use client";
+
+import { motion } from "framer-motion";
+import { FiTrendingUp, FiTrendingDown, FiActivity, FiClock } from "react-icons/fi";
+
 type BookingStatus = "Paid" | "Pending" | "Cancelled";
 
 type Booking = {
@@ -71,8 +76,8 @@ function StatusPill({ status }: { status: BookingStatus }) {
     status === "Paid"
       ? "bg-emerald-500/10 text-emerald-700 ring-emerald-500/20 dark:text-emerald-300"
       : status === "Pending"
-        ? "bg-amber-500/10 text-amber-700 ring-amber-500/20 dark:text-amber-300"
-        : "bg-rose-500/10 text-rose-700 ring-rose-500/20 dark:text-rose-300";
+      ? "bg-amber-500/10 text-amber-700 ring-amber-500/20 dark:text-amber-300"
+      : "bg-rose-500/10 text-rose-700 ring-rose-500/20 dark:text-rose-300";
 
   return (
     <span
@@ -91,151 +96,224 @@ function StatCard({
   value,
   delta,
   hint,
+  icon: Icon,
+  trend,
 }: {
   label: string;
   value: string;
   delta: string;
   hint: string;
+  icon: any;
+  trend: "up" | "down";
 }) {
   return (
-    <div className="rounded-2xl border border-slate-200/70 bg-white/70 p-5 backdrop-blur dark:border-slate-800 dark:bg-slate-950/40">
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <div className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
-            {label}
-          </div>
-          <div className="mt-2 text-2xl font-semibold tracking-tight text-slate-900 dark:text-white">
-            {value}
-          </div>
+    <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:shadow-md dark:border-slate-800 dark:bg-slate-900">
+      <div className="flex items-center justify-between">
+        <div className="rounded-xl bg-slate-50 p-2 text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+          <Icon size={20} />
         </div>
-        <span className="rounded-full bg-slate-900 px-2.5 py-1 text-xs font-semibold text-white dark:bg-white dark:text-slate-900">
+        <div
+          className={`flex items-center gap-1 rounded-full px-2 py-1 text-xs font-medium ${
+            trend === "up"
+              ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400"
+              : "bg-rose-50 text-rose-700 dark:bg-rose-500/10 dark:text-rose-400"
+          }`}
+        >
+          {trend === "up" ? <FiTrendingUp /> : <FiTrendingDown />}
           {delta}
-        </span>
+        </div>
       </div>
-      <div className="mt-3 text-sm text-slate-600 dark:text-slate-400">
-        {hint}
+      <div className="mt-4">
+        <div className="text-sm font-medium text-slate-500 dark:text-slate-400">
+          {label}
+        </div>
+        <div className="mt-1 text-2xl font-bold text-slate-900 dark:text-white">
+          {value}
+        </div>
       </div>
+      <div className="mt-4 text-xs text-slate-400">{hint}</div>
     </div>
   );
 }
 
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
+
+const item = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0 },
+};
+
 export default function DashboardPage() {
   return (
-    <div>
+    <motion.div
+      variants={container}
+      initial="hidden"
+      animate="show"
+      className="space-y-6"
+    >
       {/* Stats */}
-      <div className="grid gap-4 sm:grid-cols-2">
+      <motion.div variants={item} className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard
-          label="Bookings (7d)"
+          label="Total Bookings"
           value="1,284"
-          delta="+12%"
-          hint="Strong week-over-week growth across all modes."
+          delta="12%"
+          trend="up"
+          hint="Compared to last week"
+          icon={FiActivity}
         />
         <StatCard
-          label="Revenue (7d)"
+          label="Total Revenue"
           value="$38,420"
-          delta="+8%"
-          hint="Higher AOV driven by air & premium cabins."
+          delta="8%"
+          trend="up"
+          hint="Compared to last week"
+          icon={FiTrendingUp}
         />
         <StatCard
-          label="Conversion"
-          value="3.8%"
-          delta="+0.4%"
-          hint="Hero search improvements are paying off."
+          label="Avg. Order Value"
+          value="$142"
+          delta="2%"
+          trend="down"
+          hint="Compared to last week"
+          icon={FiTrendingDown}
         />
         <StatCard
-          label="Support SLA"
-          value="92%"
-          delta="+3%"
-          hint="Median response time: 12m (last 24h)."
+          label="Pending Requests"
+          value="18"
+          delta="5%"
+          trend="up"
+          hint="Requires attention"
+          icon={FiClock}
         />
-      </div>
+      </motion.div>
 
-      {/* Mini chart card (static visual) */}
-      <div className="mt-6 overflow-hidden rounded-2xl border border-slate-200/70 bg-white/70 backdrop-blur dark:border-slate-800 dark:bg-slate-950/40">
-        <div className="flex items-center justify-between gap-4 p-5">
-          <div>
-            <div className="text-sm font-semibold text-slate-900 dark:text-white">
-              Demand trend
+      <div className="grid gap-6 lg:grid-cols-3">
+        {/* Demand Chart */}
+        <motion.div
+          variants={item}
+          className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 lg:col-span-2"
+        >
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h3 className="text-base font-semibold text-slate-900 dark:text-white">
+                Demand Overview
+              </h3>
+              <p className="text-sm text-slate-500">Booking traffic over the last 14 days</p>
             </div>
-            <div className="mt-1 text-sm text-slate-600 dark:text-slate-400">
-              Last 14 days (visual placeholder)
-            </div>
+            <span className="rounded-full bg-indigo-50 px-3 py-1 text-xs font-medium text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-400">
+              +18% Peak
+            </span>
           </div>
-          <span className="rounded-full bg-indigo-500/10 px-3 py-1 text-xs font-semibold text-indigo-700 ring-1 ring-indigo-500/20 dark:text-indigo-300">
-            +18% peak
-          </span>
-        </div>
-        <div className="px-5 pb-5">
-          <div className="grid h-28 grid-cols-14 items-end gap-1">
-            {demandTrend.map((x) => (
-              <div
+          
+          <div className="grid h-48 grid-cols-14 items-end gap-2 sm:gap-4">
+            {demandTrend.map((x, i) => (
+              <motion.div
                 key={x.day}
-                className="rounded-full bg-gradient-to-t from-indigo-500/60 via-sky-500/40 to-cyan-400/30"
-                style={{ height: `${x.height}%` }}
-                aria-hidden="true"
-              />
+                initial={{ height: 0 }}
+                animate={{ height: `${x.height}%` }}
+                transition={{ duration: 0.5, delay: i * 0.05 }}
+                className="relative group w-full rounded-t-lg bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-500/20 dark:hover:bg-indigo-500/30 transition-colors"
+              >
+                <div
+                  className="absolute bottom-0 w-full rounded-t-lg bg-indigo-500 dark:bg-indigo-500"
+                  style={{ height: "40%", opacity: 0.8 }}
+                />
+              </motion.div>
             ))}
           </div>
-        </div>
+        </motion.div>
+
+        {/* Tasks / Activity */}
+        <motion.div
+          variants={item}
+          className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900"
+        >
+          <h3 className="text-base font-semibold text-slate-900 dark:text-white mb-4">
+            Action Items
+          </h3>
+          <div className="space-y-3">
+             {[
+               { title: "Review pending refunds", time: "2h ago", color: "bg-orange-500" },
+               { title: "Update holiday pricing", time: "5h ago", color: "bg-blue-500" },
+               { title: "Check server logs", time: "1d ago", color: "bg-emerald-500" },
+               { title: "Onboard new operator", time: "1d ago", color: "bg-purple-500" },
+             ].map((task, i) => (
+               <div key={i} className="flex items-center gap-3 rounded-xl p-3 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                 <div className={`h-2 w-2 rounded-full ${task.color}`} />
+                 <div className="flex-1">
+                   <div className="text-sm font-medium text-slate-900 dark:text-white">{task.title}</div>
+                   <div className="text-xs text-slate-500">{task.time}</div>
+                 </div>
+                 <div className="h-6 w-6 rounded-full border border-slate-200 flex items-center justify-center text-slate-400 hover:border-indigo-500 hover:text-indigo-500 transition-colors cursor-pointer">
+                    →
+                 </div>
+               </div>
+             ))}
+          </div>
+        </motion.div>
       </div>
 
       {/* Recent bookings */}
-      <div
-        id="bookings"
-        className="mt-6 rounded-2xl border border-slate-200/70 bg-white/70 p-5 backdrop-blur dark:border-slate-800 dark:bg-slate-950/40"
+      <motion.div
+        variants={item}
+        className="rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900 overflow-hidden"
       >
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+        <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100 dark:border-slate-800">
           <div>
-            <div className="text-sm font-semibold text-slate-900 dark:text-white">
-              Recent bookings
-            </div>
-            <div className="mt-1 text-sm text-slate-600 dark:text-slate-400">
-              Latest activity across bus, train, air & ship.
-            </div>
+            <h3 className="text-base font-semibold text-slate-900 dark:text-white">
+              Recent Bookings
+            </h3>
           </div>
-          <a
-            href="#bookings"
-            className="text-sm font-semibold text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
-          >
-            View all →
-          </a>
+          <button className="text-sm font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400">
+            View all
+          </button>
         </div>
 
-        <div className="mt-4 overflow-x-auto">
-          <table className="w-full min-w-[720px] text-left text-sm">
-            <thead className="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-sm">
+            <thead className="bg-slate-50 text-xs uppercase font-medium text-slate-500 dark:bg-slate-800/50 dark:text-slate-400">
               <tr>
-                <th className="py-2 pr-4">Booking</th>
-                <th className="py-2 pr-4">Customer</th>
-                <th className="py-2 pr-4">Route</th>
-                <th className="py-2 pr-4">Mode</th>
-                <th className="py-2 pr-4">Date</th>
-                <th className="py-2 pr-4">Amount</th>
-                <th className="py-2 pr-0">Status</th>
+                <th className="px-6 py-3">Booking ID</th>
+                <th className="px-6 py-3">Customer</th>
+                <th className="px-6 py-3">Route</th>
+                <th className="px-6 py-3">Mode</th>
+                <th className="px-6 py-3">Date</th>
+                <th className="px-6 py-3">Amount</th>
+                <th className="px-6 py-3">Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-200/70 dark:divide-slate-800">
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
               {bookings.map((b) => (
-                <tr key={b.id} className="align-middle">
-                  <td className="py-3 pr-4 font-semibold text-slate-900 dark:text-white">
+                <tr key={b.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
+                  <td className="px-6 py-4 font-medium text-indigo-600 dark:text-indigo-400">
                     {b.id}
                   </td>
-                  <td className="py-3 pr-4 text-slate-700 dark:text-slate-300">
+                  <td className="px-6 py-4 font-medium text-slate-900 dark:text-white">
                     {b.customer}
                   </td>
-                  <td className="py-3 pr-4 text-slate-700 dark:text-slate-300">
+                  <td className="px-6 py-4 text-slate-600 dark:text-slate-400">
                     {b.route}
                   </td>
-                  <td className="py-3 pr-4 text-slate-700 dark:text-slate-300">
-                    {b.mode}
+                  <td className="px-6 py-4">
+                    <span className="inline-flex items-center rounded-md bg-slate-100 px-2 py-1 text-xs font-medium text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+                      {b.mode}
+                    </span>
                   </td>
-                  <td className="py-3 pr-4 text-slate-700 dark:text-slate-300">
+                  <td className="px-6 py-4 text-slate-600 dark:text-slate-400">
                     {b.date}
                   </td>
-                  <td className="py-3 pr-4 font-semibold text-slate-900 dark:text-white">
+                  <td className="px-6 py-4 font-medium text-slate-900 dark:text-white">
                     {b.amount}
                   </td>
-                  <td className="py-3 pr-0">
+                  <td className="px-6 py-4">
                     <StatusPill status={b.status} />
                   </td>
                 </tr>
@@ -243,74 +321,7 @@ export default function DashboardPage() {
             </tbody>
           </table>
         </div>
-      </div>
-
-      {/* Bottom grid */}
-      <div className="mt-6 grid gap-4 lg:grid-cols-2">
-        <div className="rounded-2xl border border-slate-200/70 bg-white/70 p-5 backdrop-blur dark:border-slate-800 dark:bg-slate-950/40">
-          <div className="text-sm font-semibold text-slate-900 dark:text-white">
-            Operator health
-          </div>
-          <div className="mt-1 text-sm text-slate-600 dark:text-slate-400">
-            High-signal checks to keep quality premium.
-          </div>
-
-          <div className="mt-4 grid gap-3">
-            {[
-              { k: "On-time performance", v: "89%", s: "Good" },
-              { k: "Payment success", v: "98.4%", s: "Excellent" },
-              { k: "Refund turnaround", v: "2.1d", s: "Good" },
-            ].map((x) => (
-              <div
-                key={x.k}
-                className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3 dark:border-slate-800 dark:bg-slate-950"
-              >
-                <div>
-                  <div className="text-sm font-semibold text-slate-900 dark:text-white">
-                    {x.k}
-                  </div>
-                  <div className="text-xs text-slate-600 dark:text-slate-400">
-                    Status: {x.s}
-                  </div>
-                </div>
-                <div className="text-sm font-semibold text-slate-900 dark:text-white">
-                  {x.v}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="rounded-2xl border border-slate-200/70 bg-white/70 p-5 backdrop-blur dark:border-slate-800 dark:bg-slate-950/40">
-          <div className="text-sm font-semibold text-slate-900 dark:text-white">
-            Tasks
-          </div>
-          <div className="mt-1 text-sm text-slate-600 dark:text-slate-400">
-            Keep the product moving (mock).
-          </div>
-
-          <div className="mt-4 grid gap-2 text-sm">
-            {[
-              "Add real booking API integration",
-              "Connect payment provider webhooks",
-              "Build operator onboarding flow",
-              "Add seat-map UI (bus/train)",
-            ].map((t) => (
-              <div
-                key={t}
-                className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3 dark:border-slate-800 dark:bg-slate-950"
-              >
-                <span className="font-semibold text-slate-900 dark:text-white">
-                  {t}
-                </span>
-                <span className="text-slate-500 dark:text-slate-400">→</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
-
-
