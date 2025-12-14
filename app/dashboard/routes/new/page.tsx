@@ -330,13 +330,13 @@ export default function NewRoutePage() {
                                   paddingTop: 4,
                                 }}
                               >
-                                <Button
-                                  type="text"
-                                  danger
-                                  size="small"
-                                  icon={<FiTrash2 />}
+                                <button
+                                  className="flex cursor-pointer items-center justify-center rounded-full bg-red-600 p-2 text-white transition-colors hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800"
+                                  title="Delete"
                                   onClick={() => remove(field.name)}
-                                />
+                                >
+                                  <FiTrash2 className="h-4 w-4 text-white" />
+                                </button>
                               </div>
                             ),
                           },

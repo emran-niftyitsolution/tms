@@ -7,6 +7,7 @@ import { useEffect, useState, use } from "react";
 import { FiCalendar, FiInfo, FiUsers, FiSave } from "react-icons/fi";
 import { toast } from "sonner";
 import dayjs from "dayjs";
+import { FormLoader } from "../../components/Loader";
 
 export default function ScheduleDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();
@@ -75,8 +76,7 @@ export default function ScheduleDetailPage({ params }: { params: Promise<{ id: s
     }
   };
 
-  if (loading) return <div className="flex items-center justify-center py-12">Loading...</div>;
-  if (!schedule) return <div className="text-center py-12">Schedule not found</div>;
+  if (!schedule && !loading) return <div className="text-center py-12">Schedule not found</div>;
 
   return (
     <div className="max-w-7xl mx-auto">
@@ -84,7 +84,7 @@ export default function ScheduleDetailPage({ params }: { params: Promise<{ id: s
         items={[
           { title: <Link href="/dashboard">Dashboard</Link> },
           { title: <Link href="/dashboard/schedules">Schedules</Link> },
-          { title: `Trip ${dayjs(schedule.departureTime).format("MMM D, YYYY")}` },
+          { title: schedule ? `Trip ${dayjs(schedule.departureTime).format("MMM D, YYYY")}` : "Loading..." },
         ]}
         className="mb-4"
       />
@@ -96,18 +96,22 @@ export default function ScheduleDetailPage({ params }: { params: Promise<{ id: s
               Trip Schedule
             </h1>
             <p className="mt-1 text-sm text-slate-500">
-              {dayjs(schedule.departureTime).format("MMMM D, YYYY [at] h:mm A")}
+              {schedule ? dayjs(schedule.departureTime).format("MMMM D, YYYY [at] h:mm A") : "Loading schedule details..."}
             </p>
-            <div className="mt-3 flex items-center gap-3">
-              <Tag color={schedule.status === "Scheduled" ? "blue" : schedule.status === "Completed" ? "success" : "default"}>
-                {schedule.status}
-              </Tag>
+            {schedule && (
+              <div className="mt-3 flex items-center gap-3">
+                <Tag color={schedule.status === "Scheduled" ? "blue" : schedule.status === "Completed" ? "success" : "default"}>
+                  {schedule.status}
+                </Tag>
+              </div>
+            )}
+          </div>
+          {schedule && (
+            <div className="text-right">
+              <div className="text-sm text-slate-500">Ticket Price</div>
+              <div className="text-2xl font-bold">৳{schedule.price?.toLocaleString()}</div>
             </div>
-          </div>
-          <div className="text-right">
-            <div className="text-sm text-slate-500">Ticket Price</div>
-            <div className="text-2xl font-bold">৳{schedule.price?.toLocaleString()}</div>
-          </div>
+          )}
         </div>
       </div>
 
@@ -183,25 +187,27 @@ export default function ScheduleDetailPage({ params }: { params: Promise<{ id: s
             ),
             children: (
               <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100 dark:bg-black dark:ring-slate-800">
-                <Form form={form} layout="vertical" onFinish={onScheduleUpdate}>
-                  <div className="grid gap-6 md:grid-cols-2">
-                    <Form.Item name="price" label="Ticket Price (৳)" rules={[{ required: true }]}>
-                      <InputNumber min={0} style={{ width: "100%" }} size="large" />
-                    </Form.Item>
-                    <Form.Item name="status" label="Status">
-                      <Select size="large" options={[
-                        { label: "Scheduled", value: "Scheduled" },
-                        { label: "Delayed", value: "Delayed" },
-                        { label: "Completed", value: "Completed" },
-                        { label: "Cancelled", value: "Cancelled" },
-                      ]} />
-                    </Form.Item>
-                  </div>
-                  <div className="mt-6 flex justify-end gap-4">
-                    <Button size="large" onClick={() => router.back()}>Cancel</Button>
-                    <Button type="primary" htmlType="submit" size="large" icon={<FiSave />}>Update Schedule</Button>
-                  </div>
-                </Form>
+                <FormLoader loading={loading}>
+                  <Form form={form} layout="vertical" onFinish={onScheduleUpdate}>
+                    <div className="grid gap-6 md:grid-cols-2">
+                      <Form.Item name="price" label="Ticket Price (৳)" rules={[{ required: true }]}>
+                        <InputNumber min={0} style={{ width: "100%" }} size="large" />
+                      </Form.Item>
+                      <Form.Item name="status" label="Status">
+                        <Select size="large" options={[
+                          { label: "Scheduled", value: "Scheduled" },
+                          { label: "Delayed", value: "Delayed" },
+                          { label: "Completed", value: "Completed" },
+                          { label: "Cancelled", value: "Cancelled" },
+                        ]} />
+                      </Form.Item>
+                    </div>
+                    <div className="mt-6 flex justify-end gap-4">
+                      <Button size="large" onClick={() => router.back()}>Cancel</Button>
+                      <Button type="primary" htmlType="submit" size="large" icon={<FiSave />}>Update Schedule</Button>
+                    </div>
+                  </Form>
+                </FormLoader>
               </div>
             ),
           },

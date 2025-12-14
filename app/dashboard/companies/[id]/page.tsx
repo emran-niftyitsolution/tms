@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FiInfo, FiMapPin, FiSave, FiSettings, FiTrash2 } from "react-icons/fi";
 import { toast } from "sonner";
+import { Loader } from "../../components/Loader";
 
 export default function EditCompanyPage() {
   const router = useRouter();
@@ -66,14 +67,6 @@ export default function EditCompanyPage() {
     }
   };
 
-  if (fetching) {
-    return (
-      <div className="flex h-64 items-center justify-center">
-        <Spin size="large" />
-      </div>
-    );
-  }
-
   return (
     <div style={{ maxWidth: 1000, margin: "0 auto" }}>
       <div className="mb-8 flex items-center justify-between">
@@ -91,10 +84,11 @@ export default function EditCompanyPage() {
             icon={<FiTrash2 />}
             onClick={handleDelete}
             size="large"
+            disabled={fetching}
           >
             Delete
           </Button>
-          <Button onClick={() => router.back()} size="large">
+          <Button onClick={() => router.back()} size="large" disabled={fetching}>
             Cancel
           </Button>
           <Button
@@ -103,6 +97,7 @@ export default function EditCompanyPage() {
             loading={loading}
             icon={<FiSave />}
             size="large"
+            disabled={fetching}
             style={{
               background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
               border: "none",
@@ -114,12 +109,13 @@ export default function EditCompanyPage() {
         </Space>
       </div>
 
-      <Form
-        form={form}
-        layout="vertical"
-        onFinish={handleFinish}
-        requiredMark="optional"
-      >
+      <FormLoader loading={fetching}>
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={handleFinish}
+          requiredMark="optional"
+        >
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           <div className="lg:col-span-2">
             <div className="mb-8 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100 dark:bg-black dark:ring-slate-800">
@@ -309,6 +305,7 @@ export default function EditCompanyPage() {
           </div>
         </div>
       </Form>
+      </FormLoader>
     </div>
   );
 }

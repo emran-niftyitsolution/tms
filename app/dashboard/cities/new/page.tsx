@@ -73,6 +73,22 @@ export default function NewCityPage() {
         <Form form={form} layout="vertical" onFinish={onFinish}>
           <div className="grid gap-6 md:grid-cols-2">
             <Form.Item
+              name="company"
+              label={<span className="font-medium text-slate-600">Company</span>}
+              rules={[{ required: true, message: "Company is required" }]}
+              className="md:col-span-2"
+            >
+              <Select
+                size="large"
+                placeholder="Select company"
+                className="rounded-lg"
+                showSearch
+                optionFilterProp="label"
+                options={companies}
+              />
+            </Form.Item>
+
+            <Form.Item
               name="name"
               label={<span className="font-medium text-slate-600">City Name</span>}
               rules={[{ required: true, message: "City name is required" }]}
@@ -94,21 +110,6 @@ export default function NewCityPage() {
                 placeholder="e.g. DAC"
                 className="rounded-lg"
                 style={{ textTransform: "uppercase" }}
-              />
-            </Form.Item>
-
-            <Form.Item
-              name="company"
-              label={<span className="font-medium text-slate-600">Company</span>}
-              rules={[{ required: true, message: "Company is required" }]}
-            >
-              <Select
-                size="large"
-                placeholder="Select company"
-                className="rounded-lg"
-                showSearch
-                optionFilterProp="label"
-                options={companies}
               />
             </Form.Item>
 

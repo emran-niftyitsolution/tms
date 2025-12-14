@@ -18,6 +18,7 @@ import { use, useEffect, useState } from "react";
 import { FiCalendar, FiInfo, FiPlus, FiTrash2 } from "react-icons/fi";
 import { toast } from "sonner";
 import { RouteSchedulesTab } from "../components/RouteSchedulesTab";
+import { FormLoader } from "../../components/Loader";
 
 export default function RouteDetailPage({
   params,
@@ -149,11 +150,7 @@ export default function RouteDetailPage({
     }
   };
 
-  if (loading)
-    return (
-      <div className="flex items-center justify-center py-12">Loading...</div>
-    );
-  if (!route) return <div className="text-center py-12">Route not found</div>;
+  if (!route && !loading) return <div className="text-center py-12">Route not found</div>;
 
   return (
     <div className="max-w-7xl mx-auto">
@@ -161,7 +158,7 @@ export default function RouteDetailPage({
         items={[
           { title: <Link href="/dashboard">Dashboard</Link> },
           { title: <Link href="/dashboard/routes">Routes</Link> },
-          { title: route.name },
+          { title: route?.name || "Loading..." },
         ]}
         className="mb-4"
       />
@@ -170,10 +167,10 @@ export default function RouteDetailPage({
         <div className="flex items-start justify-between">
           <div>
             <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
-              {route.name}
+              {route?.name || "Loading..."}
             </h1>
             <p className="mt-1 text-sm text-slate-500">
-              {route.from?.name || route.from} → {route.to?.name || route.to}
+              {route ? `${route.from?.name || route.from} → ${route.to?.name || route.to}` : "Loading route details..."}
             </p>
           </div>
         </div>
@@ -192,7 +189,8 @@ export default function RouteDetailPage({
             ),
             children: (
               <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100 dark:bg-black dark:ring-slate-800">
-                <Form form={form} layout="vertical" onFinish={onRouteUpdate}>
+                <FormLoader loading={loading}>
+                  <Form form={form} layout="vertical" onFinish={onRouteUpdate}>
                   <div className="grid gap-6 md:grid-cols-2">
                     <Form.Item
                       name="company"
@@ -416,13 +414,13 @@ export default function RouteDetailPage({
                                           paddingTop: 4,
                                         }}
                                       >
-                                        <Button
-                                          type="text"
-                                          danger
-                                          size="small"
-                                          icon={<FiTrash2 />}
+                                        <button
+                                          className="flex cursor-pointer items-center justify-center rounded-full bg-red-600 p-2 text-white transition-colors hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800"
+                                          title="Delete"
                                           onClick={() => remove(field.name)}
-                                        />
+                                        >
+                                          <FiTrash2 className="h-4 w-4 text-white" />
+                                        </button>
                                       </div>
                                     ),
                                   },
@@ -463,6 +461,7 @@ export default function RouteDetailPage({
                     </Button>
                   </div>
                 </Form>
+                </FormLoader>
               </div>
             ),
           },

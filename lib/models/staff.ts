@@ -9,7 +9,7 @@ const StaffSchema = new Schema(
     },
     role: {
       type: String,
-      enum: ["Driver", "Helper", "Supervisor", "Guide", "Captain", "Pilot", "Attendant"],
+      enum: ["Driver", "Helper", "Supervisor", "Guide"],
       required: [true, "Role is required"],
     },
     contactNumber: {
