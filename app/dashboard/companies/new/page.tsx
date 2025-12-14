@@ -1,15 +1,6 @@
 "use client";
 
-import {
-  Button,
-  Card,
-  Divider,
-  Form,
-  Input,
-  InputNumber,
-  Select,
-  Space,
-} from "antd";
+import { Button, Divider, Form, Input, Select, Space } from "antd";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FiInfo, FiMapPin, FiSave, FiSettings } from "react-icons/fi";
@@ -20,7 +11,7 @@ export default function NewCompanyPage() {
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
 
-  const handleFinish = async (values: any) => {
+  const handleFinish = async (values: unknown) => {
     setLoading(true);
     try {
       const res = await fetch("/api/companies", {
@@ -33,7 +24,7 @@ export default function NewCompanyPage() {
 
       toast.success("Company created successfully");
       router.push("/dashboard/companies");
-    } catch (error) {
+    } catch {
       toast.error("Failed to create company");
     } finally {
       setLoading(false);
@@ -76,20 +67,15 @@ export default function NewCompanyPage() {
         form={form}
         layout="vertical"
         onFinish={handleFinish}
-        initialValues={{ status: "Active", routes: 0, country: "Bangladesh" }}
+        initialValues={{ status: "Active", country: "Bangladesh" }}
         requiredMark="optional"
       >
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           <div className="lg:col-span-2">
-            <Card
-              bordered={false}
-              className="mb-8 shadow-sm ring-1 ring-slate-100 dark:ring-slate-800"
-              title={
-                <div className="flex items-center gap-2 text-slate-900 dark:text-white">
-                  <FiInfo className="text-indigo-500" /> Basic Information
-                </div>
-              }
-            >
+            <div className="mb-8 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100 dark:bg-black dark:ring-slate-800">
+              <div className="mb-6 flex items-center gap-2 border-b border-slate-100 pb-4 text-lg font-semibold text-slate-900 dark:border-slate-800 dark:text-white">
+                <FiInfo className="text-indigo-500" /> Basic Information
+              </div>
               <div className="grid grid-cols-1 gap-x-6 gap-y-2 md:grid-cols-2">
                 <div className="md:col-span-2">
                   <Form.Item
@@ -108,57 +94,13 @@ export default function NewCompanyPage() {
                     />
                   </Form.Item>
                 </div>
-                <div>
-                  <Form.Item
-                    name="type"
-                    label={
-                      <span className="font-medium text-slate-600">
-                        Transport Type
-                      </span>
-                    }
-                    rules={[{ required: true, message: "Required" }]}
-                  >
-                    <Select
-                      placeholder="Select Type"
-                      size="large"
-                      className="rounded-lg"
-                    >
-                      <Select.Option value="Bus">Bus</Select.Option>
-                      <Select.Option value="Train">Train</Select.Option>
-                      <Select.Option value="Air">Air</Select.Option>
-                      <Select.Option value="Ship">Ship</Select.Option>
-                    </Select>
-                  </Form.Item>
-                </div>
-                <div>
-                  <Form.Item
-                    name="routes"
-                    label={
-                      <span className="font-medium text-slate-600">
-                        Initial Routes
-                      </span>
-                    }
-                  >
-                    <InputNumber
-                      min={0}
-                      style={{ width: "100%" }}
-                      size="large"
-                      className="rounded-lg"
-                    />
-                  </Form.Item>
-                </div>
               </div>
-            </Card>
+            </div>
 
-            <Card
-              bordered={false}
-              className="shadow-sm ring-1 ring-slate-100 dark:ring-slate-800"
-              title={
-                <div className="flex items-center gap-2 text-slate-900 dark:text-white">
-                  <FiMapPin className="text-indigo-500" /> Location & Contact
-                </div>
-              }
-            >
+            <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100 dark:bg-black dark:ring-slate-800">
+              <div className="mb-6 flex items-center gap-2 border-b border-slate-100 pb-4 text-lg font-semibold text-slate-900 dark:border-slate-800 dark:text-white">
+                <FiMapPin className="text-indigo-500" /> Location & Contact
+              </div>
               <div className="grid grid-cols-1 gap-x-6 gap-y-2 md:grid-cols-2">
                 <div>
                   <Form.Item
@@ -277,19 +219,14 @@ export default function NewCompanyPage() {
                   </Form.Item>
                 </div>
               </div>
-            </Card>
+            </div>
           </div>
 
           <div className="lg:col-span-1">
-            <Card
-              bordered={false}
-              className="mb-6 shadow-sm ring-1 ring-slate-100 dark:ring-slate-800"
-              title={
-                <div className="flex items-center gap-2 text-slate-900 dark:text-white">
-                  <FiSettings className="text-indigo-500" /> Settings
-                </div>
-              }
-            >
+            <div className="mb-6 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100 dark:bg-black dark:ring-slate-800">
+              <div className="mb-6 flex items-center gap-2 border-b border-slate-100 pb-4 text-lg font-semibold text-slate-900 dark:border-slate-800 dark:text-white">
+                <FiSettings className="text-indigo-500" /> Settings
+              </div>
               <Form.Item
                 name="status"
                 label={
@@ -316,7 +253,7 @@ export default function NewCompanyPage() {
                   className="rounded-lg"
                 />
               </Form.Item>
-            </Card>
+            </div>
 
             <div className="rounded-lg bg-indigo-50 p-4 text-sm text-indigo-700 dark:bg-indigo-900/20 dark:text-indigo-300">
               <h4 className="mb-1 font-semibold">Pro Tip</h4>

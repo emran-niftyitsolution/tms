@@ -29,10 +29,17 @@ export function FeatureSection() {
     },
     {
       title: "Real-time Tracking",
-      description: "Know exactly where your bus or train is at all times.",
+      description: "Know exactly where your bus or train is at all times with live GPS updates.",
       header: <SkeletonFour />,
       icon: <FiTrendingUp className="h-4 w-4 text-neutral-500" />,
       className: "md:col-span-2",
+    },
+    {
+      title: "24/7 Support",
+      description: "Our customer service team is always ready to help you with any issues.",
+      header: <SkeletonFive />,
+      icon: <FiSmartphone className="h-4 w-4 text-neutral-500" />,
+      className: "md:col-span-1",
     },
   ];
 
@@ -106,6 +113,16 @@ const SkeletonFour = () => {
             transition={{ duration: 3, repeat: Infinity, repeatType: 'reverse' }}
             className="w-8 bg-neutral-300 dark:bg-neutral-700 rounded-t-lg" 
         />
+    </div>
+  );
+};
+const SkeletonFive = () => {
+  return (
+    <div className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl bg-gradient-to-br from-neutral-200 to-neutral-100 dark:from-neutral-900 dark:to-neutral-800 items-center justify-center">
+      <div className="relative">
+         <div className="absolute -inset-4 bg-indigo-500/20 rounded-full animate-ping"></div>
+         <FiSmartphone className="h-12 w-12 text-neutral-400 dark:text-neutral-600" />
+      </div>
     </div>
   );
 };

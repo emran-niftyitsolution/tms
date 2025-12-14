@@ -13,15 +13,53 @@ import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useMemo, useState } from "react";
-import { FiMenu } from "react-icons/fi";
-import { LuBuilding2, LuLayoutDashboard } from "react-icons/lu";
+import { FiBriefcase, FiMenu, FiUsers } from "react-icons/fi";
+import {
+  LuBuilding2,
+  LuBus,
+  LuLayoutDashboard,
+  LuPlane,
+  LuRoute,
+  LuShip,
+} from "react-icons/lu";
 
 const { Header, Sider, Content, Footer } = Layout;
 
-type MenuKey = "dashboard" | "companies";
+type MenuKey =
+  | "dashboard"
+  | "companies"
+  | "users"
+  | "staff"
+  | "cities"
+  | "stoppages"
+  | "buses"
+  | "routes"
+  | "schedules"
+  | "seat-classes"
+  | "seat-plans"
+  | "ships"
+  | "trains"
+  | "flights";
 
 function getActiveKey(pathname: string): MenuKey {
   if (pathname.startsWith("/dashboard/companies")) return "companies";
+  if (pathname.startsWith("/dashboard/users")) return "users";
+  if (pathname.startsWith("/dashboard/staff")) return "staff";
+
+  // Bus Management
+  if (pathname.startsWith("/dashboard/cities")) return "cities";
+  if (pathname.startsWith("/dashboard/stoppages")) return "stoppages";
+  if (pathname.startsWith("/dashboard/buses")) return "buses";
+  if (pathname.startsWith("/dashboard/routes")) return "routes";
+  if (pathname.startsWith("/dashboard/schedules")) return "schedules";
+  if (pathname.startsWith("/dashboard/seat-classes")) return "seat-classes";
+  if (pathname.startsWith("/dashboard/seat-plans")) return "seat-plans";
+
+  // Other Modes
+  if (pathname.startsWith("/dashboard/ships")) return "ships";
+  if (pathname.startsWith("/dashboard/trains")) return "trains";
+  if (pathname.startsWith("/dashboard/flights")) return "flights";
+
   return "dashboard";
 }
 
@@ -39,10 +77,33 @@ export default function DashboardShell({
   const siderWidth = collapsed ? 80 : 260;
 
   const breadcrumbItems = useMemo(() => {
-    const base = [{ title: "Dashboard" }];
-    if (activeKey === "companies") return [...base, { title: "Companies" }];
-    return base;
-  }, [activeKey]);
+    // Split pathname into segments
+    const segments = pathname.split("/").filter(Boolean);
+
+    // Map segments to breadcrumb items
+    const items = segments.map((segment, index) => {
+      // Build the url for this segment
+      const url = `/${segments.slice(0, index + 1).join("/")}`;
+
+      // Capitalize and format the title
+      const title =
+        segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, " ");
+
+      // If it's the last item, it shouldn't be a link
+      const isLast = index === segments.length - 1;
+
+      return {
+        title: isLast ? title : <Link href={url}>{title}</Link>,
+      };
+    });
+
+    // Always keep Dashboard as the root if we are in /dashboard,
+    // but the split logic handles "dashboard" as the first segment naturally.
+    // If you want "Home" > "Dashboard" structure, you can prepend it.
+
+    // Antd breadcrumb expects `title` which can be a ReactNode
+    return items;
+  }, [pathname]);
 
   const userInitials = session?.user?.name
     ? session.user.name.charAt(0).toUpperCase()
@@ -117,6 +178,91 @@ export default function DashboardShell({
               icon: <LuBuilding2 size={20} />,
               label: <Link href="/dashboard/companies">Companies</Link>,
             },
+            {
+              key: "users",
+              icon: <FiUsers size={20} />,
+              label: <Link href="/dashboard/users">Users</Link>,
+            },
+            {
+              key: "staff",
+              icon: <FiBriefcase size={20} />,
+              label: <Link href="/dashboard/staff">Staff & Crew</Link>,
+            },
+            {
+              type: "divider",
+            },
+            {
+              key: "bus-management",
+              icon: <LuBus size={20} />,
+              label: "Bus Management",
+              children: [
+                {
+                  key: "cities",
+                  label: <Link href="/dashboard/cities">Cities</Link>,
+                },
+                {
+                  key: "stoppages",
+                  label: <Link href="/dashboard/stoppages">Stoppages</Link>,
+                },
+                {
+                  key: "routes",
+                  label: <Link href="/dashboard/routes">Routes</Link>,
+                },
+                {
+                  key: "seat-classes",
+                  label: (
+                    <Link href="/dashboard/seat-classes">Seat Classes</Link>
+                  ),
+                },
+                {
+                  key: "seat-plans",
+                  label: <Link href="/dashboard/seat-plans">Seat Plans</Link>,
+                },
+                {
+                  key: "buses",
+                  label: <Link href="/dashboard/buses">Fleet (Buses)</Link>,
+                },
+                {
+                  key: "schedules",
+                  label: <Link href="/dashboard/schedules">Schedules</Link>,
+                },
+              ],
+            },
+            {
+              key: "ship-management",
+              icon: <LuShip size={20} />,
+              label: "Ship Management",
+              children: [
+                { key: "ships", label: "Fleet (Ships)" },
+                { key: "ship-routes", label: "Routes" },
+                { key: "ship-schedules", label: "Schedules" },
+                { key: "terminals", label: "Terminals" },
+                { key: "cabins", label: "Cabin/Seat Plans" },
+              ],
+            },
+            {
+              key: "train-management",
+              icon: <LuRoute size={20} />,
+              label: "Train Management",
+              children: [
+                { key: "trains", label: "Fleet (Trains)" },
+                { key: "train-routes", label: "Routes" },
+                { key: "train-schedules", label: "Schedules" },
+                { key: "stations", label: "Stations" },
+                { key: "coaches", label: "Coach Config" },
+              ],
+            },
+            {
+              key: "air-management",
+              icon: <LuPlane size={20} />,
+              label: "Flight Management",
+              children: [
+                { key: "flights", label: "Aircrafts" },
+                { key: "flight-routes", label: "Routes" },
+                { key: "flight-schedules", label: "Schedules" },
+                { key: "airports", label: "Airports" },
+              ],
+            },
           ]}
         />
       </Sider>
@@ -141,7 +287,12 @@ export default function DashboardShell({
             aria-label="Toggle sidebar"
             icon={<FiMenu size={20} />}
             onClick={() => setCollapsed((v) => !v)}
-            style={{ marginLeft: -8 }}
+            style={{
+              marginLeft: -8,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
           />
 
           <Dropdown
@@ -156,9 +307,9 @@ export default function DashboardShell({
                   onClick: () => signOut({ callbackUrl: "/login" }),
                 },
               ],
+              className: "min-w-[160px]",
             }}
             trigger={["click"]}
-            overlayStyle={{ minWidth: 160 }}
           >
             <Button
               type="text"
@@ -240,3 +391,4 @@ export default function DashboardShell({
     </Layout>
   );
 }
+

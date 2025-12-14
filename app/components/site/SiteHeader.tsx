@@ -44,7 +44,7 @@ export function SiteHeader({ transparent = false }: { transparent?: boolean }) {
         <div className="flex items-center gap-2">
           <Link
             href="/login"
-            className="inline-flex rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100"
+            className="inline-flex rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-indigo-700 shadow-lg shadow-indigo-500/20"
           >
             Sign in
           </Link>

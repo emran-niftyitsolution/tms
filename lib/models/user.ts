@@ -25,6 +25,20 @@ const UserSchema = new Schema(
     emailVerified: {
       type: Date,
     },
+    role: {
+      type: String,
+      enum: ["Admin", "Operator", "User"],
+      default: "User",
+    },
+    permissions: {
+      type: [String],
+      default: [],
+    },
+    company: {
+      type: Schema.Types.ObjectId,
+      ref: "Company",
+      required: false,
+    },
   },
   {
     timestamps: true,

@@ -7,19 +7,10 @@ const CompanySchema = new Schema(
       required: [true, "Company name is required"],
       trim: true,
     },
-    type: {
-      type: String,
-      enum: ["Bus", "Train", "Air", "Ship"],
-      required: [true, "Transport type is required"],
-    },
     status: {
       type: String,
       enum: ["Active", "Inactive"],
       default: "Active",
-    },
-    routes: {
-      type: Number,
-      default: 0,
     },
     email: {
       type: String,

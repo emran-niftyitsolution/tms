@@ -1,95 +1,106 @@
 import Link from "next/link";
+import { FiFacebook, FiTwitter, FiInstagram, FiLinkedin, FiSend } from "react-icons/fi";
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-white/10 bg-white/40 backdrop-blur dark:bg-black/30">
-      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-        <div className="grid gap-8 md:grid-cols-12">
-          <div className="md:col-span-5">
+    <footer className="border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-black">
+      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+          
+          {/* Brand Column */}
+          <div className="space-y-6">
             <div className="flex items-center gap-2">
-              <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-indigo-500 to-cyan-400 text-white shadow-sm">
-                T
+              <span className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-lg shadow-indigo-500/20">
+                <span className="font-bold text-lg">T</span>
               </span>
               <div>
-                <div className="text-sm font-semibold text-slate-900 dark:text-white">
+                <div className="text-lg font-bold text-zinc-900 dark:text-white leading-tight">
                   TMS Tickets
                 </div>
-                <div className="text-sm text-slate-600 dark:text-slate-400">
-                  Book bus, train, air & ship — fast.
+                <div className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
+                  Global Travel Solutions
                 </div>
               </div>
             </div>
-
-            <p className="mt-4 max-w-md text-sm leading-6 text-slate-600 dark:text-slate-400">
-              A modern ticketing experience inspired by premium travel UIs:
-              clean typography, soft gradients, and conversion-friendly layout.
+            <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed text-sm">
+              Experience the future of travel booking. Fast, secure, and reliable ticketing for bus, train, air, and ship routes across the nation.
             </p>
-          </div>
-
-          <div className="grid gap-6 md:col-span-7 md:grid-cols-3">
-            <div>
-              <div className="text-sm font-semibold text-slate-900 dark:text-white">
-                Products
-              </div>
-              <div className="mt-3 grid gap-2 text-sm">
-                <Link
-                  href="/bus"
-                  className="text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
-                >
-                  Bus tickets
-                </Link>
-                <Link
-                  href="/train"
-                  className="text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
-                >
-                  Train tickets
-                </Link>
-                <Link
-                  href="/air"
-                  className="text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
-                >
-                  Air tickets
-                </Link>
-                <Link
-                  href="/ship"
-                  className="text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
-                >
-                  Ship tickets
-                </Link>
-              </div>
-            </div>
-
-            <div>
-              <div className="text-sm font-semibold text-slate-900 dark:text-white">
-                Company
-              </div>
-              <div className="mt-3 grid gap-2 text-sm text-slate-600 dark:text-slate-400">
-                <span>About</span>
-                <span>Support</span>
-                <span>Partners</span>
-              </div>
-            </div>
-
-            <div>
-              <div className="text-sm font-semibold text-slate-900 dark:text-white">
-                Security
-              </div>
-              <div className="mt-3 grid gap-2 text-sm text-slate-600 dark:text-slate-400">
-                <span>Secure payments</span>
-                <span>Verified operators</span>
-                <span>Instant e‑tickets</span>
-              </div>
+            <div className="flex gap-4">
+              {[FiFacebook, FiTwitter, FiInstagram, FiLinkedin].map((Icon, i) => (
+                <a key={i} href="#" className="text-zinc-400 hover:text-indigo-600 dark:hover:text-white transition-colors">
+                  <Icon className="h-5 w-5" />
+                </a>
+              ))}
             </div>
           </div>
+
+          {/* Quick Links */}
+            <div>
+            <h3 className="text-sm font-bold uppercase tracking-wider text-zinc-900 dark:text-white mb-6">Explore</h3>
+            <ul className="space-y-4 text-sm text-zinc-600 dark:text-zinc-400">
+              {['Bus Tickets', 'Train Tickets', 'Flight Booking', 'Ship/Launch', 'Hotel Booking', 'Holiday Packages'].map((item) => (
+                <li key={item}>
+                  <Link href="#" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                    {item}
+                </Link>
+                </li>
+              ))}
+            </ul>
+            </div>
+
+          {/* Support */}
+            <div>
+             <h3 className="text-sm font-bold uppercase tracking-wider text-zinc-900 dark:text-white mb-6">Support</h3>
+             <ul className="space-y-4 text-sm text-zinc-600 dark:text-zinc-400">
+              {['Help Center', 'Terms of Service', 'Privacy Policy', 'Refund Policy', 'Contact Us', 'Partner with Us'].map((item) => (
+                <li key={item}>
+                  <Link href="#" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                    {item}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            </div>
+
+          {/* Newsletter */}
+            <div>
+            <h3 className="text-sm font-bold uppercase tracking-wider text-zinc-900 dark:text-white mb-6">Stay Updated</h3>
+            <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-4">
+              Subscribe to get exclusive offers and travel updates directly to your inbox.
+            </p>
+            <form className="space-y-3">
+              <div className="relative">
+                <input 
+                  type="email" 
+                  placeholder="Enter your email" 
+                  className="w-full rounded-xl bg-zinc-100 dark:bg-zinc-900 border-none px-4 py-3 text-sm text-zinc-900 dark:text-white focus:ring-2 focus:ring-indigo-500 placeholder:text-zinc-500"
+                />
+                <button 
+                  type="submit"
+                  className="absolute right-1.5 top-1.5 bottom-1.5 rounded-lg bg-indigo-600 px-3 text-white hover:bg-indigo-700 transition-colors"
+                >
+                  <FiSend className="h-4 w-4" />
+                </button>
+              </div>
+              <p className="text-xs text-zinc-500">
+                We respect your privacy. Unsubscribe at any time.
+              </p>
+            </form>
+          </div>
+
         </div>
 
-        <div className="mt-10 flex flex-col gap-2 border-t border-slate-200/60 pt-6 text-sm text-slate-600 dark:border-slate-800 dark:text-slate-400 sm:flex-row sm:items-center sm:justify-between">
-          <span>© {new Date().getFullYear()} TMS Tickets</span>
-          <span>Built with Next.js + Tailwind</span>
+        <div className="mt-16 pt-8 border-t border-zinc-200 dark:border-zinc-800 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-sm text-zinc-500 dark:text-zinc-400 text-center md:text-left">
+            &copy; {new Date().getFullYear()} TMS Tickets. All rights reserved.
+          </p>
+          <div className="flex items-center gap-6">
+             <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa" className="h-4 opacity-50 grayscale hover:grayscale-0 transition-all" />
+             <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" className="h-6 opacity-50 grayscale hover:grayscale-0 transition-all" />
+             <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" className="h-4 opacity-50 grayscale hover:grayscale-0 transition-all" />
+          </div>
         </div>
       </div>
     </footer>
   );
 }
-
-

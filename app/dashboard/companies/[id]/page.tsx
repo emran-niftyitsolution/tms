@@ -1,16 +1,6 @@
 "use client";
 
-import {
-  Button,
-  Card,
-  Divider,
-  Form,
-  Input,
-  InputNumber,
-  Select,
-  Space,
-  Spin,
-} from "antd";
+import { Button, Divider, Form, Input, Select, Space, Spin } from "antd";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FiInfo, FiMapPin, FiSave, FiSettings, FiTrash2 } from "react-icons/fi";
@@ -42,7 +32,7 @@ export default function EditCompanyPage() {
     if (id) fetchCompany();
   }, [id, form, router]);
 
-  const handleFinish = async (values: any) => {
+  const handleFinish = async (values: unknown) => {
     setLoading(true);
     try {
       const res = await fetch(`/api/companies/${id}`, {
@@ -55,7 +45,7 @@ export default function EditCompanyPage() {
 
       toast.success("Company updated successfully");
       router.push("/dashboard/companies");
-    } catch (error) {
+    } catch {
       toast.error("Failed to update company");
     } finally {
       setLoading(false);
@@ -71,7 +61,7 @@ export default function EditCompanyPage() {
       if (!res.ok) throw new Error("Failed to delete company");
       toast.success("Company deleted");
       router.push("/dashboard/companies");
-    } catch (error) {
+    } catch {
       toast.error("Failed to delete company");
     }
   };
@@ -132,15 +122,10 @@ export default function EditCompanyPage() {
       >
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           <div className="lg:col-span-2">
-            <Card
-              bordered={false}
-              className="mb-8 shadow-sm ring-1 ring-slate-100 dark:ring-slate-800"
-              title={
-                <div className="flex items-center gap-2 text-slate-900 dark:text-white">
-                  <FiInfo className="text-indigo-500" /> Basic Information
-                </div>
-              }
-            >
+            <div className="mb-8 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100 dark:bg-black dark:ring-slate-800">
+              <div className="mb-6 flex items-center gap-2 border-b border-slate-100 pb-4 text-lg font-semibold text-slate-900 dark:border-slate-800 dark:text-white">
+                <FiInfo className="text-indigo-500" /> Basic Information
+              </div>
               <div className="grid grid-cols-1 gap-x-6 gap-y-2 md:grid-cols-2">
                 <div className="md:col-span-2">
                   <Form.Item
@@ -159,57 +144,13 @@ export default function EditCompanyPage() {
                     />
                   </Form.Item>
                 </div>
-                <div>
-                  <Form.Item
-                    name="type"
-                    label={
-                      <span className="font-medium text-slate-600">
-                        Transport Type
-                      </span>
-                    }
-                    rules={[{ required: true, message: "Required" }]}
-                  >
-                    <Select
-                      placeholder="Select Type"
-                      size="large"
-                      className="rounded-lg"
-                    >
-                      <Select.Option value="Bus">Bus</Select.Option>
-                      <Select.Option value="Train">Train</Select.Option>
-                      <Select.Option value="Air">Air</Select.Option>
-                      <Select.Option value="Ship">Ship</Select.Option>
-                    </Select>
-                  </Form.Item>
-                </div>
-                <div>
-                  <Form.Item
-                    name="routes"
-                    label={
-                      <span className="font-medium text-slate-600">
-                        No. of Routes
-                      </span>
-                    }
-                  >
-                    <InputNumber
-                      min={0}
-                      style={{ width: "100%" }}
-                      size="large"
-                      className="rounded-lg"
-                    />
-                  </Form.Item>
-                </div>
               </div>
-            </Card>
+            </div>
 
-            <Card
-              bordered={false}
-              className="shadow-sm ring-1 ring-slate-100 dark:ring-slate-800"
-              title={
-                <div className="flex items-center gap-2 text-slate-900 dark:text-white">
-                  <FiMapPin className="text-indigo-500" /> Location & Contact
-                </div>
-              }
-            >
+            <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100 dark:bg-black dark:ring-slate-800">
+              <div className="mb-6 flex items-center gap-2 border-b border-slate-100 pb-4 text-lg font-semibold text-slate-900 dark:border-slate-800 dark:text-white">
+                <FiMapPin className="text-indigo-500" /> Location & Contact
+              </div>
               <div className="grid grid-cols-1 gap-x-6 gap-y-2 md:grid-cols-2">
                 <div>
                   <Form.Item
@@ -328,19 +269,14 @@ export default function EditCompanyPage() {
                   </Form.Item>
                 </div>
               </div>
-            </Card>
+            </div>
           </div>
 
           <div className="lg:col-span-1">
-            <Card
-              bordered={false}
-              className="mb-6 shadow-sm ring-1 ring-slate-100 dark:ring-slate-800"
-              title={
-                <div className="flex items-center gap-2 text-slate-900 dark:text-white">
-                  <FiSettings className="text-indigo-500" /> Settings
-                </div>
-              }
-            >
+            <div className="mb-6 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100 dark:bg-black dark:ring-slate-800">
+              <div className="mb-6 flex items-center gap-2 border-b border-slate-100 pb-4 text-lg font-semibold text-slate-900 dark:border-slate-800 dark:text-white">
+                <FiSettings className="text-indigo-500" /> Settings
+              </div>
               <Form.Item
                 name="status"
                 label={
@@ -369,7 +305,7 @@ export default function EditCompanyPage() {
                   className="rounded-lg"
                 />
               </Form.Item>
-            </Card>
+            </div>
           </div>
         </div>
       </Form>

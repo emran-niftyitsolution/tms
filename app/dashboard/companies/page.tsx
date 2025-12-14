@@ -1,23 +1,24 @@
 "use client";
 
-import { Button, Popconfirm, Space, Table, Tag } from "antd";
+import { Button, Input, Popconfirm, Select, Space, Table, Tag } from "antd";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { FiEdit2, FiPlus, FiTrash2 } from "react-icons/fi";
+import { FiEdit2, FiPlus, FiSearch, FiTrash2 } from "react-icons/fi";
 import { toast } from "sonner";
 
 type Company = {
   _id: string;
   name: string;
-  type: "Bus" | "Train" | "Air" | "Ship";
-  routes: number;
   status: "Active" | "Inactive";
   contact: string;
 };
 
 export default function CompaniesPage() {
   const [companies, setCompanies] = useState<Company[]>([]);
+  const [filteredCompanies, setFilteredCompanies] = useState<Company[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchText, setSearchText] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string | null>(null);
 
   const fetchCompanies = async () => {
     setLoading(true);
@@ -25,8 +26,10 @@ export default function CompaniesPage() {
       const res = await fetch("/api/companies");
       if (!res.ok) throw new Error("Failed to fetch companies");
       const data = await res.json();
-      setCompanies(data);
-    } catch (error) {
+      const companyList = Array.isArray(data) ? data : [];
+      setCompanies(companyList);
+      setFilteredCompanies(companyList);
+    } catch {
       toast.error("Failed to load companies");
     } finally {
       setLoading(false);
@@ -37,6 +40,22 @@ export default function CompaniesPage() {
     fetchCompanies();
   }, []);
 
+  useEffect(() => {
+    let result = companies;
+
+    if (searchText) {
+      result = result.filter((c) =>
+        c.name.toLowerCase().includes(searchText.toLowerCase())
+      );
+    }
+
+    if (statusFilter) {
+      result = result.filter((c) => c.status === statusFilter);
+    }
+
+    setFilteredCompanies(result);
+  }, [companies, searchText, statusFilter]);
+
   const handleDelete = async (id: string) => {
     try {
       const res = await fetch(`/api/companies/${id}`, {
@@ -45,7 +64,7 @@ export default function CompaniesPage() {
       if (!res.ok) throw new Error("Failed to delete company");
       toast.success("Company deleted successfully");
       fetchCompanies();
-    } catch (error) {
+    } catch {
       toast.error("Failed to delete company");
     }
   };
@@ -65,30 +84,13 @@ export default function CompaniesPage() {
       ),
     },
     {
-      title: "Type",
-      dataIndex: "type",
-      key: "type",
-      render: (type: Company["type"]) => {
-        const colors: Record<Company["type"], string> = {
-          Bus: "green",
-          Train: "blue",
-          Air: "purple",
-          Ship: "orange",
-        };
-        return <Tag color={colors[type]}>{type}</Tag>;
-      },
-    },
-    {
-      title: "Routes",
-      dataIndex: "routes",
-      key: "routes",
-    },
-    {
       title: "Contact",
       dataIndex: "email", // Changed to show email or phone if available
       key: "contact",
-      render: (text: string, record: any) =>
-        record.email || record.phone || "-",
+      render: (
+        _: string,
+        record: Company & { email?: string; phone?: string }
+      ) => record.email || record.phone || "-",
     },
     {
       title: "Status",
@@ -102,7 +104,7 @@ export default function CompaniesPage() {
     {
       title: "Action",
       key: "action",
-      render: (_: any, record: Company) => (
+      render: (_: unknown, record: Company) => (
         <Space size="middle">
           <Link href={`/dashboard/companies/${record._id}`}>
             <Button type="text" icon={<FiEdit2 />} />
@@ -123,14 +125,7 @@ export default function CompaniesPage() {
 
   return (
     <div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: 24,
-        }}
-      >
+      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="text-xl font-bold text-slate-900 dark:text-white">
             Companies
@@ -158,9 +153,31 @@ export default function CompaniesPage() {
         </Link>
       </div>
 
+      <div className="mb-6 flex flex-wrap items-center gap-4 rounded-xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
+        <Input
+          prefix={<FiSearch className="text-slate-400" />}
+          placeholder="Search companies..."
+          className="rounded-lg"
+          style={{ width: 300 }}
+          onChange={(e) => setSearchText(e.target.value)}
+          allowClear
+        />
+        <Select
+          placeholder="Filter Status"
+          allowClear
+          className="rounded-lg"
+          style={{ width: 200 }}
+          onChange={(value) => setStatusFilter(value)}
+          options={[
+            { label: "Active", value: "Active" },
+            { label: "Inactive", value: "Inactive" },
+          ]}
+        />
+      </div>
+
       <Table
         columns={columns}
-        dataSource={companies}
+        dataSource={filteredCompanies}
         rowKey="_id"
         loading={loading}
         pagination={{ pageSize: 8 }}
