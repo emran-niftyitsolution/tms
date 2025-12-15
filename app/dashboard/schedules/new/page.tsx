@@ -128,6 +128,7 @@ function NewScheduleForm() {
                 : [];
 
             // Clean seats data - remove MongoDB _id and ensure proper format
+            // Initialize fare from existing fare or default to 0 (will be set from base price later)
             busSeatsData = busSeatsData.map((seat: any) => ({
               row: Number(seat.row),
               column: Number(seat.column),
@@ -135,6 +136,7 @@ function NewScheduleForm() {
               seatName: seat.seatName || undefined,
               isBroken: Boolean(seat.isBroken),
               isAisle: Boolean(seat.isAisle),
+              fare: seat.fare ? Number(seat.fare) : 0, // Initialize fare
             }));
 
             // Process rows, columns, aisleColumns with proper fallbacks and ensure they are numbers
@@ -238,8 +240,12 @@ function NewScheduleForm() {
           seatName: seat.seatName || undefined,
           isBroken: Boolean(seat.isBroken),
           isAisle: Boolean(seat.isAisle),
+          fare: seat.fare ? Number(seat.fare) : payload.price || 0, // Use seat fare or fallback to base price
         }));
       }
+
+      // Remove defaultFare from payload as it's not part of the model
+      delete payload.defaultFare;
 
       const res = await fetch("/api/schedules", {
         method: "POST",
@@ -274,7 +280,7 @@ function NewScheduleForm() {
         </p>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-6 lg:grid-cols-2 auto-rows-min">
         {/* Form Section */}
         <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100 dark:bg-black dark:ring-slate-800">
           <Form form={form} layout="vertical" onFinish={onFinish}>
@@ -540,12 +546,23 @@ function NewScheduleForm() {
               readOnly={false}
               allowRowRemoval={false}
               onChange={(seats) => {
+                // Preserve fare when seats are updated
+                const currentSeats = form.getFieldValue("seats") || [];
+                const seatsWithFare = seats.map((seat: any) => {
+                  const existingSeat = currentSeats.find(
+                    (s: any) => s.row === seat.row && s.column === seat.column
+                  );
+                  return {
+                    ...seat,
+                    fare: existingSeat?.fare || seat.fare || 0,
+                  };
+                });
                 // Update form with new seats
-                form.setFieldValue("seats", seats);
+                form.setFieldValue("seats", seatsWithFare);
                 // Also update selectedBus state to keep it in sync
                 setSelectedBus((prev: any) => ({
                   ...prev,
-                  seats: seats,
+                  seats: seatsWithFare,
                 }));
               }}
               onRowsChange={(rows) => {
@@ -570,6 +587,121 @@ function NewScheduleForm() {
                 }));
               }}
             />
+          </div>
+        )}
+
+        {/* Fare Configuration Section */}
+        {selectedBus && formSeats.length > 0 && (
+          <div className="lg:col-span-2 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100 dark:bg-black dark:ring-slate-800">
+            <h3 className="mb-4 text-lg font-semibold text-slate-800 dark:text-slate-200">
+              Seat Fare Configuration
+            </h3>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">
+              Set individual fare for each seat. You can set a default fare and
+              apply it to all seats, or customize each seat individually.
+            </p>
+
+            {/* Default Fare Section */}
+            <div className="mb-6 p-4 bg-slate-50 dark:bg-slate-900 rounded-lg">
+              <div className="flex items-center gap-4 mb-4">
+                <Form.Item
+                  name="defaultFare"
+                  label={
+                    <span className="font-medium text-slate-600 dark:text-slate-300">
+                      Default Fare (৳)
+                    </span>
+                  }
+                  className="mb-0 flex-1"
+                >
+                  <InputNumber
+                    size="large"
+                    placeholder="Enter default fare"
+                    className="rounded-lg w-full"
+                    min={0}
+                    onChange={(value) => {
+                      if (value && value > 0) {
+                        // Apply default fare to all non-aisle seats
+                        const updatedSeats = formSeats.map((seat: any) => {
+                          if (seat.isAisle) return seat;
+                          return { ...seat, fare: Number(value) };
+                        });
+                        form.setFieldValue("seats", updatedSeats);
+                        setSelectedBus((prev: any) => ({
+                          ...prev,
+                          seats: updatedSeats,
+                        }));
+                      }
+                    }}
+                  />
+                </Form.Item>
+                <Button
+                  size="large"
+                  onClick={() => {
+                    const basePrice = form.getFieldValue("price") || 0;
+                    if (basePrice > 0) {
+                      const updatedSeats = formSeats.map((seat: any) => {
+                        if (seat.isAisle) return seat;
+                        return { ...seat, fare: Number(basePrice) };
+                      });
+                      form.setFieldValue("seats", updatedSeats);
+                      form.setFieldValue("defaultFare", basePrice);
+                      setSelectedBus((prev: any) => ({
+                        ...prev,
+                        seats: updatedSeats,
+                      }));
+                      toast.success("Applied base price to all seats");
+                    } else {
+                      toast.error("Please set base price first");
+                    }
+                  }}
+                  className="rounded-lg"
+                >
+                  Use Base Price
+                </Button>
+              </div>
+            </div>
+
+            {/* Seat Fare Grid */}
+            <div className="max-h-96 overflow-y-auto">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+                {formSeats
+                  .filter((seat: any) => !seat.isAisle)
+                  .map((seat: any, index: number) => (
+                    <div
+                      key={`${seat.row}-${seat.column}-${index}`}
+                      className="p-3 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-900"
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="font-medium text-sm text-slate-700 dark:text-slate-300">
+                          {seat.seatName || `Seat ${seat.seatNumber}`}
+                        </span>
+                        {seat.isBroken && (
+                          <span className="text-xs text-red-500">Broken</span>
+                        )}
+                      </div>
+                      <InputNumber
+                        size="small"
+                        placeholder="Fare"
+                        value={seat.fare || 0}
+                        min={0}
+                        className="w-full"
+                        onChange={(value) => {
+                          const updatedSeats = formSeats.map((s: any) =>
+                            s.row === seat.row && s.column === seat.column
+                              ? { ...s, fare: value ? Number(value) : 0 }
+                              : s
+                          );
+                          form.setFieldValue("seats", updatedSeats);
+                          setSelectedBus((prev: any) => ({
+                            ...prev,
+                            seats: updatedSeats,
+                          }));
+                        }}
+                      />
+                    </div>
+                  ))}
+              </div>
+            </div>
           </div>
         )}
       </div>

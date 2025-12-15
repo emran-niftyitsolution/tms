@@ -44,6 +44,7 @@ const ScheduleSchema = new Schema(
           seatName: String,
           isBroken: Boolean,
           isAisle: Boolean,
+          fare: Number, // Individual seat fare
         },
       ],
       default: [],
