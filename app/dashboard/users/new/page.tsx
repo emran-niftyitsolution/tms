@@ -61,7 +61,7 @@ export default function NewUserPage() {
           <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
             Add New User
           </h1>
-          <p className="mt-1 text-slate-500">
+          <p className="mt-1 text-slate-500 dark:text-slate-400">
             Create a new user account with specific roles.
           </p>
         </div>
@@ -94,8 +94,8 @@ export default function NewUserPage() {
         requiredMark="optional"
       >
         <div className="grid grid-cols-1 gap-6">
-          <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100 dark:bg-black dark:ring-slate-800">
-            <div className="mb-6 flex items-center gap-2 border-b border-slate-100 pb-4 text-lg font-semibold text-slate-900 dark:border-slate-800 dark:text-white">
+          <div className="rounded-2xl bg-white dark:bg-slate-800 p-6 shadow-sm ring-1 ring-slate-100 dark:bg-slate-800 dark:ring-slate-700">
+            <div className="mb-6 flex items-center gap-2 border-b border-slate-100 pb-4 text-lg font-semibold text-slate-900 dark:text-white dark:border-slate-800 dark:text-white">
               <FiInfo className="text-indigo-500" /> Account Information
             </div>
             <div className="grid grid-cols-1 gap-x-6 gap-y-2 md:grid-cols-2">
@@ -103,7 +103,7 @@ export default function NewUserPage() {
                 <Form.Item
                   name="name"
                   label={
-                    <span className="font-medium text-slate-600">Full Name</span>
+                    <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Full Name</span>
                   }
                   rules={[{ required: true, message: "Required" }]}
                 >
@@ -118,7 +118,7 @@ export default function NewUserPage() {
                 <Form.Item
                   name="email"
                   label={
-                    <span className="font-medium text-slate-600">
+                    <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
                       Email Address
                     </span>
                   }
@@ -138,7 +138,7 @@ export default function NewUserPage() {
                 <Form.Item
                   name="password"
                   label={
-                    <span className="font-medium text-slate-600">Password</span>
+                    <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Password</span>
                   }
                   rules={[{ required: true, message: "Required" }]}
                 >
@@ -152,15 +152,15 @@ export default function NewUserPage() {
             </div>
           </div>
 
-          <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100 dark:bg-black dark:ring-slate-800">
-            <div className="mb-6 flex items-center gap-2 border-b border-slate-100 pb-4 text-lg font-semibold text-slate-900 dark:border-slate-800 dark:text-white">
+          <div className="rounded-2xl bg-white dark:bg-slate-800 p-6 shadow-sm ring-1 ring-slate-100 dark:bg-slate-800 dark:ring-slate-700">
+            <div className="mb-6 flex items-center gap-2 border-b border-slate-100 pb-4 text-lg font-semibold text-slate-900 dark:text-white dark:border-slate-800 dark:text-white">
               <FiShield className="text-indigo-500" /> Role & Permissions
             </div>
             <div className="grid grid-cols-1 gap-x-6 gap-y-2 md:grid-cols-2">
               <div className="md:col-span-2">
                 <Form.Item
                   name="role"
-                  label={<span className="font-medium text-slate-600">Role</span>}
+                  label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Role</span>}
                   rules={[{ required: true, message: "Required" }]}
                 >
                   <Select size="large" className="rounded-lg">
@@ -177,7 +177,7 @@ export default function NewUserPage() {
                   <Form.Item
                     name="company"
                     label={
-                      <span className="font-medium text-slate-600">
+                      <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
                         Assigned Company
                       </span>
                     }
@@ -204,7 +204,7 @@ export default function NewUserPage() {
                 <Form.Item
                   name="permissions"
                   label={
-                    <span className="font-medium text-slate-600">
+                    <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
                       Permissions
                     </span>
                   }

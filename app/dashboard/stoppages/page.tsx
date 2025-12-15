@@ -107,7 +107,7 @@ export default function StoppagesPage() {
       render: (text: string, record: Stoppage) => (
         <Link
           href={`/dashboard/stoppages/${record._id}`}
-          className="font-medium text-slate-900 hover:text-indigo-600 dark:text-white"
+          className="font-medium text-slate-900 dark:text-white hover:text-indigo-600 dark:text-white"
         >
           {text}
         </Link>
@@ -211,7 +211,7 @@ export default function StoppagesPage() {
           <h2 className="text-xl font-bold text-slate-900 dark:text-white">
             Stoppages
           </h2>
-          <p className="text-sm text-slate-500">
+          <p className="text-sm text-slate-500 dark:text-slate-400">
             Manage boarding and dropping points
           </p>
         </div>
@@ -234,9 +234,9 @@ export default function StoppagesPage() {
         </Link>
       </div>
 
-      <div className="mb-6 flex flex-wrap items-center gap-4 rounded-xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
+      <div className="mb-6 flex flex-wrap items-center gap-4 rounded-xl border border-slate-200 bg-white dark:bg-slate-800 p-4 dark:border-slate-800 dark:bg-slate-900">
         <Input
-          prefix={<FiSearch className="text-slate-400" />}
+          prefix={<FiSearch className="text-slate-400 dark:text-white dark:text-slate-300" />}
           placeholder="Search stoppages..."
           className="rounded-lg"
           style={{ width: 300 }}

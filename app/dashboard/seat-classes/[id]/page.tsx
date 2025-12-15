@@ -81,17 +81,17 @@ export default function EditSeatClassPage({ params }: { params: Promise<{ id: st
         <h2 className="text-xl font-bold text-slate-900 dark:text-white">
           Edit Seat Class
         </h2>
-        <p className="text-sm text-slate-500">
+        <p className="text-sm text-slate-500 dark:text-slate-400">
           Update seat class information
         </p>
       </div>
 
-      <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100 dark:bg-black dark:ring-slate-800">
+      <div className="rounded-2xl bg-white dark:bg-slate-800 p-6 shadow-sm ring-1 ring-slate-100 dark:bg-slate-800 dark:ring-slate-700">
         <Form form={form} layout="vertical" onFinish={onFinish}>
           <div className="grid gap-6 md:grid-cols-2">
             <Form.Item
               name="company"
-              label={<span className="font-medium text-slate-600">Company</span>}
+              label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Company</span>}
               rules={[{ required: true, message: "Company is required" }]}
               className="md:col-span-2"
             >
@@ -107,7 +107,7 @@ export default function EditSeatClassPage({ params }: { params: Promise<{ id: st
 
             <Form.Item
               name="name"
-              label={<span className="font-medium text-slate-600">Seat Class Name</span>}
+              label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Seat Class Name</span>}
               rules={[{ required: true, message: "Seat class name is required" }]}
               className="md:col-span-2"
             >
@@ -120,7 +120,7 @@ export default function EditSeatClassPage({ params }: { params: Promise<{ id: st
 
             <Form.Item
               name="fare"
-              label={<span className="font-medium text-slate-600">Fare</span>}
+              label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Fare</span>}
               rules={[
                 { required: true, message: "Fare is required" },
                 { type: "number", min: 0, message: "Fare must be a positive number" },
@@ -139,7 +139,7 @@ export default function EditSeatClassPage({ params }: { params: Promise<{ id: st
 
             <Form.Item
               name="status"
-              label={<span className="font-medium text-slate-600">Status</span>}
+              label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Status</span>}
             >
               <Select
                 size="large"

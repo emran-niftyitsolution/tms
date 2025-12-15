@@ -9,7 +9,7 @@ export default function AuthLayout({
   return (
     <div className="flex min-h-screen w-full">
       {/* Left Side - Form */}
-      <div className="flex w-full flex-col justify-center bg-white px-4 py-12 dark:bg-black sm:px-6 lg:w-1/2 lg:px-20 xl:px-24">
+      <div className="flex w-full flex-col justify-center bg-white dark:bg-slate-800 px-4 py-12 dark:bg-black sm:px-6 lg:w-1/2 lg:px-20 xl:px-24">
         <div className="mx-auto w-full max-w-sm lg:w-96">
           <Link href="/" className="mb-10 flex items-center gap-2">
             <span className="grid h-8 w-8 place-items-center rounded-lg bg-gradient-to-br from-indigo-500 to-cyan-400 text-white shadow-sm">
@@ -39,7 +39,7 @@ export default function AuthLayout({
               Start your journey <br />
               with confidence.
             </h2>
-            <p className="mt-4 text-lg text-slate-300">
+            <p className="mt-4 text-lg text-slate-300 dark:text-white">
               Join thousands of travelers who book their trips seamlessly with TMS.
             </p>
           </div>

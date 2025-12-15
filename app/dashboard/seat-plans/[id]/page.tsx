@@ -166,12 +166,12 @@ export default function EditSeatPlanPage({ params }: { params: Promise<{ id: str
         <h2 className="text-xl font-bold text-slate-900 dark:text-white">
           Edit Seat Plan
         </h2>
-        <p className="text-sm text-slate-500">Update seat configuration</p>
+        <p className="text-sm text-slate-500 dark:text-slate-400">Update seat configuration</p>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Form Section */}
-        <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100 dark:bg-black dark:ring-slate-800">
+        <div className="rounded-2xl bg-white dark:bg-slate-800 p-6 shadow-sm ring-1 ring-slate-100 dark:bg-slate-800 dark:ring-slate-700">
           <Form 
             form={form} 
             layout="vertical" 
@@ -183,7 +183,7 @@ export default function EditSeatPlanPage({ params }: { params: Promise<{ id: str
           >
             <Form.Item
               name="company"
-              label={<span className="font-medium text-slate-600">Company</span>}
+              label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Company</span>}
               rules={[{ required: true, message: "Company is required" }]}
             >
               <Select
@@ -198,7 +198,7 @@ export default function EditSeatPlanPage({ params }: { params: Promise<{ id: str
 
             <Form.Item
               name="name"
-              label={<span className="font-medium text-slate-600">Plan Name</span>}
+              label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Plan Name</span>}
               rules={[{ required: true, message: "Name is required" }]}
             >
               <Input size="large" placeholder="e.g. 40 Seat Standard" className="rounded-lg" />
@@ -206,7 +206,7 @@ export default function EditSeatPlanPage({ params }: { params: Promise<{ id: str
 
             <Form.Item
               name="type"
-              label={<span className="font-medium text-slate-600">Bus Type</span>}
+              label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Bus Type</span>}
               rules={[{ required: true, message: "Type is required" }]}
             >
               <Select
@@ -225,7 +225,7 @@ export default function EditSeatPlanPage({ params }: { params: Promise<{ id: str
             <div className="grid grid-cols-2 gap-4">
               <Form.Item
                 name="rows"
-                label={<span className="font-medium text-slate-600">Rows</span>}
+                label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Rows</span>}
                 rules={[{ required: true, message: "Rows is required" }]}
               >
                 <InputNumber size="large" min={1} max={50} className="rounded-lg" style={{ width: "100%" }} />
@@ -233,7 +233,7 @@ export default function EditSeatPlanPage({ params }: { params: Promise<{ id: str
 
               <Form.Item
                 name="columns"
-                label={<span className="font-medium text-slate-600">Columns</span>}
+                label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Columns</span>}
                 rules={[{ required: true, message: "Columns is required" }]}
               >
                 <InputNumber size="large" min={2} max={10} className="rounded-lg" style={{ width: "100%" }} />
@@ -242,7 +242,7 @@ export default function EditSeatPlanPage({ params }: { params: Promise<{ id: str
 
             <Form.Item
               name="status"
-              label={<span className="font-medium text-slate-600">Status</span>}
+              label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Status</span>}
             >
               <Select
                 size="large"
@@ -293,7 +293,7 @@ export default function EditSeatPlanPage({ params }: { params: Promise<{ id: str
         </div>
 
         {/* Seat Layout Section */}
-        <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100 dark:bg-black dark:ring-slate-800">
+        <div className="rounded-2xl bg-white dark:bg-slate-800 p-6 shadow-sm ring-1 ring-slate-100 dark:bg-slate-800 dark:ring-slate-700">
           <h3 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">
             Seat Layout
           </h3>

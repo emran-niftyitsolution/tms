@@ -1,5 +1,6 @@
 "use client";
 
+import { Avatar } from "antd";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
@@ -25,16 +26,16 @@ export default function Home() {
   ];
 
   return (
-    <div className="min-h-screen bg-white dark:bg-black selection:bg-indigo-500/30">
+    <div className="min-h-screen bg-white dark:bg-slate-800 selection:bg-indigo-500/30">
       <main className="relative overflow-hidden">
         {/* Hero Section */}
         <section className="relative min-h-[90vh] w-full flex flex-col items-center pt-0 overflow-hidden">
           {/* Animated Background Mesh */}
-          <div className="absolute inset-0 w-full h-full bg-white dark:bg-black pointer-events-none">
+          <div className="absolute inset-0 w-full h-full bg-white dark:bg-slate-800 pointer-events-none">
             <div className="absolute top-0 -left-4 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
             <div className="absolute top-0 -right-4 w-72 h-72 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
             <div className="absolute -bottom-8 left-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
-            <div className="absolute inset-0 bg-white/50 dark:bg-black/80 backdrop-blur-3xl" />
+            <div className="absolute inset-0 bg-white dark:bg-black/80 backdrop-blur-3xl" />
           </div>
 
           {/* Header Inside Hero */}
@@ -48,7 +49,7 @@ export default function Home() {
                 transition={{ duration: 0.5 }}
                 className="text-center lg:text-left"
               >
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/80 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 backdrop-blur-sm mb-6">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 backdrop-blur-sm mb-6">
                   <span className="relative flex h-2 w-2">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
@@ -80,21 +81,38 @@ export default function Home() {
                   </Link>
                   <Link
                     href="/dashboard"
-                    className="px-8 py-4 rounded-full border border-zinc-200 dark:border-zinc-800 bg-white/50 dark:bg-black/50 backdrop-blur-sm text-zinc-900 dark:text-white font-medium hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors"
+                    className="px-8 py-4 rounded-full border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-black/50 backdrop-blur-sm text-zinc-900 dark:text-white font-medium hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors"
                   >
                     View Demo
                   </Link>
                 </div>
 
                 <div className="mt-12 flex items-center justify-center lg:justify-start gap-4">
-                  <div className="flex -space-x-4">
-                    {[1, 2, 3, 4].map((_, i) => (
-                      <div
+                  <Avatar.Group
+                    max={{ count: 4 }}
+                    size={40}
+                    maxStyle={{
+                      color: "#fff",
+                      backgroundColor: "#6366f1",
+                      border: "2px solid white",
+                    }}
+                  >
+                    {[
+                      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=100&auto=format&fit=crop&crop=face",
+                      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=100&auto=format&fit=crop&crop=face",
+                      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=100&auto=format&fit=crop&crop=face",
+                      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=100&auto=format&fit=crop&crop=face",
+                    ].map((img, i) => (
+                      <Avatar
                         key={i}
-                        className="w-10 h-10 rounded-full border-2 border-white dark:border-black bg-zinc-200 dark:bg-zinc-800"
+                        src={img}
+                        alt={`Happy traveler ${i + 1}`}
+                        style={{
+                          border: "2px solid white",
+                        }}
                       />
                     ))}
-                  </div>
+                  </Avatar.Group>
                   <div className="text-sm">
                     <p className="font-bold text-zinc-900 dark:text-white">
                       50k+ Happy Travelers
@@ -123,8 +141,8 @@ export default function Home() {
         </section>
 
         {/* Features Bento Grid */}
-        <section className="py-24 bg-white dark:bg-black relative">
-          <div className="container mx-auto px-4 mb-16 text-center max-w-2xl">
+        <section className="py-24 bg-white dark:bg-slate-800 relative">
+          <div className="container mx-auto px-4 mb-16 text-center">
             <h2 className="text-3xl md:text-5xl font-bold mb-4 text-zinc-900 dark:text-white">
               Why Choose TMS?
             </h2>
@@ -150,7 +168,7 @@ export default function Home() {
                 <h2 className="text-3xl md:text-4xl font-bold text-zinc-900 dark:text-white mb-2">
                   Trending Destinations
                 </h2>
-                <p className="text-zinc-500 dark:text-zinc-400">
+                <p className="text-zinc-500 dark:text-slate-400">
                   Most booked routes this week
                 </p>
               </div>
@@ -196,7 +214,7 @@ export default function Home() {
                   city: "Sundarbans",
                   price: "$45",
                   mode: "Ship",
-                  img: "https://images.unsplash.com/photo-1606214580234-a63b0b7593c6?q=80&w=1000&auto=format&fit=crop",
+                  img: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=1000&auto=format&fit=crop",
                   colSpan: "lg:col-span-2",
                 },
               ].map((item, idx) => (
@@ -220,7 +238,7 @@ export default function Home() {
 
                   <div className="absolute bottom-0 w-full p-6 text-white">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="rounded-full bg-white/20 px-3 py-1 text-xs font-semibold backdrop-blur-md border border-white/10">
+                      <span className="rounded-full bg-white dark:bg-slate-800/20 px-3 py-1 text-xs font-semibold backdrop-blur-md border border-white/10">
                         {item.mode}
                       </span>
                       <div className="flex items-center gap-1 text-xs font-medium text-yellow-400 bg-black/30 px-2 py-1 rounded-full backdrop-blur-md">
@@ -242,7 +260,7 @@ export default function Home() {
         </section>
 
         {/* CTA Section */}
-        <section className="py-24 bg-white dark:bg-black">
+        <section className="py-24 bg-white dark:bg-slate-800">
           <div className="container mx-auto px-4">
             <div className="relative rounded-[3rem] bg-zinc-900 dark:bg-zinc-900 overflow-hidden px-6 py-20 text-center">
               <div className="absolute top-0 left-0 w-full h-full opacity-30">

@@ -35,6 +35,19 @@ const ScheduleSchema = new Schema(
       enum: ["Scheduled", "Delayed", "Completed", "Cancelled"],
       default: "Scheduled",
     },
+    seats: {
+      type: [
+        {
+          row: Number,
+          column: Number,
+          seatNumber: Number,
+          seatName: String,
+          isBroken: Boolean,
+          isAisle: Boolean,
+        },
+      ],
+      default: [],
+    },
   },
   {
     timestamps: true,

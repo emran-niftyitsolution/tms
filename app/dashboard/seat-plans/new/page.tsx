@@ -143,19 +143,19 @@ export default function NewSeatPlanPage() {
         <h2 className="text-xl font-bold text-slate-900 dark:text-white">
           Add New Seat Plan
         </h2>
-        <p className="text-sm text-slate-500">
+        <p className="text-sm text-slate-500 dark:text-slate-400">
           Define a new seat configuration
         </p>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Form Section */}
-        <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100 dark:bg-black dark:ring-slate-800">
+        <div className="rounded-2xl bg-white dark:bg-slate-800 p-6 shadow-sm ring-1 ring-slate-100 dark:bg-slate-800 dark:ring-slate-700">
           <Form form={form} layout="vertical" onFinish={onFinish}>
             <Form.Item
               name="company"
               label={
-                <span className="font-medium text-slate-600">Company</span>
+                <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Company</span>
               }
               rules={[{ required: true, message: "Company is required" }]}
             >
@@ -172,7 +172,7 @@ export default function NewSeatPlanPage() {
             <Form.Item
               name="name"
               label={
-                <span className="font-medium text-slate-600">Plan Name</span>
+                <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Plan Name</span>
               }
               rules={[{ required: true, message: "Name is required" }]}
             >
@@ -186,7 +186,7 @@ export default function NewSeatPlanPage() {
             <Form.Item
               name="type"
               label={
-                <span className="font-medium text-slate-600">Bus Type</span>
+                <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Bus Type</span>
               }
               rules={[{ required: true, message: "Type is required" }]}
             >
@@ -206,7 +206,7 @@ export default function NewSeatPlanPage() {
             <div className="grid grid-cols-2 gap-4">
               <Form.Item
                 name="rows"
-                label={<span className="font-medium text-slate-600">Rows</span>}
+                label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Rows</span>}
                 initialValue={10}
                 rules={[{ required: true, message: "Rows is required" }]}
               >
@@ -222,7 +222,7 @@ export default function NewSeatPlanPage() {
               <Form.Item
                 name="columns"
                 label={
-                  <span className="font-medium text-slate-600">Columns</span>
+                  <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Columns</span>
                 }
                 initialValue={5}
                 rules={[{ required: true, message: "Columns is required" }]}
@@ -239,7 +239,7 @@ export default function NewSeatPlanPage() {
 
             <Form.Item
               name="status"
-              label={<span className="font-medium text-slate-600">Status</span>}
+              label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Status</span>}
               initialValue="Active"
             >
               <Select
@@ -275,7 +275,7 @@ export default function NewSeatPlanPage() {
         </div>
 
         {/* Seat Layout Section */}
-        <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100 dark:bg-black dark:ring-slate-800">
+        <div className="rounded-2xl bg-white dark:bg-slate-800 p-6 shadow-sm ring-1 ring-slate-100 dark:bg-slate-800 dark:ring-slate-700">
           <h3 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">
             Seat Layout
           </h3>

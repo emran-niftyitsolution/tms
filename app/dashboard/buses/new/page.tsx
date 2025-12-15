@@ -149,22 +149,22 @@ export default function NewBusPage() {
         <h2 className="text-xl font-bold text-slate-900 dark:text-white">
           Add New Bus
         </h2>
-        <p className="text-sm text-slate-500">
+        <p className="text-sm text-slate-500 dark:text-slate-400">
           Enter the comprehensive details of the new bus
         </p>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Form Section */}
-        <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100 dark:bg-black dark:ring-slate-800">
+        <div className="rounded-2xl bg-white dark:bg-slate-800 p-6 shadow-sm ring-1 ring-slate-100 dark:bg-slate-800 dark:ring-slate-700">
           <Form form={form} layout="vertical" onFinish={onFinish}>
           
           <div className="mb-6">
-            <h3 className="text-lg font-semibold mb-4 text-slate-800 dark:text-slate-200">Basic Information</h3>
+            <h3 className="text-lg font-semibold mb-4 text-slate-800 dark:text-white">Basic Information</h3>
             <div className="grid gap-6 md:grid-cols-2">
               <Form.Item
                 name="company"
-                label={<span className="font-medium text-slate-600">Company</span>}
+                label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Company</span>}
                 rules={[{ required: true, message: "Company is required" }]}
                 className="md:col-span-2"
               >
@@ -180,7 +180,7 @@ export default function NewBusPage() {
 
               <Form.Item
                 name="number"
-                label={<span className="font-medium text-slate-600">Bus Number / Code</span>}
+                label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Bus Number / Code</span>}
                 rules={[{ required: true, message: "Bus number is required" }]}
               >
                 <Input size="large" placeholder="e.g. DHAKA-TA-1234" className="rounded-lg" />
@@ -188,28 +188,28 @@ export default function NewBusPage() {
 
               <Form.Item
                 name="registrationNumber"
-                label={<span className="font-medium text-slate-600">Registration Number</span>}
+                label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Registration Number</span>}
               >
                 <Input size="large" placeholder="e.g. REG-2023-XYZ" className="rounded-lg" />
               </Form.Item>
 
               <Form.Item
                 name="brand"
-                label={<span className="font-medium text-slate-600">Brand</span>}
+                label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Brand</span>}
               >
                 <Input size="large" placeholder="e.g. Scania, Volvo" className="rounded-lg" />
               </Form.Item>
 
               <Form.Item
                 name="model"
-                label={<span className="font-medium text-slate-600">Model</span>}
+                label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Model</span>}
               >
                 <Input size="large" placeholder="e.g. K410IB" className="rounded-lg" />
               </Form.Item>
 
                <Form.Item
                 name="status"
-                label={<span className="font-medium text-slate-600">Status</span>}
+                label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Status</span>}
                 initialValue="Active"
               >
                 <Select
@@ -226,11 +226,11 @@ export default function NewBusPage() {
           </div>
 
           <div className="mb-6 border-t pt-6 border-slate-100 dark:border-slate-800">
-            <h3 className="text-lg font-semibold mb-4 text-slate-800 dark:text-slate-200">Configuration</h3>
+            <h3 className="text-lg font-semibold mb-4 text-slate-800 dark:text-white">Configuration</h3>
             <div className="grid gap-6 md:grid-cols-3">
               <Form.Item
                 name="type"
-                label={<span className="font-medium text-slate-600">Bus Type</span>}
+                label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Bus Type</span>}
                 rules={[{ required: true, message: "Bus type is required" }]}
               >
                 <Select
@@ -249,7 +249,7 @@ export default function NewBusPage() {
 
               <Form.Item
                 name="seatPlan"
-                label={<span className="font-medium text-slate-600">Seat Plan</span>}
+                label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Seat Plan</span>}
               >
                 <Select
                   size="large"
@@ -263,7 +263,7 @@ export default function NewBusPage() {
 
                <Form.Item
                 name="capacity"
-                label={<span className="font-medium text-slate-600">Total Capacity</span>}
+                label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Total Capacity</span>}
                 rules={[{ required: true, message: "Capacity is required" }]}
               >
                 <InputNumber size="large" min={1} className="rounded-lg" style={{ width: "100%" }} />
@@ -272,32 +272,32 @@ export default function NewBusPage() {
           </div>
 
           <div className="mb-6 border-t pt-6 border-slate-100 dark:border-slate-800">
-            <h3 className="text-lg font-semibold mb-4 text-slate-800 dark:text-slate-200">Documents & Compliance</h3>
+            <h3 className="text-lg font-semibold mb-4 text-slate-800 dark:text-white">Documents & Compliance</h3>
             <div className="grid gap-6 md:grid-cols-3">
               <Form.Item
                 name="fitnessExpiry"
-                label={<span className="font-medium text-slate-600">Fitness Expiry</span>}
+                label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Fitness Expiry</span>}
               >
                 <DatePicker size="large" className="w-full rounded-lg" />
               </Form.Item>
 
               <Form.Item
                 name="insuranceExpiry"
-                label={<span className="font-medium text-slate-600">Insurance Expiry</span>}
+                label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Insurance Expiry</span>}
               >
                 <DatePicker size="large" className="w-full rounded-lg" />
               </Form.Item>
 
               <Form.Item
                 name="taxTokenExpiry"
-                label={<span className="font-medium text-slate-600">Tax Token Expiry</span>}
+                label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Tax Token Expiry</span>}
               >
                 <DatePicker size="large" className="w-full rounded-lg" />
               </Form.Item>
 
               <Form.Item
                 name="permitNumber"
-                label={<span className="font-medium text-slate-600">Permit Number</span>}
+                label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Permit Number</span>}
               >
                 <Input size="large" className="rounded-lg" />
               </Form.Item>
@@ -305,7 +305,7 @@ export default function NewBusPage() {
           </div>
 
           <div className="mb-6 border-t pt-6 border-slate-100 dark:border-slate-800">
-            <h3 className="text-lg font-semibold mb-4 text-slate-800 dark:text-slate-200">Facilities</h3>
+            <h3 className="text-lg font-semibold mb-4 text-slate-800 dark:text-white">Facilities</h3>
             <Form.Item name="facilities">
               <Checkbox.Group options={facilitiesOptions} />
             </Form.Item>
@@ -335,12 +335,12 @@ export default function NewBusPage() {
 
         {/* Seat Plan Layout Section */}
         {selectedSeatPlan && (
-          <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100 dark:bg-black dark:ring-slate-800">
+          <div className="rounded-2xl bg-white dark:bg-slate-800 p-6 shadow-sm ring-1 ring-slate-100 dark:bg-slate-800 dark:ring-slate-700">
             <h3 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">
               Seat Plan Layout
             </h3>
-            <div className="text-sm text-slate-500 mb-4">
-              <p className="font-medium text-slate-700 dark:text-slate-300">
+            <div className="text-sm text-slate-500 dark:text-white mb-4">
+              <p className="font-medium text-slate-700 dark:text-white dark:text-slate-300">
                 {selectedSeatPlan.name} ({selectedSeatPlan.type})
               </p>
               <p className="mt-1">

@@ -211,7 +211,7 @@ export default function StaffPage() {
           <h2 className="text-xl font-bold text-slate-900 dark:text-white">
             Staff
           </h2>
-          <p className="text-sm text-slate-500">
+          <p className="text-sm text-slate-500 dark:text-slate-400">
             Manage all staff members (Drivers, Helpers, Supervisors, etc.)
           </p>
         </div>
@@ -237,7 +237,7 @@ export default function StaffPage() {
       <div className="mb-6 flex flex-wrap items-center gap-4 rounded-xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
         <Input
           placeholder="Search by name, contact, license, or NID"
-          prefix={<FiSearch className="text-slate-400" />}
+          prefix={<FiSearch className="text-slate-400 dark:text-slate-300" />}
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
           className="max-w-xs"
@@ -280,7 +280,7 @@ export default function StaffPage() {
         />
       </div>
 
-      <div className="rounded-2xl bg-white shadow-sm ring-1 ring-slate-100 dark:bg-black dark:ring-slate-800">
+      <div className="rounded-2xl bg-white shadow-sm ring-1 ring-slate-100 dark:bg-slate-800 dark:ring-slate-700">
         <Table
           columns={columns}
           dataSource={filteredStaff}

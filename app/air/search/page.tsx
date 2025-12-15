@@ -81,14 +81,14 @@ function SearchResults() {
                 Flight results
               </h1>
             </div>
-            <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
+            <p className="mt-2 text-sm text-slate-600 dark:text-white">
               {from} → {to} • {date} • {passengers} traveler(s)
             </p>
           </div>
 
           <Link
             href="/air"
-            className="inline-flex items-center justify-center rounded-md border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-900 hover:border-slate-300 dark:border-slate-800 dark:bg-slate-950 dark:text-white dark:hover:border-slate-700"
+            className="inline-flex items-center justify-center rounded-md border border-slate-200 bg-white dark:bg-slate-800 px-4 py-2.5 text-sm font-semibold text-slate-900 dark:text-white hover:border-slate-300 dark:border-slate-800 dark:bg-slate-950 dark:text-white dark:hover:border-slate-700"
           >
             Modify search
           </Link>
@@ -97,17 +97,17 @@ function SearchResults() {
         <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-12">
           {/* Filters */}
           <aside className="lg:col-span-4 xl:col-span-3">
-            <div className="rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-950">
+            <div className="rounded-xl border border-slate-200 bg-white dark:bg-slate-800 p-5 dark:border-slate-800 dark:bg-slate-950">
               <div className="text-sm font-semibold text-slate-900 dark:text-white">
                 Filters
               </div>
 
               <div className="mt-4 space-y-4">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-white dark:text-slate-300">
                     Stops
                   </label>
-                  <select className="mt-2 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 focus:border-[#0071c2] focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-white">
+                  <select className="mt-2 w-full rounded-md border border-slate-200 bg-white dark:bg-slate-800 px-3 py-2 text-sm text-slate-900 dark:text-white focus:border-[#0071c2] focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-white">
                     <option>Any</option>
                     <option>Non-stop</option>
                     <option>1 stop</option>
@@ -116,10 +116,10 @@ function SearchResults() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-white dark:text-slate-300">
                     Sort
                   </label>
-                  <select className="mt-2 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 focus:border-[#0071c2] focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-white">
+                  <select className="mt-2 w-full rounded-md border border-slate-200 bg-white dark:bg-slate-800 px-3 py-2 text-sm text-slate-900 dark:text-white focus:border-[#0071c2] focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-white">
                     <option>Recommended</option>
                     <option>Lowest price</option>
                     <option>Shortest duration</option>
@@ -136,7 +136,7 @@ function SearchResults() {
               {results.map((result) => (
                 <div
                   key={result.id}
-                  className="rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-950"
+                  className="rounded-xl border border-slate-200 bg-white dark:bg-slate-800 p-5 dark:border-slate-800 dark:bg-slate-950"
                 >
                   <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
                     <div className="min-w-0">
@@ -147,7 +147,7 @@ function SearchResults() {
                         <span className="text-sm text-slate-500 dark:text-slate-400">
                           Flight {result.flight} • ★ {result.rating}
                         </span>
-                        <span className="rounded-md bg-slate-100 px-2 py-1 text-xs font-medium text-slate-700 dark:bg-slate-900 dark:text-slate-300">
+                        <span className="rounded-md bg-slate-100 px-2 py-1 text-xs font-medium text-slate-700 dark:bg-slate-900 dark:text-white dark:text-slate-300">
                           {result.stops}
                         </span>
                       </div>
@@ -157,13 +157,13 @@ function SearchResults() {
                           <div className="text-lg font-semibold text-slate-900 dark:text-white">
                             {result.departure}
                           </div>
-                          <div className="text-sm text-slate-600 dark:text-slate-400">
+                          <div className="text-sm text-slate-600 dark:text-white">
                             {from}
                           </div>
                         </div>
 
                         <div className="flex-1">
-                          <div className="text-center text-sm text-slate-600 dark:text-slate-400">
+                          <div className="text-center text-sm text-slate-600 dark:text-white">
                             {result.duration}
                           </div>
                           <div className="mt-1 h-0.5 w-full bg-slate-200 dark:bg-slate-800" />
@@ -173,24 +173,24 @@ function SearchResults() {
                           <div className="text-lg font-semibold text-slate-900 dark:text-white">
                             {result.arrival}
                           </div>
-                          <div className="text-sm text-slate-600 dark:text-slate-400">
+                          <div className="text-sm text-slate-600 dark:text-white">
                             {to}
                           </div>
                         </div>
                       </div>
 
-                      <div className="mt-3 text-sm text-slate-600 dark:text-slate-400">
+                      <div className="mt-3 text-sm text-slate-600 dark:text-white">
                         {result.aircraft}
                       </div>
                     </div>
 
                     <div className="shrink-0 rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900">
-                      <div className="text-sm text-slate-600 dark:text-slate-400">
+                      <div className="text-sm text-slate-600 dark:text-white">
                         {result.seats} seats left
                       </div>
                       <div className="mt-1 text-2xl font-semibold text-slate-900 dark:text-white">
                         ${result.price}
-                        <span className="ml-1 text-sm font-normal text-slate-600 dark:text-slate-400">
+                        <span className="ml-1 text-sm font-normal text-slate-600 dark:text-white">
                           /person
                         </span>
                       </div>
@@ -198,7 +198,7 @@ function SearchResults() {
                         <button className="w-full rounded-md bg-[#0071c2] py-2.5 text-sm font-semibold text-white hover:bg-[#00508f]">
                           Book
                         </button>
-                        <button className="w-full rounded-md border border-slate-200 bg-white py-2.5 text-sm font-semibold text-slate-900 hover:border-slate-300 dark:border-slate-800 dark:bg-slate-950 dark:text-white dark:hover:border-slate-700">
+                        <button className="w-full rounded-md border border-slate-200 bg-white dark:bg-slate-800 py-2.5 text-sm font-semibold text-slate-900 dark:text-white hover:border-slate-300 dark:border-slate-800 dark:bg-slate-950 dark:text-white dark:hover:border-slate-700">
                           Details
                         </button>
                       </div>

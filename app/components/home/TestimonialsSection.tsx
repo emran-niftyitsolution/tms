@@ -30,7 +30,7 @@ export function TestimonialsSection() {
   ];
 
   return (
-    <section className="py-24 bg-white dark:bg-black relative overflow-hidden">
+    <section className="py-24 bg-white dark:bg-slate-800 relative overflow-hidden">
        {/* Background Decoration */}
        <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl" />
        <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
@@ -70,7 +70,7 @@ export function TestimonialsSection() {
                   </div>
                   <div>
                     <h4 className="font-bold text-zinc-900 dark:text-white">{testimonial.name}</h4>
-                    <p className="text-sm text-zinc-500 dark:text-zinc-400">{testimonial.role}</p>
+                    <p className="text-sm text-zinc-500 dark:text-slate-400">{testimonial.role}</p>
                   </div>
                 </div>
               </motion.div>

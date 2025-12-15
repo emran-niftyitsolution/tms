@@ -147,7 +147,7 @@ export default function CitiesPage() {
           <h2 className="text-xl font-bold text-slate-900 dark:text-white">
             Cities
           </h2>
-          <p className="text-sm text-slate-500">
+          <p className="text-sm text-slate-500 dark:text-slate-400">
             Manage cities and locations
           </p>
         </div>
@@ -172,7 +172,7 @@ export default function CitiesPage() {
 
       <div className="mb-6 flex flex-wrap items-center gap-4 rounded-xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
         <Input
-          prefix={<FiSearch className="text-slate-400" />}
+          prefix={<FiSearch className="text-slate-400 dark:text-slate-300" />}
           placeholder="Search cities..."
           className="rounded-lg"
           style={{ width: 300 }}

@@ -60,7 +60,7 @@ export function HeroSearch({
   );
 
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-white/40 bg-white/80 p-6 shadow-2xl shadow-indigo-500/10 backdrop-blur-xl dark:border-white/10 dark:bg-slate-900/60 dark:shadow-black/40 sm:p-8">
+    <div className="relative overflow-hidden rounded-3xl border border-white/40 bg-white dark:bg-slate-800/80 p-6 shadow-2xl shadow-indigo-500/10 backdrop-blur-xl dark:border-white/10 dark:bg-slate-900/60 dark:shadow-black/40 sm:p-8">
       {/* Glow effect */}
       <div className="pointer-events-none absolute -left-10 -top-10 h-32 w-32 rounded-full bg-indigo-500/20 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-10 -right-10 h-32 w-32 rounded-full bg-cyan-500/20 blur-3xl" />
@@ -129,13 +129,13 @@ export function HeroSearch({
           className="grid grid-cols-1 gap-4 md:grid-cols-12"
         >
           {/* From Input */}
-          <div className="group relative rounded-2xl bg-white p-3 ring-1 ring-slate-200 transition focus-within:ring-2 focus-within:ring-indigo-500 dark:bg-slate-950 dark:ring-slate-800 md:col-span-3">
+          <div className="group relative rounded-2xl bg-white dark:bg-slate-800 p-3 ring-1 ring-slate-200 transition focus-within:ring-2 focus-within:ring-indigo-500 dark:bg-slate-950 dark:ring-slate-800 md:col-span-3">
             <label className="mb-1 block text-xs font-medium text-slate-500 dark:text-slate-400">From</label>
             <div className="flex items-center gap-2">
-              <FiMapPin className="text-slate-400" />
+              <FiMapPin className="text-slate-400 dark:text-white" />
               <input
                 name="from"
-                className="w-full bg-transparent text-sm font-semibold text-slate-900 placeholder:text-slate-300 focus:outline-none dark:text-white dark:placeholder:text-slate-600"
+                className="w-full bg-transparent text-sm font-semibold text-slate-900 dark:text-white placeholder:text-slate-300 focus:outline-none dark:text-white dark:placeholder:text-slate-600 dark:text-white dark:text-slate-300"
                 placeholder="City or Station"
                 defaultValue="Dhaka"
               />
@@ -143,13 +143,13 @@ export function HeroSearch({
           </div>
 
           {/* To Input */}
-          <div className="group relative rounded-2xl bg-white p-3 ring-1 ring-slate-200 transition focus-within:ring-2 focus-within:ring-indigo-500 dark:bg-slate-950 dark:ring-slate-800 md:col-span-3">
+          <div className="group relative rounded-2xl bg-white dark:bg-slate-800 p-3 ring-1 ring-slate-200 transition focus-within:ring-2 focus-within:ring-indigo-500 dark:bg-slate-950 dark:ring-slate-800 md:col-span-3">
             <label className="mb-1 block text-xs font-medium text-slate-500 dark:text-slate-400">To</label>
             <div className="flex items-center gap-2">
-              <FiMapPin className="text-slate-400" />
+              <FiMapPin className="text-slate-400 dark:text-white" />
               <input
                 name="to"
-                className="w-full bg-transparent text-sm font-semibold text-slate-900 placeholder:text-slate-300 focus:outline-none dark:text-white dark:placeholder:text-slate-600"
+                className="w-full bg-transparent text-sm font-semibold text-slate-900 dark:text-white placeholder:text-slate-300 focus:outline-none dark:text-white dark:placeholder:text-slate-600 dark:text-white dark:text-slate-300"
                 placeholder="City or Station"
                 defaultValue="Chittagong"
               />
@@ -157,31 +157,31 @@ export function HeroSearch({
           </div>
 
           {/* Date Input */}
-          <div className="group relative rounded-2xl bg-white p-3 ring-1 ring-slate-200 transition focus-within:ring-2 focus-within:ring-indigo-500 dark:bg-slate-950 dark:ring-slate-800 md:col-span-3">
+          <div className="group relative rounded-2xl bg-white dark:bg-slate-800 p-3 ring-1 ring-slate-200 transition focus-within:ring-2 focus-within:ring-indigo-500 dark:bg-slate-950 dark:ring-slate-800 md:col-span-3">
             <label className="mb-1 block text-xs font-medium text-slate-500 dark:text-slate-400">Journey Date</label>
             <div className="flex items-center gap-2">
-              <FiCalendar className="text-slate-400" />
+              <FiCalendar className="text-slate-400 dark:text-white" />
               <input
                 type="date"
                 name="date"
-                className="w-full bg-transparent text-sm font-semibold text-slate-900 focus:outline-none dark:text-white"
+                className="w-full bg-transparent text-sm font-semibold text-slate-900 dark:text-white focus:outline-none dark:text-white"
                 defaultValue={new Date().toISOString().slice(0, 10)}
               />
             </div>
           </div>
 
           {/* Passengers Input */}
-          <div className="group relative rounded-2xl bg-white p-3 ring-1 ring-slate-200 transition focus-within:ring-2 focus-within:ring-indigo-500 dark:bg-slate-950 dark:ring-slate-800 md:col-span-2">
+          <div className="group relative rounded-2xl bg-white dark:bg-slate-800 p-3 ring-1 ring-slate-200 transition focus-within:ring-2 focus-within:ring-indigo-500 dark:bg-slate-950 dark:ring-slate-800 md:col-span-2">
             <label className="mb-1 block text-xs font-medium text-slate-500 dark:text-slate-400">Passengers</label>
             <div className="flex items-center gap-2">
-              <FiUsers className="text-slate-400" />
+              <FiUsers className="text-slate-400 dark:text-white" />
               <input
                 type="number"
                 min={1}
                 max={9}
                 name="passengers"
                 defaultValue={1}
-                className="w-full bg-transparent text-sm font-semibold text-slate-900 focus:outline-none dark:text-white"
+                className="w-full bg-transparent text-sm font-semibold text-slate-900 dark:text-white focus:outline-none dark:text-white"
               />
             </div>
           </div>

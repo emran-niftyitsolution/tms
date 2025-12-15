@@ -45,10 +45,10 @@ export function BusInfoTab({ bus, form, companies, onFinish, loading }: BusInfoT
   ];
 
   return (
-    <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100 dark:bg-black dark:ring-slate-800">
+    <div className="rounded-2xl bg-white dark:bg-slate-800 p-6 shadow-sm ring-1 ring-slate-100 dark:bg-slate-800 dark:ring-slate-700">
       <Form form={form} layout="vertical" onFinish={onFinish}>
         <div className="mb-6">
-          <h3 className="text-lg font-semibold mb-4 text-slate-800 dark:text-slate-200">Basic Information</h3>
+          <h3 className="text-lg font-semibold mb-4 text-slate-800 dark:text-white">Basic Information</h3>
           <div className="mb-6">
             <Form.Item name="company" label="Company" rules={[{ required: true }]}>
               <Select size="large" options={companies} className="rounded-lg w-full" showSearch />
@@ -80,7 +80,7 @@ export function BusInfoTab({ bus, form, companies, onFinish, loading }: BusInfoT
         </div>
 
         <div className="mb-6 border-t pt-6 border-slate-100 dark:border-slate-800">
-          <h3 className="text-lg font-semibold mb-4 text-slate-800 dark:text-slate-200">Configuration</h3>
+          <h3 className="text-lg font-semibold mb-4 text-slate-800 dark:text-white">Configuration</h3>
           <div className="grid gap-6 md:grid-cols-3">
             <Form.Item name="type" label="Type" rules={[{ required: true }]}>
               <Select size="large" options={[
@@ -108,7 +108,7 @@ export function BusInfoTab({ bus, form, companies, onFinish, loading }: BusInfoT
         </div>
 
         <div className="mb-6 border-t pt-6 border-slate-100 dark:border-slate-800">
-          <h3 className="text-lg font-semibold mb-4 text-slate-800 dark:text-slate-200">Documents & Compliance</h3>
+          <h3 className="text-lg font-semibold mb-4 text-slate-800 dark:text-white">Documents & Compliance</h3>
           <div className="grid gap-6 md:grid-cols-3">
             <Form.Item name="fitnessExpiry" label="Fitness Expiry">
               <DatePicker size="large" className="w-full rounded-lg" />
@@ -126,7 +126,7 @@ export function BusInfoTab({ bus, form, companies, onFinish, loading }: BusInfoT
         </div>
 
         <div className="mb-6 border-t pt-6 border-slate-100 dark:border-slate-800">
-          <h3 className="text-lg font-semibold mb-4 text-slate-800 dark:text-slate-200">Facilities</h3>
+          <h3 className="text-lg font-semibold mb-4 text-slate-800 dark:text-white">Facilities</h3>
           <Form.Item name="facilities">
             <Checkbox.Group options={facilitiesOptions} />
           </Form.Item>

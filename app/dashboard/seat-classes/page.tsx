@@ -80,7 +80,7 @@ export default function SeatClassesPage() {
       render: (text: string, record: SeatClass) => (
         <Link
           href={`/dashboard/seat-classes/${record._id}`}
-          className="font-medium text-slate-900 hover:text-indigo-600 dark:text-white"
+          className="font-medium text-slate-900 dark:text-white hover:text-indigo-600 dark:text-white"
         >
           {text}
         </Link>
@@ -148,7 +148,7 @@ export default function SeatClassesPage() {
           <h2 className="text-xl font-bold text-slate-900 dark:text-white">
             Seat Classes
           </h2>
-          <p className="text-sm text-slate-500">
+          <p className="text-sm text-slate-500 dark:text-slate-400">
             Manage seat class configurations
           </p>
         </div>
@@ -171,9 +171,9 @@ export default function SeatClassesPage() {
         </Link>
       </div>
 
-      <div className="mb-6 flex flex-wrap items-center gap-4 rounded-xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
+      <div className="mb-6 flex flex-wrap items-center gap-4 rounded-xl border border-slate-200 bg-white dark:bg-slate-800 p-4 dark:border-slate-800 dark:bg-slate-900">
         <Input
-          prefix={<FiSearch className="text-slate-400" />}
+          prefix={<FiSearch className="text-slate-400 dark:text-white dark:text-slate-300" />}
           placeholder="Search seat classes..."
           className="rounded-lg"
           style={{ width: 300 }}

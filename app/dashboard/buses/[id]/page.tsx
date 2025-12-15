@@ -330,7 +330,7 @@ export default function BusDetailPage({
         <h2 className="text-xl font-bold text-slate-900 dark:text-white">
           Edit Bus
         </h2>
-        <p className="text-sm text-slate-500">
+        <p className="text-sm text-slate-500 dark:text-slate-400">
           Update the comprehensive details of the bus
         </p>
       </div>
@@ -338,16 +338,16 @@ export default function BusDetailPage({
       <Form form={form} layout="vertical" onFinish={onFinish}>
         <div className="grid gap-6 lg:grid-cols-2">
           {/* Form Section */}
-          <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100 dark:bg-black dark:ring-slate-800">
+          <div className="rounded-2xl bg-white dark:bg-slate-800 p-6 shadow-sm ring-1 ring-slate-100 dark:bg-slate-800 dark:ring-slate-700">
             <div className="mb-6">
-              <h3 className="text-lg font-semibold mb-4 text-slate-800 dark:text-slate-200">
+              <h3 className="text-lg font-semibold mb-4 text-slate-800 dark:text-white">
                 Basic Information
               </h3>
               <div className="grid gap-6 md:grid-cols-2">
                 <Form.Item
                   name="company"
                   label={
-                    <span className="font-medium text-slate-600">Company</span>
+                    <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Company</span>
                   }
                   rules={[{ required: true, message: "Company is required" }]}
                   className="md:col-span-2"
@@ -365,7 +365,7 @@ export default function BusDetailPage({
                 <Form.Item
                   name="number"
                   label={
-                    <span className="font-medium text-slate-600">
+                    <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
                       Bus Number / Code
                     </span>
                   }
@@ -383,7 +383,7 @@ export default function BusDetailPage({
                 <Form.Item
                   name="registrationNumber"
                   label={
-                    <span className="font-medium text-slate-600">
+                    <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
                       Registration Number
                     </span>
                   }
@@ -398,7 +398,7 @@ export default function BusDetailPage({
                 <Form.Item
                   name="brand"
                   label={
-                    <span className="font-medium text-slate-600">Brand</span>
+                    <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Brand</span>
                   }
                 >
                   <Input
@@ -411,7 +411,7 @@ export default function BusDetailPage({
                 <Form.Item
                   name="model"
                   label={
-                    <span className="font-medium text-slate-600">Model</span>
+                    <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Model</span>
                   }
                 >
                   <Input
@@ -424,7 +424,7 @@ export default function BusDetailPage({
                 <Form.Item
                   name="status"
                   label={
-                    <span className="font-medium text-slate-600">Status</span>
+                    <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Status</span>
                   }
                   initialValue="Active"
                 >
@@ -442,14 +442,14 @@ export default function BusDetailPage({
             </div>
 
             <div className="mb-6 border-t pt-6 border-slate-100 dark:border-slate-800">
-              <h3 className="text-lg font-semibold mb-4 text-slate-800 dark:text-slate-200">
+              <h3 className="text-lg font-semibold mb-4 text-slate-800 dark:text-white">
                 Configuration
               </h3>
               <div className="grid gap-6 md:grid-cols-3">
                 <Form.Item
                   name="type"
                   label={
-                    <span className="font-medium text-slate-600">Bus Type</span>
+                    <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Bus Type</span>
                   }
                   rules={[{ required: true, message: "Bus type is required" }]}
                 >
@@ -470,7 +470,7 @@ export default function BusDetailPage({
                 <Form.Item
                   name="seatPlan"
                   label={
-                    <span className="font-medium text-slate-600">
+                    <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
                       Seat Plan
                     </span>
                   }
@@ -493,7 +493,7 @@ export default function BusDetailPage({
                 <Form.Item
                   name="capacity"
                   label={
-                    <span className="font-medium text-slate-600">
+                    <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
                       Total Capacity
                     </span>
                   }
@@ -510,14 +510,14 @@ export default function BusDetailPage({
             </div>
 
             <div className="mb-6 border-t pt-6 border-slate-100 dark:border-slate-800">
-              <h3 className="text-lg font-semibold mb-4 text-slate-800 dark:text-slate-200">
+              <h3 className="text-lg font-semibold mb-4 text-slate-800 dark:text-white">
                 Documents & Compliance
               </h3>
               <div className="grid gap-6 md:grid-cols-3">
                 <Form.Item
                   name="fitnessExpiry"
                   label={
-                    <span className="font-medium text-slate-600">
+                    <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
                       Fitness Expiry
                     </span>
                   }
@@ -528,7 +528,7 @@ export default function BusDetailPage({
                 <Form.Item
                   name="insuranceExpiry"
                   label={
-                    <span className="font-medium text-slate-600">
+                    <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
                       Insurance Expiry
                     </span>
                   }
@@ -539,7 +539,7 @@ export default function BusDetailPage({
                 <Form.Item
                   name="taxTokenExpiry"
                   label={
-                    <span className="font-medium text-slate-600">
+                    <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
                       Tax Token Expiry
                     </span>
                   }
@@ -550,7 +550,7 @@ export default function BusDetailPage({
                 <Form.Item
                   name="permitNumber"
                   label={
-                    <span className="font-medium text-slate-600">
+                    <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
                       Permit Number
                     </span>
                   }
@@ -561,7 +561,7 @@ export default function BusDetailPage({
             </div>
 
             <div className="mb-6 border-t pt-6 border-slate-100 dark:border-slate-800">
-              <h3 className="text-lg font-semibold mb-4 text-slate-800 dark:text-slate-200">
+              <h3 className="text-lg font-semibold mb-4 text-slate-800 dark:text-white">
                 Facilities
               </h3>
               <Form.Item name="facilities">
@@ -591,8 +591,8 @@ export default function BusDetailPage({
           </div>
 
           {/* Seat Layout Section - Side by Side */}
-          <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100 dark:bg-black dark:ring-slate-800">
-            <h3 className="mb-4 text-lg font-semibold text-slate-800 dark:text-slate-200">
+          <div className="rounded-2xl bg-white dark:bg-slate-800 p-6 shadow-sm ring-1 ring-slate-100 dark:bg-slate-800 dark:ring-slate-700">
+            <h3 className="mb-4 text-lg font-semibold text-slate-800 dark:text-white">
               Seat Layout
             </h3>
             <Form.Item name="seats" preserve>

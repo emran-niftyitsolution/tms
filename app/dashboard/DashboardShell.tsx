@@ -12,8 +12,9 @@ import {
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useMemo, useState } from "react";
-import { FiBriefcase, FiMenu, FiUsers } from "react-icons/fi";
+import { useEffect, useMemo, useState } from "react";
+import { useTheme } from "next-themes";
+import { FiBriefcase, FiMenu, FiUsers, FiMoon, FiSun } from "react-icons/fi";
 import {
   LuBuilding2,
   LuBus,
@@ -74,8 +75,15 @@ export default function DashboardShell({
   const activeKey = getActiveKey(pathname);
   const [collapsed, setCollapsed] = useState(false);
   const { data: session, status } = useSession();
+  const { theme: currentTheme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
 
   const { token } = theme.useToken();
+
+  // Avoid hydration mismatch
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   const siderWidth = collapsed ? 80 : 260;
 
   const breadcrumbItems = useMemo(() => {
@@ -293,17 +301,34 @@ export default function DashboardShell({
           <Button
             type="text"
             aria-label="Toggle sidebar"
-            icon={<FiMenu size={20} />}
+            icon={<FiMenu/>}
             onClick={() => setCollapsed((v) => !v)}
             style={{
-              marginLeft: -8,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
+              marginLeft: -24,
+							fontSize: '24px',
+              width: 64,
+              height: 64,
             }}
           />
 
-          <Dropdown
+          <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 8 }}>
+            {mounted && (
+              <Button
+                type="text"
+                aria-label="Toggle dark mode"
+                icon={currentTheme === "dark" ? <FiSun size={18} /> : <FiMoon size={18} />}
+                onClick={() => setTheme(currentTheme === "dark" ? "light" : "dark")}
+                style={{
+                  paddingInline: 12,
+                  height: 40,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              />
+            )}
+
+            <Dropdown
             menu={{
               items: [
                 { key: "profile", label: "Profile" },
@@ -364,6 +389,7 @@ export default function DashboardShell({
               </span>
             </Button>
           </Dropdown>
+          </div>
         </Header>
 
         <Content

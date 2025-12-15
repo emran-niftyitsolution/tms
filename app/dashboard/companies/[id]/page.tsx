@@ -74,7 +74,7 @@ export default function EditCompanyPage() {
           <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
             Edit Company
           </h1>
-          <p className="mt-1 text-slate-500">
+          <p className="mt-1 text-slate-500 dark:text-slate-400">
             Update company details, location, and settings.
           </p>
         </div>
@@ -118,8 +118,8 @@ export default function EditCompanyPage() {
         >
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           <div className="lg:col-span-2">
-            <div className="mb-8 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100 dark:bg-black dark:ring-slate-800">
-              <div className="mb-6 flex items-center gap-2 border-b border-slate-100 pb-4 text-lg font-semibold text-slate-900 dark:border-slate-800 dark:text-white">
+            <div className="mb-8 rounded-2xl bg-white dark:bg-slate-800 p-6 shadow-sm ring-1 ring-slate-100 dark:bg-slate-800 dark:ring-slate-700">
+              <div className="mb-6 flex items-center gap-2 border-b border-slate-100 pb-4 text-lg font-semibold text-slate-900 dark:text-white dark:border-slate-800 dark:text-white">
                 <FiInfo className="text-indigo-500" /> Basic Information
               </div>
               <div className="grid grid-cols-1 gap-x-6 gap-y-2 md:grid-cols-2">
@@ -127,7 +127,7 @@ export default function EditCompanyPage() {
                   <Form.Item
                     name="name"
                     label={
-                      <span className="font-medium text-slate-600">
+                      <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
                         Company Name
                       </span>
                     }
@@ -143,8 +143,8 @@ export default function EditCompanyPage() {
               </div>
             </div>
 
-            <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100 dark:bg-black dark:ring-slate-800">
-              <div className="mb-6 flex items-center gap-2 border-b border-slate-100 pb-4 text-lg font-semibold text-slate-900 dark:border-slate-800 dark:text-white">
+            <div className="rounded-2xl bg-white dark:bg-slate-800 p-6 shadow-sm ring-1 ring-slate-100 dark:bg-slate-800 dark:ring-slate-700">
+              <div className="mb-6 flex items-center gap-2 border-b border-slate-100 pb-4 text-lg font-semibold text-slate-900 dark:text-white dark:border-slate-800 dark:text-white">
                 <FiMapPin className="text-indigo-500" /> Location & Contact
               </div>
               <div className="grid grid-cols-1 gap-x-6 gap-y-2 md:grid-cols-2">
@@ -152,7 +152,7 @@ export default function EditCompanyPage() {
                   <Form.Item
                     name="email"
                     label={
-                      <span className="font-medium text-slate-600">
+                      <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
                         Email Address
                       </span>
                     }
@@ -168,7 +168,7 @@ export default function EditCompanyPage() {
                   <Form.Item
                     name="phone"
                     label={
-                      <span className="font-medium text-slate-600">
+                      <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
                         Phone Number
                       </span>
                     }
@@ -189,7 +189,7 @@ export default function EditCompanyPage() {
                   <Form.Item
                     name="street"
                     label={
-                      <span className="font-medium text-slate-600">
+                      <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
                         Street Address
                       </span>
                     }
@@ -206,7 +206,7 @@ export default function EditCompanyPage() {
                   <Form.Item
                     name="city"
                     label={
-                      <span className="font-medium text-slate-600">City</span>
+                      <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">City</span>
                     }
                   >
                     <Input
@@ -220,7 +220,7 @@ export default function EditCompanyPage() {
                   <Form.Item
                     name="state"
                     label={
-                      <span className="font-medium text-slate-600">
+                      <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
                         State / Division
                       </span>
                     }
@@ -236,7 +236,7 @@ export default function EditCompanyPage() {
                   <Form.Item
                     name="zip"
                     label={
-                      <span className="font-medium text-slate-600">
+                      <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
                         Zip / Postal Code
                       </span>
                     }
@@ -252,7 +252,7 @@ export default function EditCompanyPage() {
                   <Form.Item
                     name="country"
                     label={
-                      <span className="font-medium text-slate-600">
+                      <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
                         Country
                       </span>
                     }
@@ -269,14 +269,14 @@ export default function EditCompanyPage() {
           </div>
 
           <div className="lg:col-span-1">
-            <div className="mb-6 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100 dark:bg-black dark:ring-slate-800">
-              <div className="mb-6 flex items-center gap-2 border-b border-slate-100 pb-4 text-lg font-semibold text-slate-900 dark:border-slate-800 dark:text-white">
+            <div className="mb-6 rounded-2xl bg-white dark:bg-slate-800 p-6 shadow-sm ring-1 ring-slate-100 dark:bg-slate-800 dark:ring-slate-700">
+              <div className="mb-6 flex items-center gap-2 border-b border-slate-100 pb-4 text-lg font-semibold text-slate-900 dark:text-white dark:border-slate-800 dark:text-white">
                 <FiSettings className="text-indigo-500" /> Settings
               </div>
               <Form.Item
                 name="status"
                 label={
-                  <span className="font-medium text-slate-600">
+                  <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
                     Account Status
                   </span>
                 }
@@ -289,7 +289,7 @@ export default function EditCompanyPage() {
               <Form.Item
                 name="license"
                 label={
-                  <span className="font-medium text-slate-600">
+                  <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
                     License Number
                   </span>
                 }

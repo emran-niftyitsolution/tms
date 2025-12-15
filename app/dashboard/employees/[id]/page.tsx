@@ -83,12 +83,12 @@ export default function EditEmployeePage({
         <h2 className="text-xl font-bold text-slate-900 dark:text-white">
           Edit Staff
         </h2>
-        <p className="text-sm text-slate-500">
+        <p className="text-sm text-slate-500 dark:text-slate-400">
           Update staff information
         </p>
       </div>
 
-      <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100 dark:bg-black dark:ring-slate-800">
+      <div className="rounded-2xl bg-white dark:bg-slate-800 p-6 shadow-sm ring-1 ring-slate-100 dark:bg-slate-800 dark:ring-slate-700">
         <FormLoader loading={fetching}>
           <Form
             form={form}
@@ -98,7 +98,7 @@ export default function EditEmployeePage({
           <div className="grid gap-6 md:grid-cols-2">
             <Form.Item
               name="company"
-              label={<span className="font-medium text-slate-600">Company</span>}
+              label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Company</span>}
               rules={[{ required: true, message: "Company is required" }]}
               className="md:col-span-2"
             >
@@ -114,7 +114,7 @@ export default function EditEmployeePage({
 
             <Form.Item
               name="name"
-              label={<span className="font-medium text-slate-600">Name</span>}
+              label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Name</span>}
               rules={[{ required: true, message: "Name is required" }]}
             >
               <Input size="large" placeholder="Staff name" className="rounded-lg" />
@@ -122,7 +122,7 @@ export default function EditEmployeePage({
 
             <Form.Item
               name="role"
-              label={<span className="font-medium text-slate-600">Role</span>}
+              label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Role</span>}
               rules={[{ required: true, message: "Role is required" }]}
             >
               <Select
@@ -140,7 +140,7 @@ export default function EditEmployeePage({
 
             <Form.Item
               name="contactNumber"
-              label={<span className="font-medium text-slate-600">Contact Number</span>}
+              label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Contact Number</span>}
               rules={[{ required: true, message: "Contact number is required" }]}
             >
               <Input size="large" placeholder="Phone number" className="rounded-lg" />
@@ -148,21 +148,21 @@ export default function EditEmployeePage({
 
             <Form.Item
               name="licenseNumber"
-              label={<span className="font-medium text-slate-600">License Number</span>}
+              label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">License Number</span>}
             >
               <Input size="large" placeholder="License number (optional)" className="rounded-lg" />
             </Form.Item>
 
             <Form.Item
               name="nid"
-              label={<span className="font-medium text-slate-600">NID</span>}
+              label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">NID</span>}
             >
               <Input size="large" placeholder="National ID (optional)" className="rounded-lg" />
             </Form.Item>
 
             <Form.Item
               name="status"
-              label={<span className="font-medium text-slate-600">Status</span>}
+              label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Status</span>}
             >
               <Select
                 size="large"

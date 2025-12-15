@@ -108,10 +108,10 @@ export default function CompaniesPage() {
         <Space size="middle">
           <Link href={`/dashboard/companies/${record._id}`}>
             <button
-              className="flex cursor-pointer items-center justify-center rounded-full bg-indigo-200 p-2 text-white transition-colors hover:bg-indigo-300 dark:bg-indigo-500/40 dark:hover:bg-indigo-500/60"
+              className="flex cursor-pointer items-center justify-center rounded-full bg-indigo-500 p-2 text-white transition-colors hover:bg-indigo-700 dark:bg-indigo-500/40 dark:hover:bg-indigo-500/60"
               title="Edit"
             >
-              <FiEdit2 className="h-4 w-4 text-blue-500" />
+              <FiEdit2 className="h-4 w-4 text-white" />
             </button>
           </Link>
           <Popconfirm
@@ -122,7 +122,7 @@ export default function CompaniesPage() {
             cancelText="No"
           >
             <button
-              className="flex cursor-pointer items-center justify-center rounded-full bg-red-600 p-2 text-white transition-colors hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800"
+              className="flex cursor-pointer items-center justify-center rounded-full bg-red-500 p-2 text-white transition-colors hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-800"
               title="Delete"
             >
               <FiTrash2 className="h-4 w-4 text-white" />

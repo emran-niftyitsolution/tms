@@ -12,7 +12,7 @@ export default function BusPage() {
             <h1 className="text-3xl font-semibold tracking-tight text-slate-900 dark:text-white sm:text-4xl">
               Book bus tickets with confidence.
             </h1>
-            <p className="mt-3 max-w-xl text-sm leading-6 text-slate-600 dark:text-slate-400">
+            <p className="mt-3 max-w-xl text-sm leading-6 text-slate-600 dark:text-white">
               Verified operators, clean timings, and seat availability — wrapped
               in a modern UI.
             </p>
@@ -25,12 +25,12 @@ export default function BusPage() {
               ].map((i) => (
                 <div
                   key={i.k}
-                  className="rounded-2xl border border-white/10 bg-white/50 p-4 backdrop-blur dark:bg-slate-950/30"
+                  className="rounded-2xl border border-white/10 bg-white dark:bg-slate-800/50 p-4 backdrop-blur dark:bg-slate-950/30"
                 >
                   <div className="text-sm font-semibold text-slate-900 dark:text-white">
                     {i.k}
                   </div>
-                  <div className="mt-1 text-xs text-slate-600 dark:text-slate-400">
+                  <div className="mt-1 text-xs text-slate-600 dark:text-white">
                     {i.v}
                   </div>
                 </div>

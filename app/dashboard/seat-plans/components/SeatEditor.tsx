@@ -499,7 +499,7 @@ export function SeatEditor({
           className="flex h-16 w-16 items-center justify-center border-2 border-dashed border-slate-400 bg-slate-200 dark:border-slate-600 dark:bg-slate-700"
           title="Road"
         >
-          <span className="text-base text-slate-500">🚶</span>
+          <span className="text-base text-slate-500 dark:text-slate-400">🚶</span>
         </div>
       );
     }
@@ -630,7 +630,7 @@ export function SeatEditor({
             className={`group relative flex h-16 w-16 items-center justify-center rounded border text-base font-medium shadow-sm ${
               seat.isBroken
                 ? "border-red-400 bg-red-100 text-red-700 line-through dark:border-red-600 dark:bg-red-900/30 dark:text-red-400"
-                : "border-slate-300 bg-slate-50 text-slate-700 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300"
+                : "border-slate-300 bg-slate-50 text-slate-700 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
             }`}
             title={`Seat ${seat.seatName || seat.seatNumber}${seat.isBroken ? " (Broken)" : ""}`}
           >
@@ -689,7 +689,7 @@ export function SeatEditor({
         <div className="flex flex-wrap items-center gap-4">
           {!readOnly && (
             <div className="flex items-center gap-2">
-              <label className="text-sm font-medium text-slate-600 dark:text-slate-400">
+              <label className="text-sm font-medium text-slate-600 dark:text-white dark:text-slate-300">
                 Road Columns:
               </label>
               <div className="flex gap-1">
@@ -787,7 +787,7 @@ export function SeatEditor({
         {/* Bus Back Indicator */}
         <div className="mt-4">
           <div className="inline-flex items-center gap-2 rounded-lg bg-slate-100 px-4 py-2 dark:bg-slate-800">
-            <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
+            <span className="text-sm font-medium text-slate-600 dark:text-white dark:text-slate-300">
               ⬇️ Back
             </span>
           </div>
@@ -798,21 +798,21 @@ export function SeatEditor({
       <div className="mt-6 flex flex-wrap items-center justify-center gap-4 rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/50">
         <div className="flex items-center gap-2">
           <div className="h-6 w-6 rounded border border-slate-300 bg-slate-50 dark:border-slate-600 dark:bg-slate-800"></div>
-          <span className="text-xs text-slate-600 dark:text-slate-400">
+          <span className="text-xs text-slate-600 dark:text-white dark:text-slate-300">
             Seat (double-click to edit, right-click for menu)
           </span>
         </div>
         <div className="flex items-center gap-2">
           <div className="h-6 w-6 rounded border border-red-400 bg-red-100 dark:border-red-600 dark:bg-red-900/30"></div>
-          <span className="text-xs text-slate-600 dark:text-slate-400">Broken Seat</span>
+          <span className="text-xs text-slate-600 dark:text-white dark:text-slate-300">Broken Seat</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="h-6 w-6 rounded border-2 border-dashed border-slate-400 bg-slate-200 dark:bg-slate-700"></div>
-          <span className="text-xs text-slate-600 dark:text-slate-400">Road</span>
+          <span className="text-xs text-slate-600 dark:text-white dark:text-slate-300">Road</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="h-6 w-6 rounded border border-dashed border-slate-300 dark:border-slate-600"></div>
-          <span className="text-xs text-slate-600 dark:text-slate-400">Empty (double-click to add)</span>
+          <span className="text-xs text-slate-600 dark:text-white dark:text-slate-300">Empty (double-click to add)</span>
         </div>
       </div>
 
@@ -828,7 +828,7 @@ export function SeatEditor({
         width={800}
       >
         <div className="py-4">
-          <div className="mb-4 text-sm text-slate-600 dark:text-slate-400">
+          <div className="mb-4 text-sm text-slate-600 dark:text-white dark:text-slate-300">
             Enter seat names for each column (leave empty to skip, use XX for broken seat, XY for road):
           </div>
           <div className="grid grid-cols-5 gap-4">
@@ -849,7 +849,7 @@ export function SeatEditor({
               }
               return (
                 <div key={i} className="flex flex-col">
-                  <label className="mb-2 text-xs font-medium text-slate-600 dark:text-slate-400">
+                  <label className="mb-2 text-xs font-medium text-slate-600 dark:text-white dark:text-slate-300">
                     Column {i + 1}
                   </label>
                   <Input
@@ -867,7 +867,7 @@ export function SeatEditor({
               );
             })}
           </div>
-          <div className="mt-4 rounded-lg bg-slate-50 p-3 text-xs text-slate-600 dark:bg-slate-800 dark:text-slate-400">
+          <div className="mt-4 rounded-lg bg-slate-50 p-3 text-xs text-slate-600 dark:text-white dark:bg-slate-800 dark:text-slate-400">
             <p className="mb-2 font-semibold">Pattern Format:</p>
             <ul className="list-inside list-disc space-y-1">
               <li><code className="rounded bg-slate-200 px-1 py-0.5 dark:bg-slate-700">A1, A2, A3</code> - Seat names</li>

@@ -1,11 +1,19 @@
 "use client";
 
-import { Button, DatePicker, Popconfirm, Select, Space, Table, Tag } from "antd";
+import {
+  Button,
+  DatePicker,
+  Popconfirm,
+  Select,
+  Space,
+  Table,
+  Tag,
+} from "antd";
+import dayjs from "dayjs";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { FiEdit2, FiPlus, FiTrash2 } from "react-icons/fi";
 import { toast } from "sonner";
-import dayjs from "dayjs";
 
 type Schedule = {
   _id: string;
@@ -90,7 +98,7 @@ export default function SchedulesPage() {
           <span className="font-medium text-slate-900 dark:text-white">
             {dayjs(text).format("MMM D, YYYY")}
           </span>
-          <span className="text-xs text-slate-500">
+          <span className="text-xs text-slate-500 dark:text-slate-400">
             {dayjs(text).format("h:mm A")}
           </span>
         </div>
@@ -106,34 +114,35 @@ export default function SchedulesPage() {
       title: "Bus",
       dataIndex: "bus",
       key: "bus",
-      render: (bus: Schedule["bus"]) => (
+      render: (bus: Schedule["bus"]) =>
         bus ? (
           <Link
             href={`/dashboard/buses/${bus._id}`}
             className="flex flex-col text-indigo-600 hover:text-indigo-700"
           >
             <span className="font-medium">{bus.number}</span>
-            <span className="text-xs text-slate-500">{bus.type}</span>
+            <span className="text-xs text-slate-500 dark:text-slate-400">
+              {bus.type}
+            </span>
           </Link>
         ) : (
           <div className="flex flex-col">
             <span className="font-medium">-</span>
           </div>
-        )
-      ),
+        ),
     },
     {
       title: "Route",
       dataIndex: "route",
       key: "route",
-      render: (route: Schedule["route"]) => (
+      render: (route: Schedule["route"]) =>
         route ? (
           <Link
             href={`/dashboard/routes/${route._id}`}
             className="flex flex-col text-indigo-600 hover:text-indigo-700"
           >
             <span className="font-medium">{route.name}</span>
-            <span className="text-xs text-slate-500">
+            <span className="text-xs text-slate-500 dark:text-slate-400">
               {typeof route.from === "object" ? route.from.name : route.from} -{" "}
               {typeof route.to === "object" ? route.to.name : route.to}
             </span>
@@ -142,16 +151,13 @@ export default function SchedulesPage() {
           <div className="flex flex-col">
             <span className="font-medium">-</span>
           </div>
-        )
-      ),
+        ),
     },
     {
       title: "Price",
       dataIndex: "price",
       key: "price",
-      render: (price: number) => (
-        <span className="font-medium">৳{price}</span>
-      ),
+      render: (price: number) => <span className="font-medium">৳{price}</span>,
     },
     {
       title: "Status",
@@ -205,7 +211,7 @@ export default function SchedulesPage() {
           <h2 className="text-xl font-bold text-slate-900 dark:text-white">
             Schedules
           </h2>
-          <p className="text-sm text-slate-500">
+          <p className="text-sm text-slate-500 dark:text-slate-400">
             Manage trip schedules and pricing
           </p>
         </div>
@@ -260,4 +266,3 @@ export default function SchedulesPage() {
     </div>
   );
 }
-

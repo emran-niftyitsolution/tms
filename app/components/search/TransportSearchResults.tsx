@@ -238,14 +238,14 @@ export function TransportSearchResults({ mode }: { mode: TravelMode }) {
         <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
             <div className="flex items-center gap-3">
-              <span className="grid h-10 w-10 place-items-center rounded-xl bg-white/70 text-xl ring-1 ring-slate-200/70 backdrop-blur dark:bg-slate-950/50 dark:ring-slate-800">
+              <span className="grid h-10 w-10 place-items-center rounded-xl bg-white dark:bg-slate-800/70 text-xl ring-1 ring-slate-200/70 backdrop-blur dark:bg-slate-950/50 dark:ring-slate-800">
                 {meta.icon}
               </span>
               <h1 className="text-2xl font-semibold tracking-tight text-slate-900 dark:text-white">
                 {meta.title}
               </h1>
             </div>
-            <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
+            <p className="mt-2 text-sm text-slate-600 dark:text-white">
               {from} → {to}
               {date ? ` • ${date}` : ""} • {passengers} traveler(s)
             </p>
@@ -253,7 +253,7 @@ export function TransportSearchResults({ mode }: { mode: TravelMode }) {
 
           <Link
             href={meta.backHref}
-            className="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-900 hover:border-slate-300 dark:border-slate-800 dark:bg-slate-950 dark:text-white dark:hover:border-slate-700"
+            className="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white dark:bg-slate-800 px-4 py-2.5 text-sm font-semibold text-slate-900 dark:text-white hover:border-slate-300 dark:border-slate-800 dark:bg-slate-950 dark:text-white dark:hover:border-slate-700"
           >
             Modify search
           </Link>
@@ -261,17 +261,17 @@ export function TransportSearchResults({ mode }: { mode: TravelMode }) {
 
         <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-12">
           <aside className="lg:col-span-4 xl:col-span-3">
-            <div className="rounded-2xl border border-slate-200/70 bg-white/70 p-5 backdrop-blur dark:border-slate-800 dark:bg-slate-950/40">
+            <div className="rounded-2xl border border-slate-200/70 bg-white dark:bg-slate-800/70 p-5 backdrop-blur dark:border-slate-800 dark:bg-slate-950/40">
               <div className="text-sm font-semibold text-slate-900 dark:text-white">
                 Filters
               </div>
 
               <div className="mt-4 space-y-4">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-white dark:text-slate-300">
                     Stops
                   </label>
-                  <select className="mt-2 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-900 focus:border-slate-300 focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-white dark:focus:border-slate-700">
+                  <select className="mt-2 w-full rounded-xl border border-slate-200 bg-white dark:bg-slate-800 px-3 py-2 text-sm font-medium text-slate-900 dark:text-white focus:border-slate-300 focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-white dark:focus:border-slate-700">
                     <option>Any</option>
                     <option>Direct / Non-stop</option>
                     <option>1 stop</option>
@@ -280,10 +280,10 @@ export function TransportSearchResults({ mode }: { mode: TravelMode }) {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-white dark:text-slate-300">
                     Sort
                   </label>
-                  <select className="mt-2 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-900 focus:border-slate-300 focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-white dark:focus:border-slate-700">
+                  <select className="mt-2 w-full rounded-xl border border-slate-200 bg-white dark:bg-slate-800 px-3 py-2 text-sm font-medium text-slate-900 dark:text-white focus:border-slate-300 focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-white dark:focus:border-slate-700">
                     <option>Recommended</option>
                     <option>Lowest price</option>
                     <option>Shortest duration</option>
@@ -291,7 +291,7 @@ export function TransportSearchResults({ mode }: { mode: TravelMode }) {
                   </select>
                 </div>
 
-                <div className="rounded-xl bg-slate-900 px-4 py-3 text-sm text-white dark:bg-white dark:text-slate-900">
+                <div className="rounded-xl bg-slate-900 px-4 py-3 text-sm text-white dark:bg-slate-800 dark:text-white">
                   Tip: try switching modes on the homepage for a unified
                   experience.
                 </div>
@@ -304,7 +304,7 @@ export function TransportSearchResults({ mode }: { mode: TravelMode }) {
               {results.map((r) => (
                 <div
                   key={r.id}
-                  className="rounded-2xl border border-slate-200/70 bg-white/70 p-5 backdrop-blur dark:border-slate-800 dark:bg-slate-950/40"
+                  className="rounded-2xl border border-slate-200/70 bg-white dark:bg-slate-800/70 p-5 backdrop-blur dark:border-slate-800 dark:bg-slate-950/40"
                 >
                   <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
                     <div className="min-w-0">
@@ -315,7 +315,7 @@ export function TransportSearchResults({ mode }: { mode: TravelMode }) {
                         <span className="text-sm text-slate-500 dark:text-slate-400">
                           {r.code} • ★ {r.rating}
                         </span>
-                        <span className="rounded-xl bg-white/70 px-2.5 py-1 text-xs font-semibold text-slate-700 ring-1 ring-slate-200/70 dark:bg-slate-950/50 dark:text-slate-300 dark:ring-slate-800">
+                        <span className="rounded-xl bg-white dark:bg-slate-800/70 px-2.5 py-1 text-xs font-semibold text-slate-700 ring-1 ring-slate-200/70 dark:bg-slate-950/50 dark:text-slate-300 dark:ring-slate-800">
                           {r.stops}
                         </span>
                       </div>
@@ -325,13 +325,13 @@ export function TransportSearchResults({ mode }: { mode: TravelMode }) {
                           <div className="text-lg font-semibold text-slate-900 dark:text-white">
                             {r.departure}
                           </div>
-                          <div className="text-sm text-slate-600 dark:text-slate-400">
+                          <div className="text-sm text-slate-600 dark:text-white">
                             {from}
                           </div>
                         </div>
 
                         <div className="flex-1">
-                          <div className="text-center text-sm text-slate-600 dark:text-slate-400">
+                          <div className="text-center text-sm text-slate-600 dark:text-white">
                             {r.duration}
                           </div>
                           <div className="mt-1 h-0.5 w-full bg-slate-200 dark:bg-slate-800" />
@@ -341,32 +341,32 @@ export function TransportSearchResults({ mode }: { mode: TravelMode }) {
                           <div className="text-lg font-semibold text-slate-900 dark:text-white">
                             {r.arrival}
                           </div>
-                          <div className="text-sm text-slate-600 dark:text-slate-400">
+                          <div className="text-sm text-slate-600 dark:text-white">
                             {to}
                           </div>
                         </div>
                       </div>
 
-                      <div className="mt-3 text-sm text-slate-600 dark:text-slate-400">
+                      <div className="mt-3 text-sm text-slate-600 dark:text-white">
                         {r.vehicle}
                       </div>
                     </div>
 
-                    <div className="shrink-0 rounded-2xl border border-slate-200/70 bg-white/70 p-4 dark:border-slate-800 dark:bg-slate-950/50">
-                      <div className="text-sm text-slate-600 dark:text-slate-400">
+                    <div className="shrink-0 rounded-2xl border border-slate-200/70 bg-white dark:bg-slate-800/70 p-4 dark:border-slate-800 dark:bg-slate-950/50">
+                      <div className="text-sm text-slate-600 dark:text-white">
                         {r.seats} seats left
                       </div>
                       <div className="mt-1 text-2xl font-semibold text-slate-900 dark:text-white">
                         ${r.price}
-                        <span className="ml-1 text-sm font-normal text-slate-600 dark:text-slate-400">
+                        <span className="ml-1 text-sm font-normal text-slate-600 dark:text-white">
                           /person
                         </span>
                       </div>
                       <div className="mt-3 grid gap-2">
-                        <button className="w-full rounded-xl bg-slate-900 py-2.5 text-sm font-semibold text-white hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100">
+                        <button className="w-full rounded-xl bg-slate-900 py-2.5 text-sm font-semibold text-white hover:bg-slate-800 dark:bg-slate-800 dark:text-white dark:hover:bg-slate-100 dark:bg-slate-800">
                           Book
                         </button>
-                        <button className="w-full rounded-xl border border-slate-200 bg-white py-2.5 text-sm font-semibold text-slate-900 hover:border-slate-300 dark:border-slate-800 dark:bg-slate-950 dark:text-white dark:hover:border-slate-700">
+                        <button className="w-full rounded-xl border border-slate-200 bg-white dark:bg-slate-800 py-2.5 text-sm font-semibold text-slate-900 dark:text-white hover:border-slate-300 dark:border-slate-800 dark:bg-slate-950 dark:text-white dark:hover:border-slate-700">
                           Details
                         </button>
                       </div>

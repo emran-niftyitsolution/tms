@@ -51,7 +51,7 @@ export default function LoginPage() {
         <h2 className="mt-6 text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
           Welcome back
         </h2>
-        <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
+        <p className="mt-2 text-sm text-slate-600 dark:text-white">
           Or{" "}
           <Link
             href="/register"
@@ -74,7 +74,7 @@ export default function LoginPage() {
               <div className="group relative">
                 <label
                   htmlFor="email"
-                  className="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1 ml-1"
+                  className="block text-xs font-medium text-slate-500 dark:text-white mb-1 ml-1"
                 >
                   Email address
                 </label>
@@ -86,7 +86,7 @@ export default function LoginPage() {
                     type="email"
                     autoComplete="email"
                     required
-                    className="block w-full rounded-2xl border-0 bg-slate-50/50 py-4 pl-12 pr-4 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-200 placeholder:text-slate-400 focus:bg-white focus:ring-2 focus:ring-inset focus:ring-indigo-500 dark:bg-white/5 dark:text-white dark:ring-white/10 dark:focus:bg-white/10 dark:focus:ring-indigo-500 sm:text-sm sm:leading-6 transition-all"
+                    className="block w-full rounded-2xl border-0 bg-slate-50/50 py-4 pl-12 pr-4 text-slate-900 dark:text-white shadow-sm ring-1 ring-inset ring-slate-200 placeholder:text-slate-400 focus:bg-white focus:ring-2 focus:ring-inset focus:ring-indigo-500 dark:bg-white/5 dark:text-white dark:ring-white/10 dark:focus:bg-white dark:bg-slate-800/10 dark:focus:ring-indigo-500 sm:text-sm sm:leading-6 transition-all"
                     placeholder="you@example.com"
                   />
                 </div>
@@ -95,7 +95,7 @@ export default function LoginPage() {
               <div className="group relative">
                 <label
                   htmlFor="password"
-                  className="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1 ml-1"
+                  className="block text-xs font-medium text-slate-500 dark:text-white mb-1 ml-1"
                 >
                   Password
                 </label>
@@ -107,7 +107,7 @@ export default function LoginPage() {
                     type="password"
                     autoComplete="current-password"
                     required
-                    className="block w-full rounded-2xl border-0 bg-slate-50/50 py-4 pl-12 pr-4 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-200 placeholder:text-slate-400 focus:bg-white focus:ring-2 focus:ring-inset focus:ring-indigo-500 dark:bg-white/5 dark:text-white dark:ring-white/10 dark:focus:bg-white/10 dark:focus:ring-indigo-500 sm:text-sm sm:leading-6 transition-all"
+                    className="block w-full rounded-2xl border-0 bg-slate-50/50 py-4 pl-12 pr-4 text-slate-900 dark:text-white shadow-sm ring-1 ring-inset ring-slate-200 placeholder:text-slate-400 focus:bg-white focus:ring-2 focus:ring-inset focus:ring-indigo-500 dark:bg-white/5 dark:text-white dark:ring-white/10 dark:focus:bg-white dark:bg-slate-800/10 dark:focus:ring-indigo-500 sm:text-sm sm:leading-6 transition-all"
                     placeholder="••••••••"
                   />
                 </div>
@@ -123,7 +123,7 @@ export default function LoginPage() {
                   />
                   <label
                     htmlFor="remember-me"
-                    className="ml-2 block text-sm text-slate-900 dark:text-slate-300"
+                    className="ml-2 block text-sm text-slate-900 dark:text-white"
                   >
                     Remember me
                   </label>
@@ -158,7 +158,7 @@ export default function LoginPage() {
               <div className="w-full border-t border-slate-200 dark:border-slate-800" />
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="bg-white px-4 text-slate-500 dark:bg-black">
+              <span className="bg-white dark:bg-slate-800 px-4 text-slate-500 dark:text-slate-400 dark:bg-black">
                 Or continue with
               </span>
             </div>
@@ -168,7 +168,7 @@ export default function LoginPage() {
             <motion.button
               whileHover={{ scale: 1.01 }}
               whileTap={{ scale: 0.99 }}
-              className="relative flex items-center justify-center gap-3 rounded-2xl bg-white px-4 py-4 text-sm font-semibold text-slate-700 shadow-sm ring-1 ring-inset ring-slate-200 hover:bg-slate-50 dark:bg-white/5 dark:text-white dark:ring-white/10 dark:hover:bg-white/10 transition-all"
+              className="relative flex items-center justify-center gap-3 rounded-2xl bg-white px-4 py-4 text-sm font-semibold text-slate-700 shadow-sm ring-1 ring-inset ring-slate-200 hover:bg-slate-50 dark:bg-white/5 dark:text-white dark:ring-white/10 dark:hover:bg-white dark:bg-slate-800/10 transition-all"
               onClick={() => toast.info("Google login not implemented yet")}
             >
               <svg className="h-5 w-5" viewBox="0 0 24 24">
@@ -195,7 +195,7 @@ export default function LoginPage() {
             <motion.button
               whileHover={{ scale: 1.01 }}
               whileTap={{ scale: 0.99 }}
-              className="relative flex items-center justify-center gap-3 rounded-2xl bg-[#24292F] px-4 py-4 text-sm font-semibold text-white shadow-sm hover:bg-[#24292F]/90 dark:bg-white dark:text-black dark:hover:bg-white/90 transition-all"
+              className="relative flex items-center justify-center gap-3 rounded-2xl bg-[#24292F] px-4 py-4 text-sm font-semibold text-white shadow-sm hover:bg-[#24292F]/90 dark:bg-white dark:text-black dark:hover:bg-white dark:bg-slate-800/90 transition-all"
               onClick={() => toast.info("GitHub login not implemented yet")}
             >
               <FiGithub className="h-5 w-5" />

@@ -112,17 +112,17 @@ export default function EditStoppagePage({ params }: { params: Promise<{ id: str
         <h2 className="text-xl font-bold text-slate-900 dark:text-white">
           Edit Stoppage
         </h2>
-        <p className="text-sm text-slate-500">
+        <p className="text-sm text-slate-500 dark:text-slate-400">
           Update stoppage information
         </p>
       </div>
 
-      <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100 dark:bg-black dark:ring-slate-800">
+      <div className="rounded-2xl bg-white dark:bg-slate-800 p-6 shadow-sm ring-1 ring-slate-100 dark:bg-slate-800 dark:ring-slate-700">
         <Form form={form} layout="vertical" onFinish={onFinish}>
           <div className="grid gap-6 md:grid-cols-2">
             <Form.Item
               name="company"
-              label={<span className="font-medium text-slate-600">Company</span>}
+              label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Company</span>}
               rules={[{ required: true, message: "Company is required" }]}
               className="md:col-span-2"
             >
@@ -138,7 +138,7 @@ export default function EditStoppagePage({ params }: { params: Promise<{ id: str
 
             <Form.Item
               name="name"
-              label={<span className="font-medium text-slate-600">Stoppage Name</span>}
+              label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Stoppage Name</span>}
               rules={[{ required: true, message: "Stoppage name is required" }]}
               className="md:col-span-2"
             >
@@ -151,7 +151,7 @@ export default function EditStoppagePage({ params }: { params: Promise<{ id: str
 
             <Form.Item
               name="city"
-              label={<span className="font-medium text-slate-600">City</span>}
+              label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">City</span>}
               rules={[{ required: true, message: "City is required" }]}
               className="md:col-span-2"
             >
@@ -167,7 +167,7 @@ export default function EditStoppagePage({ params }: { params: Promise<{ id: str
 
             <Form.Item
               name="code"
-              label={<span className="font-medium text-slate-600">Stoppage Code</span>}
+              label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Stoppage Code</span>}
             >
               <Input
                 size="large"
@@ -179,7 +179,7 @@ export default function EditStoppagePage({ params }: { params: Promise<{ id: str
 
             <Form.Item
               name="status"
-              label={<span className="font-medium text-slate-600">Status</span>}
+              label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Status</span>}
             >
               <Select
                 size="large"
@@ -197,7 +197,7 @@ export default function EditStoppagePage({ params }: { params: Promise<{ id: str
                   name="boarding"
                   valuePropName="checked"
                 >
-                  <Checkbox className="text-slate-700 dark:text-slate-300">
+                  <Checkbox className="text-slate-700 dark:text-white dark:text-slate-300">
                     Boarding
                   </Checkbox>
                 </Form.Item>
@@ -205,7 +205,7 @@ export default function EditStoppagePage({ params }: { params: Promise<{ id: str
                   name="dropping"
                   valuePropName="checked"
                 >
-                  <Checkbox className="text-slate-700 dark:text-slate-300">
+                  <Checkbox className="text-slate-700 dark:text-white dark:text-slate-300">
                     Dropping
                   </Checkbox>
                 </Form.Item>
@@ -213,7 +213,7 @@ export default function EditStoppagePage({ params }: { params: Promise<{ id: str
                   name="counter"
                   valuePropName="checked"
                 >
-                  <Checkbox className="text-slate-700 dark:text-slate-300">
+                  <Checkbox className="text-slate-700 dark:text-white dark:text-slate-300">
                     Counter
                   </Checkbox>
                 </Form.Item>

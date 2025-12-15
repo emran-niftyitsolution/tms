@@ -100,18 +100,18 @@ export default function NewRoutePage() {
         <h2 className="text-xl font-bold text-slate-900 dark:text-white">
           Add New Route
         </h2>
-        <p className="text-sm text-slate-500">
+        <p className="text-sm text-slate-500 dark:text-slate-400">
           Enter the details of the new route
         </p>
       </div>
 
-      <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100 dark:bg-black dark:ring-slate-800">
+      <div className="rounded-2xl bg-white dark:bg-slate-800 p-6 shadow-sm ring-1 ring-slate-100 dark:bg-slate-800 dark:ring-slate-700">
         <Form form={form} layout="vertical" onFinish={onFinish}>
           <div className="grid gap-6 md:grid-cols-2">
             <Form.Item
               name="company"
               label={
-                <span className="font-medium text-slate-600">Company</span>
+                <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Company</span>
               }
               rules={[{ required: true, message: "Company is required" }]}
               className="md:col-span-2"
@@ -129,7 +129,7 @@ export default function NewRoutePage() {
             <Form.Item
               name="name"
               label={
-                <span className="font-medium text-slate-600">Route Name</span>
+                <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Route Name</span>
               }
               rules={[{ required: true, message: "Route name is required" }]}
               className="md:col-span-2"
@@ -143,7 +143,7 @@ export default function NewRoutePage() {
 
             <Form.Item
               name="from"
-              label={<span className="font-medium text-slate-600">From</span>}
+              label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">From</span>}
               rules={[
                 { required: true, message: "Start location is required" },
               ]}
@@ -160,7 +160,7 @@ export default function NewRoutePage() {
 
             <Form.Item
               name="to"
-              label={<span className="font-medium text-slate-600">To</span>}
+              label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">To</span>}
               rules={[{ required: true, message: "End location is required" }]}
             >
               <Select
@@ -178,7 +178,7 @@ export default function NewRoutePage() {
                 {(fields, { add, remove }) => (
                   <div className="flex flex-col gap-4">
                     <div className="flex items-center justify-between">
-                      <label className="font-medium text-slate-600">
+                      <label className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
                         Stoppages (Intermediate Stops)
                       </label>
                       <Button
@@ -350,7 +350,7 @@ export default function NewRoutePage() {
 
             <Form.Item
               name="status"
-              label={<span className="font-medium text-slate-600">Status</span>}
+              label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Status</span>}
               initialValue="Active"
             >
               <Select

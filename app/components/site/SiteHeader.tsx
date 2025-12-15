@@ -34,7 +34,7 @@ export function SiteHeader({ transparent = false }: { transparent?: boolean }) {
             <Link
               key={item.href}
               href={item.href}
-              className="rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-900/5 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-white"
+              className="rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-900/5 hover:text-slate-900 dark:text-white dark:hover:bg-white dark:bg-slate-800/10 dark:hover:text-white"
             >
               {item.label}
             </Link>

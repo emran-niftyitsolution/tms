@@ -1,7 +1,7 @@
 "use client";
 
-import { cn } from "./BentoGrid";
 import React, { useEffect, useState } from "react";
+import { cn } from "./BentoGrid";
 
 export const InfiniteMarquee = ({
   items,
@@ -67,7 +67,7 @@ export const InfiniteMarquee = ({
     };
 
     if (!start) {
-        addAnimation();
+      addAnimation();
     }
   }, [direction, speed, start]);
 
@@ -75,7 +75,7 @@ export const InfiniteMarquee = ({
     <div
       ref={containerRef}
       className={cn(
-        "scroller relative z-20  max-w-7xl overflow-hidden  [mask-image:linear-gradient(to_right,transparent,white_20%,white_80%,transparent)]",
+        "scroller relative z-20 mx-auto  overflow-hidden  mask-[linear-gradient(to_right,transparent,white_20%,white_80%,transparent)]",
         className
       )}
     >
