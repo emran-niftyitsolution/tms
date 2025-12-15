@@ -3,7 +3,14 @@
 import { Button, Input, Popconfirm, Select, Space, Table, Tag } from "antd";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { FiEdit2, FiPlus, FiSearch, FiTrash2 } from "react-icons/fi";
+import {
+  FiEdit2,
+  FiEye,
+  FiEyeOff,
+  FiPlus,
+  FiSearch,
+  FiTrash2,
+} from "react-icons/fi";
 import { toast } from "sonner";
 
 type Staff = {
@@ -26,6 +33,8 @@ export default function StaffPage() {
   const [companyFilter, setCompanyFilter] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<string | null>(null);
   const [companies, setCompanies] = useState<{ label: string; value: string }[]>([]);
+  const [licenseVisible, setLicenseVisible] = useState<Set<string>>(new Set());
+  const [nidVisible, setNidVisible] = useState<Set<string>>(new Set());
 
   const fetchStaff = async () => {
     try {
@@ -145,13 +154,63 @@ export default function StaffPage() {
       title: "License Number",
       dataIndex: "licenseNumber",
       key: "licenseNumber",
-      render: (license: string) => license || "-",
+      render: (license: string, record: Staff) => {
+        if (!license) return "-";
+        const isVisible = licenseVisible.has(record._id);
+        return (
+          <div className="flex items-center gap-2">
+            <span className="font-mono text-sm">
+              {isVisible ? license : "••••••••"}
+            </span>
+            <button
+              type="button"
+              className="text-slate-400 hover:text-indigo-500 transition-colors"
+              onClick={() => {
+                setLicenseVisible((prev) => {
+                  const next = new Set(prev);
+                  if (next.has(record._id)) next.delete(record._id);
+                  else next.add(record._id);
+                  return next;
+                });
+              }}
+              aria-label={isVisible ? "Hide license" : "Show license"}
+            >
+              {isVisible ? <FiEyeOff /> : <FiEye />}
+            </button>
+          </div>
+        );
+      },
     },
     {
       title: "NID",
       dataIndex: "nid",
       key: "nid",
-      render: (nid: string) => nid || "-",
+      render: (nid: string, record: Staff) => {
+        if (!nid) return "-";
+        const isVisible = nidVisible.has(record._id);
+        return (
+          <div className="flex items-center gap-2">
+            <span className="font-mono text-sm">
+              {isVisible ? nid : "••••••••"}
+            </span>
+            <button
+              type="button"
+              className="text-slate-400 hover:text-indigo-500 transition-colors"
+              onClick={() => {
+                setNidVisible((prev) => {
+                  const next = new Set(prev);
+                  if (next.has(record._id)) next.delete(record._id);
+                  else next.add(record._id);
+                  return next;
+                });
+              }}
+              aria-label={isVisible ? "Hide NID" : "Show NID"}
+            >
+              {isVisible ? <FiEyeOff /> : <FiEye />}
+            </button>
+          </div>
+        );
+      },
     },
     {
       title: "Company",

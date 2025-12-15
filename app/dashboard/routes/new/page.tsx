@@ -3,8 +3,8 @@
 import { Button, Checkbox, Form, Input, Select, Table, TimePicker } from "antd";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { FiPlus, FiSave, FiTrash2 } from "react-icons/fi";
+import { useEffect, useRef, useState } from "react";
+import { FiMove, FiPlus, FiSave, FiTrash2 } from "react-icons/fi";
 import { toast } from "sonner";
 
 export default function NewRoutePage() {
@@ -17,6 +17,7 @@ export default function NewRoutePage() {
   const [stoppages, setStoppages] = useState<
     { label: string; value: string }[]
   >([]);
+  const dragIndexRef = useRef<number | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -111,7 +112,9 @@ export default function NewRoutePage() {
             <Form.Item
               name="company"
               label={
-                <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Company</span>
+                <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
+                  Company
+                </span>
               }
               rules={[{ required: true, message: "Company is required" }]}
               className="md:col-span-2"
@@ -129,7 +132,9 @@ export default function NewRoutePage() {
             <Form.Item
               name="name"
               label={
-                <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Route Name</span>
+                <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
+                  Route Name
+                </span>
               }
               rules={[{ required: true, message: "Route name is required" }]}
               className="md:col-span-2"
@@ -143,7 +148,11 @@ export default function NewRoutePage() {
 
             <Form.Item
               name="from"
-              label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">From</span>}
+              label={
+                <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
+                  From
+                </span>
+              }
               rules={[
                 { required: true, message: "Start location is required" },
               ]}
@@ -160,7 +169,11 @@ export default function NewRoutePage() {
 
             <Form.Item
               name="to"
-              label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">To</span>}
+              label={
+                <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
+                  To
+                </span>
+              }
               rules={[{ required: true, message: "End location is required" }]}
             >
               <Select
@@ -175,7 +188,7 @@ export default function NewRoutePage() {
 
             <div className="md:col-span-2">
               <Form.List name="stoppages">
-                {(fields, { add, remove }) => (
+                {(fields, { add, remove, move }) => (
                   <div className="flex flex-col gap-4">
                     <div className="flex items-center justify-between">
                       <label className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
@@ -198,11 +211,14 @@ export default function NewRoutePage() {
                         size="small"
                         columns={[
                           {
-                            title: "#",
-                            key: "index",
-                            width: 50,
-                            render: (_: any, __: any, index: number) =>
-                              index + 1,
+                            title: "",
+                            key: "drag",
+                            width: 40,
+                            render: () => (
+                              <div className="flex items-center justify-center text-slate-400 cursor-move">
+                                <FiMove />
+                              </div>
+                            ),
                           },
                           {
                             title: "Enable",
@@ -341,6 +357,30 @@ export default function NewRoutePage() {
                             ),
                           },
                         ]}
+                        onRow={(_, index) => {
+                          const rowIndex = index ?? 0;
+                          return {
+                            draggable: true,
+                            onDragStart: () => {
+                              dragIndexRef.current = rowIndex;
+                            },
+                            onDragOver: (e) => {
+                              e.preventDefault();
+                            },
+                            onDrop: () => {
+                              if (
+                                dragIndexRef.current !== null &&
+                                dragIndexRef.current !== rowIndex
+                              ) {
+                                move(dragIndexRef.current, rowIndex);
+                              }
+                              dragIndexRef.current = null;
+                            },
+                            onDragEnd: () => {
+                              dragIndexRef.current = null;
+                            },
+                          };
+                        }}
                       />
                     </div>
                   </div>
@@ -350,7 +390,11 @@ export default function NewRoutePage() {
 
             <Form.Item
               name="status"
-              label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Status</span>}
+              label={
+                <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
+                  Status
+                </span>
+              }
               initialValue="Active"
             >
               <Select

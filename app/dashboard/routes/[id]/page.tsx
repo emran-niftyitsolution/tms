@@ -3,8 +3,8 @@
 import { Button, Checkbox, Form, Input, Select, Table, TimePicker } from "antd";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
-import { use, useEffect, useState } from "react";
-import { FiInfo, FiPlus, FiSave, FiTrash2 } from "react-icons/fi";
+import { use, useEffect, useRef, useState } from "react";
+import { FiInfo, FiMove, FiPlus, FiSave, FiTrash2 } from "react-icons/fi";
 import { toast } from "sonner";
 import { FormLoader } from "../../components/Loader";
 
@@ -25,6 +25,7 @@ export default function RouteDetailPage({
   const [stoppages, setStoppages] = useState<
     { label: string; value: string }[]
   >([]);
+  const dragIndexRef = useRef<number | null>(null);
 
   useEffect(() => {
     fetchRouteData();
@@ -33,12 +34,11 @@ export default function RouteDetailPage({
   const fetchRouteData = async () => {
     setPageLoading(true);
     try {
-      const [routeRes, companiesRes, stoppagesRes] =
-        await Promise.all([
-          fetch(`/api/routes/${resolvedParams.id}`),
-          fetch("/api/companies"),
-          fetch("/api/stoppages"),
-        ]);
+      const [routeRes, companiesRes, stoppagesRes] = await Promise.all([
+        fetch(`/api/routes/${resolvedParams.id}`),
+        fetch("/api/companies"),
+        fetch("/api/stoppages"),
+      ]);
 
       if (routeRes.ok) {
         const routeData = await routeRes.json();
@@ -163,9 +163,7 @@ export default function RouteDetailPage({
                     Company
                   </span>
                 }
-                rules={[
-                  { required: true, message: "Company is required" },
-                ]}
+                rules={[{ required: true, message: "Company is required" }]}
                 className="md:col-span-2"
               >
                 <Select
@@ -185,9 +183,7 @@ export default function RouteDetailPage({
                     Route Name
                   </span>
                 }
-                rules={[
-                  { required: true, message: "Route name is required" },
-                ]}
+                rules={[{ required: true, message: "Route name is required" }]}
                 className="md:col-span-2"
               >
                 <Input
@@ -244,7 +240,7 @@ export default function RouteDetailPage({
 
               <div className="md:col-span-2">
                 <Form.List name="stoppages">
-                  {(fields, { add, remove }) => (
+                  {(fields, { add, remove, move }) => (
                     <div className="flex flex-col gap-4">
                       <div className="flex items-center justify-between">
                         <label className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
@@ -267,11 +263,14 @@ export default function RouteDetailPage({
                           size="small"
                           columns={[
                             {
-                              title: "#",
-                              key: "index",
-                              width: 50,
-                              render: (_: any, __: any, index: number) =>
-                                index + 1,
+                              title: "",
+                              key: "drag",
+                              width: 40,
+                              render: () => (
+                                <div className="flex items-center justify-center text-slate-400 cursor-move">
+                                  <FiMove />
+                                </div>
+                              ),
                             },
                             {
                               title: "Enable",
@@ -410,6 +409,30 @@ export default function RouteDetailPage({
                               ),
                             },
                           ]}
+                          onRow={(_, index) => {
+                            const rowIndex = index ?? 0;
+                            return {
+                              draggable: true,
+                              onDragStart: () => {
+                                dragIndexRef.current = rowIndex;
+                              },
+                              onDragOver: (e) => {
+                                e.preventDefault();
+                              },
+                              onDrop: () => {
+                                if (
+                                  dragIndexRef.current !== null &&
+                                  dragIndexRef.current !== rowIndex
+                                ) {
+                                  move(dragIndexRef.current, rowIndex);
+                                }
+                                dragIndexRef.current = null;
+                              },
+                              onDragEnd: () => {
+                                dragIndexRef.current = null;
+                              },
+                            };
+                          }}
                         />
                       </div>
                     </div>

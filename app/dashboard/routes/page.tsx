@@ -13,6 +13,10 @@ type Route = {
   to: { _id: string; name: string; code?: string } | string;
   company: { _id: string; name: string } | null;
   status: "Active" | "Inactive";
+  stoppages?: {
+    place?: { _id: string; name: string } | string;
+    enable?: boolean;
+  }[];
 };
 
 export default function RoutesPage() {
@@ -114,6 +118,40 @@ export default function RoutesPage() {
           {text}
         </Link>
       ),
+    },
+    {
+      title: "Sequence",
+      dataIndex: "stoppages",
+      key: "sequence",
+      render: (_: unknown, record: Route) => {
+        const names =
+          Array.isArray(record.stoppages) && record.stoppages.length > 0
+            ? record.stoppages
+                .filter((s) => s.enable ?? true) // only enabled stoppages
+                .map((s) => {
+                  const place = s.place;
+                  if (place && typeof place === "object") return place.name;
+                  if (typeof place === "string") return place;
+                  return "";
+                })
+                .filter(Boolean)
+            : [];
+
+        // Fallback to From -> To when no stoppage list
+        if (names.length === 0) {
+          const fromName =
+            typeof record.from === "object" ? record.from.name : record.from;
+          const toName =
+            typeof record.to === "object" ? record.to.name : record.to;
+          names.push(fromName, toName);
+        }
+
+        return (
+          <span className="text-slate-600 dark:text-slate-300">
+            {names.join(" → ")}
+          </span>
+        );
+      },
     },
     {
       title: "From",

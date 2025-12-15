@@ -114,6 +114,14 @@ export default function StoppagesPage() {
       ),
     },
     {
+      title: "City",
+      dataIndex: "city",
+      key: "city",
+      render: (city: Stoppage["city"]) => (
+        <div className="font-medium">{city?.name || "-"}</div>
+      ),
+    },
+    {
       title: "Code",
       dataIndex: "code",
       key: "code",
@@ -124,14 +132,6 @@ export default function StoppagesPage() {
       dataIndex: "company",
       key: "company",
       render: (company: Stoppage["company"]) => company?.name || "-",
-    },
-    {
-      title: "City",
-      dataIndex: "city",
-      key: "city",
-      render: (city: Stoppage["city"]) => (
-        <div className="font-medium">{city?.name || "-"}</div>
-      ),
     },
     {
       title: "Boarding",

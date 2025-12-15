@@ -119,42 +119,44 @@ export function SeatEditor({
   };
 
   const toggleRoadColumn = (column: number) => {
-    const isBecomingRoad = !aisleColumns.includes(column);
-    const newRoadColumns = aisleColumns.includes(column)
-      ? aisleColumns.filter((ac) => ac !== column)
-      : [...aisleColumns, column].sort((a, b) => a - b);
-    
-    setAisleColumns(newRoadColumns);
-    onAisleColumnsChange?.(newRoadColumns);
-    
-    // Remove seats from this column if it becomes a road
-    if (isBecomingRoad) {
-      const filteredSeats = seats.filter((s) => s.column !== column);
-      setSeats(filteredSeats);
-      onChange?.(filteredSeats);
-    }
-  };
+    const isCurrentlyRoad = aisleColumns.includes(column);
 
-  const addRoadColumn = (column: number) => {
-    if (!aisleColumns.includes(column)) {
+    if (isCurrentlyRoad) {
+      // Turn road column back into normal seats: remove from aisleColumns and clear road flags
+      const newRoadColumns = aisleColumns.filter((ac) => ac !== column);
+      setAisleColumns(newRoadColumns);
+      onAisleColumnsChange?.(newRoadColumns);
+
+      const updatedSeats = seats
+        .map((s) =>
+          s.column === column
+            ? {
+                ...s,
+                isAisle: false,
+              }
+            : s,
+        );
+      setSeats(updatedSeats);
+      onChange?.(updatedSeats);
+    } else {
+      // Make this entire column a road
       const newRoadColumns = [...aisleColumns, column].sort((a, b) => a - b);
       setAisleColumns(newRoadColumns);
       onAisleColumnsChange?.(newRoadColumns);
-      
+
       // Remove existing seats from this column and create road seats for all rows
       const filteredSeats = seats.filter((s) => s.column !== column);
-      const maxSeatNumber = filteredSeats.length > 0 ? Math.max(...filteredSeats.map((s) => s.seatNumber)) : 0;
       const roadSeats: Seat[] = [];
-      
+
       for (let r = 0; r < rows; r++) {
         roadSeats.push({
           row: r,
-          column: column,
-          seatNumber: maxSeatNumber + r + 1,
+          column,
+          seatNumber: 0, // seatNumber not used for roads
           isAisle: true,
         });
       }
-      
+
       const newSeats = [...filteredSeats, ...roadSeats];
       setSeats(newSeats);
       onChange?.(newSeats);
@@ -698,8 +700,7 @@ export function SeatEditor({
                     key={i}
                     size="small"
                     type={aisleColumns.includes(i) ? "primary" : "default"}
-                    onClick={() => addRoadColumn(i)}
-                    disabled={aisleColumns.includes(i)}
+                    onClick={() => toggleRoadColumn(i)}
                     className="h-7 w-7 p-0"
                   >
                     {i + 1}

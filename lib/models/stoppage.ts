@@ -1,4 +1,5 @@
 import { Schema, model, models } from "mongoose";
+import "./city";
 
 const StoppageSchema = new Schema(
   {
