@@ -1,23 +1,11 @@
 "use client";
 
-import {
-  Breadcrumb,
-  Button,
-  Checkbox,
-  Form,
-  Input,
-  Select,
-  Table,
-  Tabs,
-  TimePicker,
-} from "antd";
+import { Button, Checkbox, Form, Input, Select, Table, TimePicker } from "antd";
 import dayjs from "dayjs";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { use, useEffect, useState } from "react";
-import { FiCalendar, FiInfo, FiPlus, FiTrash2 } from "react-icons/fi";
+import { FiInfo, FiPlus, FiSave, FiTrash2 } from "react-icons/fi";
 import { toast } from "sonner";
-import { RouteSchedulesTab } from "../components/RouteSchedulesTab";
 import { FormLoader } from "../../components/Loader";
 
 export default function RouteDetailPage({
@@ -27,9 +15,9 @@ export default function RouteDetailPage({
 }) {
   const router = useRouter();
   const resolvedParams = use(params);
-  const [activeTab, setActiveTab] = useState("info");
   const [route, setRoute] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  const [pageLoading, setPageLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [form] = Form.useForm();
   const [companies, setCompanies] = useState<
     { label: string; value: string }[]
@@ -37,21 +25,19 @@ export default function RouteDetailPage({
   const [stoppages, setStoppages] = useState<
     { label: string; value: string }[]
   >([]);
-  const [schedules, setSchedules] = useState<any[]>([]);
 
   useEffect(() => {
     fetchRouteData();
   }, [resolvedParams.id]);
 
   const fetchRouteData = async () => {
-    setLoading(true);
+    setPageLoading(true);
     try {
-      const [routeRes, companiesRes, stoppagesRes, schedulesRes] =
+      const [routeRes, companiesRes, stoppagesRes] =
         await Promise.all([
           fetch(`/api/routes/${resolvedParams.id}`),
           fetch("/api/companies"),
           fetch("/api/stoppages"),
-          fetch(`/api/schedules?routeId=${resolvedParams.id}`),
         ]);
 
       if (routeRes.ok) {
@@ -106,19 +92,15 @@ export default function RouteDetailPage({
             : []
         );
       }
-
-      if (schedulesRes.ok) {
-        const data = await schedulesRes.json();
-        setSchedules(Array.isArray(data) ? data : []);
-      }
     } catch {
       toast.error("Failed to load data");
     } finally {
-      setLoading(false);
+      setPageLoading(false);
     }
   };
 
   const onRouteUpdate = async (values: any) => {
+    setSaving(true);
     try {
       // Convert time picker values to strings
       if (values.stoppages) {
@@ -147,340 +129,334 @@ export default function RouteDetailPage({
       fetchRouteData();
     } catch (error: any) {
       toast.error(error.message);
+    } finally {
+      setSaving(false);
     }
   };
 
-  if (!route && !loading) return <div className="text-center py-12">Route not found</div>;
+  if (!route && !pageLoading)
+    return <div className="text-center py-12">Route not found</div>;
 
   return (
-    <div className="max-w-7xl mx-auto">
-      <Breadcrumb
-        items={[
-          { title: <Link href="/dashboard">Dashboard</Link> },
-          { title: <Link href="/dashboard/routes">Routes</Link> },
-          { title: route?.name || "Loading..." },
-        ]}
-        className="mb-4"
-      />
-
-      <div className="mb-6 rounded-xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
-        <div className="flex items-start justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
-              {route?.name || "Loading..."}
-            </h1>
-            <p className="mt-1 text-sm text-slate-500">
-              {route ? `${route.from?.name || route.from} → ${route.to?.name || route.to}` : "Loading route details..."}
-            </p>
-          </div>
-        </div>
+    <div className="max-w-6xl mx-auto">
+      <div className="mb-8">
+        <h2 className="text-xl font-bold text-slate-900 dark:text-white">
+          Edit Route
+        </h2>
+        <p className="text-sm text-slate-500 dark:text-slate-400">
+          Update the details of this route
+        </p>
       </div>
 
-      <Tabs
-        activeKey={activeTab}
-        onChange={setActiveTab}
-        items={[
-          {
-            key: "info",
-            label: (
-              <span className="flex items-center gap-2">
-                <FiInfo /> Route Information
-              </span>
-            ),
-            children: (
-              <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100 dark:bg-black dark:ring-slate-800">
-                <FormLoader loading={loading}>
-                  <Form form={form} layout="vertical" onFinish={onRouteUpdate}>
-                  <div className="grid gap-6 md:grid-cols-2">
-                    <Form.Item
-                      name="company"
-                      label="Company"
-                      rules={[
-                        { required: true, message: "Company is required" },
-                      ]}
-                      className="md:col-span-2"
-                    >
-                      <Select
-                        size="large"
-                        options={companies}
-                        className="rounded-lg"
-                        showSearch
-                        optionFilterProp="label"
-                      />
-                    </Form.Item>
+      <div className="rounded-2xl bg-white dark:bg-slate-800 p-6 shadow-sm ring-1 ring-slate-100 dark:bg-slate-800 dark:ring-slate-700">
+        <div className="mb-6 flex items-center gap-2 text-slate-900 dark:text-white">
+          <FiInfo />
+          <h2 className="text-lg font-semibold">Route Information</h2>
+        </div>
+        <FormLoader loading={pageLoading}>
+          <Form form={form} layout="vertical" onFinish={onRouteUpdate}>
+            <div className="grid gap-6 md:grid-cols-2">
+              <Form.Item
+                name="company"
+                label={
+                  <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
+                    Company
+                  </span>
+                }
+                rules={[
+                  { required: true, message: "Company is required" },
+                ]}
+                className="md:col-span-2"
+              >
+                <Select
+                  size="large"
+                  placeholder="Select company"
+                  options={companies}
+                  className="rounded-lg"
+                  showSearch
+                  optionFilterProp="label"
+                />
+              </Form.Item>
 
-                    <Form.Item
-                      name="name"
-                      label="Route Name"
-                      rules={[
-                        { required: true, message: "Route name is required" },
-                      ]}
-                      className="md:col-span-2"
-                    >
-                      <Input size="large" className="rounded-lg" />
-                    </Form.Item>
+              <Form.Item
+                name="name"
+                label={
+                  <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
+                    Route Name
+                  </span>
+                }
+                rules={[
+                  { required: true, message: "Route name is required" },
+                ]}
+                className="md:col-span-2"
+              >
+                <Input
+                  size="large"
+                  placeholder="e.g. Dhaka - Chittagong"
+                  className="rounded-lg"
+                />
+              </Form.Item>
 
-                    <Form.Item
-                      name="from"
-                      label="From"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Start location is required",
-                        },
-                      ]}
-                    >
-                      <Select
-                        size="large"
-                        placeholder="Select stoppage"
-                        className="rounded-lg"
-                        showSearch
-                        optionFilterProp="label"
-                        options={stoppages}
-                      />
-                    </Form.Item>
+              <Form.Item
+                name="from"
+                label={
+                  <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
+                    From
+                  </span>
+                }
+                rules={[
+                  {
+                    required: true,
+                    message: "Start location is required",
+                  },
+                ]}
+              >
+                <Select
+                  size="large"
+                  placeholder="Select stoppage"
+                  className="rounded-lg"
+                  showSearch
+                  optionFilterProp="label"
+                  options={stoppages}
+                />
+              </Form.Item>
 
-                    <Form.Item
-                      name="to"
-                      label="To"
-                      rules={[
-                        { required: true, message: "End location is required" },
-                      ]}
-                    >
-                      <Select
-                        size="large"
-                        placeholder="Select stoppage"
-                        className="rounded-lg"
-                        showSearch
-                        optionFilterProp="label"
-                        options={stoppages}
-                      />
-                    </Form.Item>
+              <Form.Item
+                name="to"
+                label={
+                  <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
+                    To
+                  </span>
+                }
+                rules={[
+                  { required: true, message: "End location is required" },
+                ]}
+              >
+                <Select
+                  size="large"
+                  placeholder="Select stoppage"
+                  className="rounded-lg"
+                  showSearch
+                  optionFilterProp="label"
+                  options={stoppages}
+                />
+              </Form.Item>
 
-                    <div className="md:col-span-2">
-                      <Form.List name="stoppages">
-                        {(fields, { add, remove }) => (
-                          <div className="flex flex-col gap-4">
-                            <div className="flex items-center justify-between">
-                              <label className="font-medium text-slate-600">
-                                Stoppages (Intermediate Stops)
-                              </label>
-                              <Button
-                                type="dashed"
-                                onClick={() => add()}
-                                icon={<FiPlus />}
-                                className="flex items-center gap-2"
-                              >
-                                Add Stoppage
-                              </Button>
-                            </div>
-                            <div className="rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden">
-                              <Table
-                                dataSource={fields}
-                                rowKey="key"
-                                pagination={false}
-                                size="small"
-                                columns={[
-                                  {
-                                    title: "#",
-                                    key: "index",
-                                    width: 50,
-                                    render: (_: any, __: any, index: number) =>
-                                      index + 1,
-                                  },
-                                  {
-                                    title: "Enable",
-                                    key: "enable",
-                                    width: 80,
-                                    render: (_: any, field: any) => (
-                                      <Form.Item
-                                        {...field}
-                                        name={[field.name, "enable"]}
-                                        valuePropName="checked"
-                                        initialValue={true}
-                                        className="mb-0"
-                                      >
-                                        <Checkbox />
-                                      </Form.Item>
-                                    ),
-                                  },
-                                  {
-                                    title: "Stoppage",
-                                    key: "place",
-                                    width: 200,
-                                    render: (_: any, field: any) => (
-                                      <Form.Item
-                                        {...field}
-                                        name={[field.name, "place"]}
-                                        rules={[
-                                          {
-                                            required: true,
-                                            message: "Stoppage is required",
-                                          },
-                                        ]}
-                                        className="mb-0"
-                                      >
-                                        <Select
-                                          size="small"
-                                          placeholder="Select stoppage"
-                                          className="rounded-lg"
-                                          showSearch
-                                          optionFilterProp="label"
-                                          options={stoppages}
-                                        />
-                                      </Form.Item>
-                                    ),
-                                  },
-                                  {
-                                    title: "Boarding",
-                                    key: "boarding",
-                                    width: 100,
-                                    render: (_: any, field: any) => (
-                                      <Form.Item
-                                        {...field}
-                                        name={[field.name, "boarding"]}
-                                        valuePropName="checked"
-                                        initialValue={false}
-                                        className="mb-0"
-                                      >
-                                        <Checkbox />
-                                      </Form.Item>
-                                    ),
-                                  },
-                                  {
-                                    title: "Boarding Time",
-                                    key: "boardingTime",
-                                    width: 150,
-                                    render: (_: any, field: any) => (
-                                      <Form.Item
-                                        {...field}
-                                        name={[field.name, "boardingTime"]}
-                                        className="mb-0"
-                                      >
-                                        <TimePicker
-                                          size="small"
-                                          className="w-full rounded-lg"
-                                          format="HH:mm"
-                                        />
-                                      </Form.Item>
-                                    ),
-                                  },
-                                  {
-                                    title: "Dropping",
-                                    key: "dropping",
-                                    width: 100,
-                                    render: (_: any, field: any) => (
-                                      <Form.Item
-                                        {...field}
-                                        name={[field.name, "dropping"]}
-                                        valuePropName="checked"
-                                        initialValue={false}
-                                        className="mb-0"
-                                      >
-                                        <Checkbox />
-                                      </Form.Item>
-                                    ),
-                                  },
-                                  {
-                                    title: "Dropping Time",
-                                    key: "droppingTime",
-                                    width: 150,
-                                    render: (_: any, field: any) => (
-                                      <Form.Item
-                                        {...field}
-                                        name={[field.name, "droppingTime"]}
-                                        className="mb-0"
-                                      >
-                                        <TimePicker
-                                          size="small"
-                                          className="w-full rounded-lg"
-                                          format="HH:mm"
-                                        />
-                                      </Form.Item>
-                                    ),
-                                  },
-                                  {
-                                    title: "Action",
-                                    key: "action",
-                                    width: 80,
-                                    onCell: () => ({
-                                      style: { verticalAlign: "top" },
-                                    }),
-                                    render: (_: any, field: any) => (
-                                      <div
-                                        style={{
-                                          display: "flex",
-                                          alignItems: "flex-start",
-                                          paddingTop: 4,
-                                        }}
-                                      >
-                                        <button
-                                          className="flex cursor-pointer items-center justify-center rounded-full bg-red-600 p-2 text-white transition-colors hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800"
-                                          title="Delete"
-                                          onClick={() => remove(field.name)}
-                                        >
-                                          <FiTrash2 className="h-4 w-4 text-white" />
-                                        </button>
-                                      </div>
-                                    ),
-                                  },
-                                ]}
-                              />
-                            </div>
-                          </div>
-                        )}
-                      </Form.List>
+              <div className="md:col-span-2">
+                <Form.List name="stoppages">
+                  {(fields, { add, remove }) => (
+                    <div className="flex flex-col gap-4">
+                      <div className="flex items-center justify-between">
+                        <label className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
+                          Stoppages (Intermediate Stops)
+                        </label>
+                        <Button
+                          type="dashed"
+                          onClick={() => add()}
+                          icon={<FiPlus />}
+                          className="flex items-center gap-2"
+                        >
+                          Add Stoppage
+                        </Button>
+                      </div>
+                      <div className="rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden">
+                        <Table
+                          dataSource={fields}
+                          rowKey="key"
+                          pagination={false}
+                          size="small"
+                          columns={[
+                            {
+                              title: "#",
+                              key: "index",
+                              width: 50,
+                              render: (_: any, __: any, index: number) =>
+                                index + 1,
+                            },
+                            {
+                              title: "Enable",
+                              key: "enable",
+                              width: 80,
+                              render: (_: any, field: any) => (
+                                <Form.Item
+                                  {...field}
+                                  name={[field.name, "enable"]}
+                                  valuePropName="checked"
+                                  initialValue={true}
+                                  className="mb-0"
+                                >
+                                  <Checkbox />
+                                </Form.Item>
+                              ),
+                            },
+                            {
+                              title: "Stoppage",
+                              key: "place",
+                              width: 200,
+                              render: (_: any, field: any) => (
+                                <Form.Item
+                                  {...field}
+                                  name={[field.name, "place"]}
+                                  rules={[
+                                    {
+                                      required: true,
+                                      message: "Stoppage is required",
+                                    },
+                                  ]}
+                                  className="mb-0"
+                                >
+                                  <Select
+                                    size="small"
+                                    placeholder="Select stoppage"
+                                    className="rounded-lg"
+                                    showSearch
+                                    optionFilterProp="label"
+                                    options={stoppages}
+                                  />
+                                </Form.Item>
+                              ),
+                            },
+                            {
+                              title: "Boarding",
+                              key: "boarding",
+                              width: 100,
+                              render: (_: any, field: any) => (
+                                <Form.Item
+                                  {...field}
+                                  name={[field.name, "boarding"]}
+                                  valuePropName="checked"
+                                  initialValue={false}
+                                  className="mb-0"
+                                >
+                                  <Checkbox />
+                                </Form.Item>
+                              ),
+                            },
+                            {
+                              title: "Boarding Time",
+                              key: "boardingTime",
+                              width: 150,
+                              render: (_: any, field: any) => (
+                                <Form.Item
+                                  {...field}
+                                  name={[field.name, "boardingTime"]}
+                                  className="mb-0"
+                                >
+                                  <TimePicker
+                                    size="small"
+                                    className="w-full rounded-lg"
+                                    format="HH:mm"
+                                  />
+                                </Form.Item>
+                              ),
+                            },
+                            {
+                              title: "Dropping",
+                              key: "dropping",
+                              width: 100,
+                              render: (_: any, field: any) => (
+                                <Form.Item
+                                  {...field}
+                                  name={[field.name, "dropping"]}
+                                  valuePropName="checked"
+                                  initialValue={false}
+                                  className="mb-0"
+                                >
+                                  <Checkbox />
+                                </Form.Item>
+                              ),
+                            },
+                            {
+                              title: "Dropping Time",
+                              key: "droppingTime",
+                              width: 150,
+                              render: (_: any, field: any) => (
+                                <Form.Item
+                                  {...field}
+                                  name={[field.name, "droppingTime"]}
+                                  className="mb-0"
+                                >
+                                  <TimePicker
+                                    size="small"
+                                    className="w-full rounded-lg"
+                                    format="HH:mm"
+                                  />
+                                </Form.Item>
+                              ),
+                            },
+                            {
+                              title: "Action",
+                              key: "action",
+                              width: 80,
+                              onCell: () => ({
+                                style: { verticalAlign: "top" },
+                              }),
+                              render: (_: any, field: any) => (
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "flex-start",
+                                    paddingTop: 4,
+                                  }}
+                                >
+                                  <button
+                                    className="flex cursor-pointer items-center justify-center rounded-full bg-red-600 p-2 text-white transition-colors hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800"
+                                    title="Delete"
+                                    onClick={() => remove(field.name)}
+                                  >
+                                    <FiTrash2 className="h-4 w-4 text-white" />
+                                  </button>
+                                </div>
+                              ),
+                            },
+                          ]}
+                        />
+                      </div>
                     </div>
-
-                    <Form.Item name="status" label="Status">
-                      <Select
-                        size="large"
-                        options={[
-                          { label: "Active", value: "Active" },
-                          { label: "Inactive", value: "Inactive" },
-                        ]}
-                        className="rounded-lg"
-                      />
-                    </Form.Item>
-                  </div>
-                  <div className="mt-6 flex justify-end gap-4">
-                    <Button
-                      size="large"
-                      onClick={() => router.back()}
-                      className="rounded-lg"
-                    >
-                      Cancel
-                    </Button>
-                    <Button
-                      type="primary"
-                      htmlType="submit"
-                      size="large"
-                      className="rounded-lg bg-indigo-600"
-                    >
-                      Update Route
-                    </Button>
-                  </div>
-                </Form>
-                </FormLoader>
+                  )}
+                </Form.List>
               </div>
-            ),
-          },
-          {
-            key: "schedules",
-            label: (
-              <span className="flex items-center gap-2">
-                <FiCalendar /> Schedules ({schedules.length})
-              </span>
-            ),
-            children: (
-              <RouteSchedulesTab
-                schedules={schedules}
-                routeId={resolvedParams.id}
-              />
-            ),
-          },
-        ]}
-      />
+
+              <Form.Item
+                name="status"
+                label={
+                  <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
+                    Status
+                  </span>
+                }
+              >
+                <Select
+                  size="large"
+                  options={[
+                    { label: "Active", value: "Active" },
+                    { label: "Inactive", value: "Inactive" },
+                  ]}
+                  className="rounded-lg"
+                />
+              </Form.Item>
+            </div>
+            <div className="mt-6 flex justify-end gap-4">
+              <Button
+                size="large"
+                onClick={() => router.back()}
+                className="rounded-lg"
+              >
+                Cancel
+              </Button>
+              <Button
+                type="primary"
+                htmlType="submit"
+                size="large"
+                loading={saving}
+                icon={<FiSave />}
+                className="rounded-lg bg-indigo-600 hover:bg-indigo-700"
+              >
+                Update Route
+              </Button>
+            </div>
+          </Form>
+        </FormLoader>
+      </div>
     </div>
   );
 }

@@ -1,50 +1,67 @@
 "use client";
 
-import { Button, Form, InputNumber, Select } from "antd";
+import { Button, Form, InputNumber, InputNumberProps, Select } from "antd";
 import { useRouter } from "next/navigation";
-import { useEffect, useState, use } from "react";
+import { use, useEffect, useState } from "react";
 import { FiSave } from "react-icons/fi";
 import { toast } from "sonner";
 
-export default function EditFarePage({ params }: { params: Promise<{ id: string }> }) {
+export default function EditFarePage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const resolvedParams = use(params);
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
   const [form] = Form.useForm();
-  const [companies, setCompanies] = useState<{ label: string; value: string }[]>([]);
-  const [seatClasses, setSeatClasses] = useState<{ label: string; value: string }[]>([]);
-  const [routes, setRoutes] = useState<{ label: string; value: string }[]>([]);
-  const [filteredSeatClasses, setFilteredSeatClasses] = useState<{ label: string; value: string }[]>([]);
-  const [filteredRoutes, setFilteredRoutes] = useState<{ label: string; value: string }[]>([]);
+
+  type Option = { label: string; value: string; company?: string };
+  type SeatClassOption = Option & { baseFare?: number };
+
+  const [companies, setCompanies] = useState<Option[]>([]);
+  const [seatClasses, setSeatClasses] = useState<SeatClassOption[]>([]);
+  const [routes, setRoutes] = useState<Option[]>([]);
+  const [filteredSeatClasses, setFilteredSeatClasses] = useState<
+    SeatClassOption[]
+  >([]);
+  const [filteredRoutes, setFilteredRoutes] = useState<Option[]>([]);
+
+  const parseCurrency: InputNumberProps["parser"] = (value) =>
+    Number((value || "").replace(/৳\s?|(,*)/g, "")) || 0;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [fareRes, companiesRes, seatClassesRes, routesRes] = await Promise.all([
-          fetch(`/api/fares/${resolvedParams.id}`),
-          fetch("/api/companies"),
-          fetch("/api/seat-classes"),
-          fetch("/api/routes"),
-        ]);
+        const [fareRes, companiesRes, seatClassesRes, routesRes] =
+          await Promise.all([
+            fetch(`/api/fares/${resolvedParams.id}`),
+            fetch("/api/companies"),
+            fetch("/api/seat-classes"),
+            fetch("/api/routes"),
+          ]);
 
         if (fareRes.ok) {
           const fareData = await fareRes.json();
-          
+
           // Extract company ID
-          const companyId = fareData.company && typeof fareData.company === "object"
-            ? fareData.company._id
-            : fareData.company;
-          
+          const companyId =
+            fareData.company && typeof fareData.company === "object"
+              ? fareData.company._id
+              : fareData.company;
+
           // Extract seat class ID
-          const seatClassId = fareData.seatClass && typeof fareData.seatClass === "object"
-            ? fareData.seatClass._id
-            : fareData.seatClass;
-          
+          const seatClassId =
+            fareData.seatClass && typeof fareData.seatClass === "object"
+              ? fareData.seatClass._id
+              : fareData.seatClass;
+
           // Extract route ID
-          const routeId = fareData.route && typeof fareData.route === "object"
-            ? fareData.route._id
-            : fareData.route;
+          const routeId =
+            fareData.route && typeof fareData.route === "object"
+              ? fareData.route._id
+              : fareData.route;
 
           form.setFieldsValue({
             company: companyId,
@@ -62,7 +79,10 @@ export default function EditFarePage({ params }: { params: Promise<{ id: string 
           const data = await companiesRes.json();
           setCompanies(
             Array.isArray(data)
-              ? data.map((c: any) => ({ label: c.name, value: c._id }))
+              ? data.map((c: { name: string; _id: string }) => ({
+                  label: c.name,
+                  value: c._id,
+                }))
               : []
           );
         }
@@ -70,12 +90,22 @@ export default function EditFarePage({ params }: { params: Promise<{ id: string 
         if (seatClassesRes.ok) {
           const data = await seatClassesRes.json();
           const seatClassOptions = Array.isArray(data)
-            ? data.map((sc: any) => ({
-                label: `${sc.name} (৳${sc.fare?.toLocaleString()})`,
-                value: sc._id,
-                company: typeof sc.company === 'object' && sc.company !== null ? sc.company._id : sc.company,
-                baseFare: sc.fare,
-              }))
+            ? data.map(
+                (sc: {
+                  name: string;
+                  fare?: number;
+                  company?: string | { _id: string };
+                  _id: string;
+                }) => ({
+                  label: `${sc.name} (৳${sc.fare?.toLocaleString()})`,
+                  value: sc._id,
+                  company:
+                    typeof sc.company === "object" && sc.company !== null
+                      ? (sc.company as { _id: string })._id
+                      : (sc.company as string | undefined),
+                  baseFare: sc.fare,
+                })
+              )
             : [];
           setSeatClasses(seatClassOptions);
         }
@@ -83,11 +113,24 @@ export default function EditFarePage({ params }: { params: Promise<{ id: string 
         if (routesRes.ok) {
           const data = await routesRes.json();
           const routeOptions = Array.isArray(data)
-            ? data.map((r: any) => ({
-                label: `${r.name} (${typeof r.from === 'object' ? r.from.name : r.from} - ${typeof r.to === 'object' ? r.to.name : r.to})`,
-                value: r._id,
-                company: typeof r.company === 'object' && r.company !== null ? r.company._id : r.company,
-              }))
+            ? data.map(
+                (r: {
+                  name: string;
+                  _id: string;
+                  from: string | { name: string };
+                  to: string | { name: string };
+                  company?: string | { _id: string };
+                }) => ({
+                  label: `${r.name} (${
+                    typeof r.from === "object" ? r.from.name : r.from
+                  } - ${typeof r.to === "object" ? r.to.name : r.to})`,
+                  value: r._id,
+                  company:
+                    typeof r.company === "object" && r.company !== null
+                      ? (r.company as { _id: string })._id
+                      : (r.company as string | undefined),
+                })
+              )
             : [];
           setRoutes(routeOptions);
         }
@@ -98,13 +141,14 @@ export default function EditFarePage({ params }: { params: Promise<{ id: string 
       }
     };
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resolvedParams.id, form]);
 
   // Filter seat classes and routes based on selected company
   const handleCompanyChange = (companyId: string) => {
     if (companyId) {
-      const filteredSC = seatClasses.filter((sc: any) => sc.company === companyId);
-      const filteredR = routes.filter((r: any) => r.company === companyId);
+      const filteredSC = seatClasses.filter((sc) => sc.company === companyId);
+      const filteredR = routes.filter((r) => r.company === companyId);
       setFilteredSeatClasses(filteredSC);
       setFilteredRoutes(filteredR);
     } else {
@@ -115,13 +159,22 @@ export default function EditFarePage({ params }: { params: Promise<{ id: string 
 
   // Auto-fill fare when seat class is selected
   const handleSeatClassChange = (seatClassId: string) => {
-    const selectedSeatClass = seatClasses.find((sc: any) => sc.value === seatClassId);
-    if (selectedSeatClass && selectedSeatClass.baseFare && !form.getFieldValue("fare")) {
+    const selectedSeatClass = seatClasses.find(
+      (sc) => sc.value === seatClassId
+    );
+    if (
+      selectedSeatClass &&
+      selectedSeatClass.baseFare &&
+      !form.getFieldValue("fare")
+    ) {
       form.setFieldsValue({ fare: selectedSeatClass.baseFare });
     }
   };
 
-  const onFinish = async (values: any) => {
+  const onFinish = async (values: {
+    fare?: number;
+    [key: string]: unknown;
+  }) => {
     setLoading(true);
     try {
       // Ensure fare is a number
@@ -144,8 +197,10 @@ export default function EditFarePage({ params }: { params: Promise<{ id: string 
 
       toast.success("Fare updated successfully");
       router.push("/dashboard/fares");
-    } catch (error: any) {
-      toast.error(error.message || "Failed to update fare");
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : "Failed to update fare";
+      toast.error(message);
     } finally {
       setLoading(false);
     }
@@ -175,7 +230,11 @@ export default function EditFarePage({ params }: { params: Promise<{ id: string 
             <div className="grid gap-6 md:grid-cols-2">
               <Form.Item
                 name="company"
-                label={<span className="font-medium text-slate-600 dark:text-slate-300">Company</span>}
+                label={
+                  <span className="font-medium text-slate-600 dark:text-slate-300">
+                    Company
+                  </span>
+                }
                 rules={[{ required: true, message: "Company is required" }]}
                 className="md:col-span-2"
               >
@@ -192,7 +251,11 @@ export default function EditFarePage({ params }: { params: Promise<{ id: string 
 
               <Form.Item
                 name="route"
-                label={<span className="font-medium text-slate-600 dark:text-slate-300">Route</span>}
+                label={
+                  <span className="font-medium text-slate-600 dark:text-slate-300">
+                    Route
+                  </span>
+                }
                 rules={[{ required: true, message: "Route is required" }]}
               >
                 <Select
@@ -208,7 +271,11 @@ export default function EditFarePage({ params }: { params: Promise<{ id: string 
 
               <Form.Item
                 name="seatClass"
-                label={<span className="font-medium text-slate-600 dark:text-slate-300">Seat Class</span>}
+                label={
+                  <span className="font-medium text-slate-600 dark:text-slate-300">
+                    Seat Class
+                  </span>
+                }
                 rules={[{ required: true, message: "Seat class is required" }]}
               >
                 <Select
@@ -232,25 +299,40 @@ export default function EditFarePage({ params }: { params: Promise<{ id: string 
             <div className="grid gap-6 md:grid-cols-2">
               <Form.Item
                 name="fare"
-                label={<span className="font-medium text-slate-600 dark:text-slate-300">Fare (৳)</span>}
+                label={
+                  <span className="font-medium text-slate-600 dark:text-slate-300">
+                    Fare (৳)
+                  </span>
+                }
                 rules={[
                   { required: true, message: "Fare is required" },
-                  { type: "number", min: 0, message: "Fare must be a positive number" },
+                  {
+                    type: "number",
+                    min: 0,
+                    message: "Fare must be a positive number",
+                  },
                 ]}
               >
                 <InputNumber
                   size="large"
                   placeholder="Enter fare amount"
                   className="rounded-lg w-full"
+                  style={{ width: "100%" }}
                   min={0}
-                  formatter={(value) => `৳ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                  parser={(value) => value!.replace(/৳\s?|(,*)/g, "")}
+                  formatter={(value) =>
+                    `৳ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                  }
+                  parser={parseCurrency}
                 />
               </Form.Item>
 
               <Form.Item
                 name="status"
-                label={<span className="font-medium text-slate-600 dark:text-slate-300">Status</span>}
+                label={
+                  <span className="font-medium text-slate-600 dark:text-slate-300">
+                    Status
+                  </span>
+                }
               >
                 <Select
                   size="large"
@@ -288,4 +370,3 @@ export default function EditFarePage({ params }: { params: Promise<{ id: string 
     </div>
   );
 }
-

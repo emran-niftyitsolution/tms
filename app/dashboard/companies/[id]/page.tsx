@@ -1,11 +1,10 @@
 "use client";
 
-import { Button, Divider, Form, Input, Select, Space, Spin } from "antd";
+import { Button, Divider, Form, Input, Select, Space } from "antd";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FiInfo, FiMapPin, FiSave, FiSettings, FiTrash2 } from "react-icons/fi";
 import { toast } from "sonner";
-import { Loader } from "../../components/Loader";
 
 export default function EditCompanyPage() {
   const router = useRouter();
@@ -88,7 +87,11 @@ export default function EditCompanyPage() {
           >
             Delete
           </Button>
-          <Button onClick={() => router.back()} size="large" disabled={fetching}>
+          <Button
+            onClick={() => router.back()}
+            size="large"
+            disabled={fetching}
+          >
             Cancel
           </Button>
           <Button
@@ -116,195 +119,197 @@ export default function EditCompanyPage() {
           onFinish={handleFinish}
           requiredMark="optional"
         >
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-          <div className="lg:col-span-2">
-            <div className="mb-8 rounded-2xl bg-white dark:bg-slate-800 p-6 shadow-sm ring-1 ring-slate-100 dark:bg-slate-800 dark:ring-slate-700">
-              <div className="mb-6 flex items-center gap-2 border-b border-slate-100 pb-4 text-lg font-semibold text-slate-900 dark:text-white dark:border-slate-800 dark:text-white">
-                <FiInfo className="text-indigo-500" /> Basic Information
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+            <div className="lg:col-span-2">
+              <div className="mb-8 rounded-2xl bg-white dark:bg-slate-800 p-6 shadow-sm ring-1 ring-slate-100 dark:bg-slate-800 dark:ring-slate-700">
+                <div className="mb-6 flex items-center gap-2 border-b border-slate-100 pb-4 text-lg font-semibold text-slate-900 dark:text-white dark:border-slate-800 dark:text-white">
+                  <FiInfo className="text-indigo-500" /> Basic Information
+                </div>
+                <div className="grid grid-cols-1 gap-x-6 gap-y-2 md:grid-cols-2">
+                  <div className="md:col-span-2">
+                    <Form.Item
+                      name="name"
+                      label={
+                        <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
+                          Company Name
+                        </span>
+                      }
+                      rules={[{ required: true, message: "Required" }]}
+                    >
+                      <Input
+                        placeholder="e.g. Green Line Paribahan"
+                        size="large"
+                        className="rounded-lg"
+                      />
+                    </Form.Item>
+                  </div>
+                </div>
               </div>
-              <div className="grid grid-cols-1 gap-x-6 gap-y-2 md:grid-cols-2">
-                <div className="md:col-span-2">
-                  <Form.Item
-                    name="name"
-                    label={
-                      <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
-                        Company Name
-                      </span>
-                    }
-                    rules={[{ required: true, message: "Required" }]}
-                  >
-                    <Input
-                      placeholder="e.g. Green Line Paribahan"
-                      size="large"
-                      className="rounded-lg"
-                    />
-                  </Form.Item>
+
+              <div className="rounded-2xl bg-white dark:bg-slate-800 p-6 shadow-sm ring-1 ring-slate-100 dark:bg-slate-800 dark:ring-slate-700">
+                <div className="mb-6 flex items-center gap-2 border-b border-slate-100 pb-4 text-lg font-semibold text-slate-900 dark:text-white dark:border-slate-800 dark:text-white">
+                  <FiMapPin className="text-indigo-500" /> Location & Contact
+                </div>
+                <div className="grid grid-cols-1 gap-x-6 gap-y-2 md:grid-cols-2">
+                  <div>
+                    <Form.Item
+                      name="email"
+                      label={
+                        <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
+                          Email Address
+                        </span>
+                      }
+                    >
+                      <Input
+                        placeholder="contact@company.com"
+                        size="large"
+                        className="rounded-lg"
+                      />
+                    </Form.Item>
+                  </div>
+                  <div>
+                    <Form.Item
+                      name="phone"
+                      label={
+                        <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
+                          Phone Number
+                        </span>
+                      }
+                    >
+                      <Input
+                        placeholder="+880 1..."
+                        size="large"
+                        className="rounded-lg"
+                      />
+                    </Form.Item>
+                  </div>
+
+                  <div className="md:col-span-2">
+                    <Divider dashed style={{ margin: "8px 0 24px 0" }} />
+                  </div>
+
+                  <div className="md:col-span-2">
+                    <Form.Item
+                      name="street"
+                      label={
+                        <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
+                          Street Address
+                        </span>
+                      }
+                    >
+                      <Input
+                        placeholder="123 Main St, Suite 400"
+                        size="large"
+                        className="rounded-lg"
+                      />
+                    </Form.Item>
+                  </div>
+
+                  <div>
+                    <Form.Item
+                      name="city"
+                      label={
+                        <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
+                          City
+                        </span>
+                      }
+                    >
+                      <Input
+                        placeholder="Dhaka"
+                        size="large"
+                        className="rounded-lg"
+                      />
+                    </Form.Item>
+                  </div>
+                  <div>
+                    <Form.Item
+                      name="state"
+                      label={
+                        <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
+                          State / Division
+                        </span>
+                      }
+                    >
+                      <Input
+                        placeholder="Dhaka"
+                        size="large"
+                        className="rounded-lg"
+                      />
+                    </Form.Item>
+                  </div>
+                  <div>
+                    <Form.Item
+                      name="zip"
+                      label={
+                        <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
+                          Zip / Postal Code
+                        </span>
+                      }
+                    >
+                      <Input
+                        placeholder="1212"
+                        size="large"
+                        className="rounded-lg"
+                      />
+                    </Form.Item>
+                  </div>
+                  <div>
+                    <Form.Item
+                      name="country"
+                      label={
+                        <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
+                          Country
+                        </span>
+                      }
+                    >
+                      <Input
+                        placeholder="Bangladesh"
+                        size="large"
+                        className="rounded-lg"
+                      />
+                    </Form.Item>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <div className="rounded-2xl bg-white dark:bg-slate-800 p-6 shadow-sm ring-1 ring-slate-100 dark:bg-slate-800 dark:ring-slate-700">
-              <div className="mb-6 flex items-center gap-2 border-b border-slate-100 pb-4 text-lg font-semibold text-slate-900 dark:text-white dark:border-slate-800 dark:text-white">
-                <FiMapPin className="text-indigo-500" /> Location & Contact
-              </div>
-              <div className="grid grid-cols-1 gap-x-6 gap-y-2 md:grid-cols-2">
-                <div>
-                  <Form.Item
-                    name="email"
-                    label={
-                      <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
-                        Email Address
-                      </span>
-                    }
-                  >
-                    <Input
-                      placeholder="contact@company.com"
-                      size="large"
-                      className="rounded-lg"
-                    />
-                  </Form.Item>
+            <div className="lg:col-span-1">
+              <div className="mb-6 rounded-2xl bg-white dark:bg-slate-800 p-6 shadow-sm ring-1 ring-slate-100 dark:bg-slate-800 dark:ring-slate-700">
+                <div className="mb-6 flex items-center gap-2 border-b border-slate-100 pb-4 text-lg font-semibold text-slate-900 dark:text-white dark:border-slate-800 dark:text-white">
+                  <FiSettings className="text-indigo-500" /> Settings
                 </div>
-                <div>
-                  <Form.Item
-                    name="phone"
-                    label={
-                      <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
-                        Phone Number
-                      </span>
-                    }
-                  >
-                    <Input
-                      placeholder="+880 1..."
-                      size="large"
-                      className="rounded-lg"
-                    />
-                  </Form.Item>
-                </div>
-
-                <div className="md:col-span-2">
-                  <Divider dashed style={{ margin: "8px 0 24px 0" }} />
-                </div>
-
-                <div className="md:col-span-2">
-                  <Form.Item
-                    name="street"
-                    label={
-                      <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
-                        Street Address
-                      </span>
-                    }
-                  >
-                    <Input
-                      placeholder="123 Main St, Suite 400"
-                      size="large"
-                      className="rounded-lg"
-                    />
-                  </Form.Item>
-                </div>
-
-                <div>
-                  <Form.Item
-                    name="city"
-                    label={
-                      <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">City</span>
-                    }
-                  >
-                    <Input
-                      placeholder="Dhaka"
-                      size="large"
-                      className="rounded-lg"
-                    />
-                  </Form.Item>
-                </div>
-                <div>
-                  <Form.Item
-                    name="state"
-                    label={
-                      <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
-                        State / Division
-                      </span>
-                    }
-                  >
-                    <Input
-                      placeholder="Dhaka"
-                      size="large"
-                      className="rounded-lg"
-                    />
-                  </Form.Item>
-                </div>
-                <div>
-                  <Form.Item
-                    name="zip"
-                    label={
-                      <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
-                        Zip / Postal Code
-                      </span>
-                    }
-                  >
-                    <Input
-                      placeholder="1212"
-                      size="large"
-                      className="rounded-lg"
-                    />
-                  </Form.Item>
-                </div>
-                <div>
-                  <Form.Item
-                    name="country"
-                    label={
-                      <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
-                        Country
-                      </span>
-                    }
-                  >
-                    <Input
-                      placeholder="Bangladesh"
-                      size="large"
-                      className="rounded-lg"
-                    />
-                  </Form.Item>
-                </div>
+                <Form.Item
+                  name="status"
+                  label={
+                    <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
+                      Account Status
+                    </span>
+                  }
+                >
+                  <Select size="large" className="rounded-lg">
+                    <Select.Option value="Active">Active</Select.Option>
+                    <Select.Option value="Inactive">Inactive</Select.Option>
+                  </Select>
+                </Form.Item>
+                <Form.Item
+                  name="license"
+                  label={
+                    <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
+                      License Number
+                    </span>
+                  }
+                  tooltip="Government issued transport license"
+                >
+                  <Input
+                    placeholder="LIC-12345"
+                    size="large"
+                    className="rounded-lg"
+                  />
+                </Form.Item>
               </div>
             </div>
           </div>
-
-          <div className="lg:col-span-1">
-            <div className="mb-6 rounded-2xl bg-white dark:bg-slate-800 p-6 shadow-sm ring-1 ring-slate-100 dark:bg-slate-800 dark:ring-slate-700">
-              <div className="mb-6 flex items-center gap-2 border-b border-slate-100 pb-4 text-lg font-semibold text-slate-900 dark:text-white dark:border-slate-800 dark:text-white">
-                <FiSettings className="text-indigo-500" /> Settings
-              </div>
-              <Form.Item
-                name="status"
-                label={
-                  <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
-                    Account Status
-                  </span>
-                }
-              >
-                <Select size="large" className="rounded-lg">
-                  <Select.Option value="Active">Active</Select.Option>
-                  <Select.Option value="Inactive">Inactive</Select.Option>
-                </Select>
-              </Form.Item>
-              <Form.Item
-                name="license"
-                label={
-                  <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
-                    License Number
-                  </span>
-                }
-                tooltip="Government issued transport license"
-              >
-                <Input
-                  placeholder="LIC-12345"
-                  size="large"
-                  className="rounded-lg"
-                />
-              </Form.Item>
-            </div>
-          </div>
-        </div>
-      </Form>
+        </Form>
       </FormLoader>
     </div>
   );

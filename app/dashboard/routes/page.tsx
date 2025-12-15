@@ -107,20 +107,12 @@ export default function RoutesPage() {
       dataIndex: "name",
       key: "name",
       render: (text: string, record: Route) => (
-        <div>
-          <Link
-            href={`/dashboard/routes/${record._id}`}
-            className="font-medium text-slate-900 hover:text-indigo-600 dark:text-white block"
-          >
-            {text}
-          </Link>
-          <Link
-            href={`/dashboard/schedules/new?routeId=${record._id}`}
-            className="text-xs text-indigo-600 hover:text-indigo-700 mt-1 inline-block"
-          >
-            Create Schedule →
-          </Link>
-        </div>
+        <Link
+          href={`/dashboard/routes/${record._id}`}
+          className="font-medium text-slate-900 hover:text-indigo-600 dark:text-white"
+        >
+          {text}
+        </Link>
       ),
     },
     {

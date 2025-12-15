@@ -160,7 +160,9 @@ export default function NewCompanyPage() {
                   <Form.Item
                     name="city"
                     label={
-                      <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">City</span>
+                      <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
+                        City
+                      </span>
                     }
                   >
                     <Input
@@ -230,7 +232,9 @@ export default function NewCompanyPage() {
               <Form.Item
                 name="status"
                 label={
-                  <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Status</span>
+                  <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
+                    Status
+                  </span>
                 }
               >
                 <Select size="large" className="rounded-lg">

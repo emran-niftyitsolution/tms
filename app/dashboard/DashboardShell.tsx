@@ -10,11 +10,11 @@ import {
   theme,
 } from "antd";
 import { signOut, useSession } from "next-auth/react";
+import { useTheme } from "next-themes";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { useTheme } from "next-themes";
-import { FiBriefcase, FiMenu, FiUsers, FiMoon, FiSun } from "react-icons/fi";
+import { FiBriefcase, FiMenu, FiMoon, FiSun, FiUsers } from "react-icons/fi";
 import {
   LuBuilding2,
   LuBus,
@@ -307,23 +307,38 @@ export default function DashboardShell({
           <Button
             type="text"
             aria-label="Toggle sidebar"
-            icon={<FiMenu/>}
+            icon={<FiMenu />}
             onClick={() => setCollapsed((v) => !v)}
             style={{
               marginLeft: -24,
-							fontSize: '24px',
+              fontSize: "24px",
               width: 64,
               height: 64,
             }}
           />
 
-          <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 8 }}>
+          <div
+            style={{
+              marginLeft: "auto",
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+            }}
+          >
             {mounted && (
               <Button
                 type="text"
                 aria-label="Toggle dark mode"
-                icon={currentTheme === "dark" ? <FiSun size={18} /> : <FiMoon size={18} />}
-                onClick={() => setTheme(currentTheme === "dark" ? "light" : "dark")}
+                icon={
+                  currentTheme === "dark" ? (
+                    <FiSun size={18} />
+                  ) : (
+                    <FiMoon size={18} />
+                  )
+                }
+                onClick={() =>
+                  setTheme(currentTheme === "dark" ? "light" : "dark")
+                }
                 style={{
                   paddingInline: 12,
                   height: 40,
@@ -335,66 +350,68 @@ export default function DashboardShell({
             )}
 
             <Dropdown
-            menu={{
-              items: [
-                { key: "profile", label: "Profile" },
-                { key: "settings", label: "Settings" },
-                { type: "divider" },
-                {
-                  key: "logout",
-                  label: "Logout",
-                  onClick: () => signOut({ callbackUrl: "/login" }),
-                },
-              ],
-              className: "min-w-[160px]",
-            }}
-            trigger={["click"]}
-          >
-            <Button
-              type="text"
-              aria-label="Open profile menu"
-              style={{ paddingInline: 8, height: 40 }}
+              menu={{
+                items: [
+                  { key: "profile", label: "Profile" },
+                  { key: "settings", label: "Settings" },
+                  { type: "divider" },
+                  {
+                    key: "logout",
+                    label: "Logout",
+                    onClick: () => signOut({ callbackUrl: "/login" }),
+                  },
+                ],
+                className: "min-w-[160px]",
+              }}
+              trigger={["click"]}
             >
-              <span style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                <div className="text-right hidden sm:block">
-                  <div
-                    style={{
-                      fontWeight: 600,
-                      color: token.colorText,
-                      fontSize: 13,
-                      lineHeight: 1.2,
-                    }}
-                  >
-                    {status === "loading"
-                      ? "Loading..."
-                      : session?.user?.name || "Guest"}
-                  </div>
-                  <div
-                    style={{
-                      fontSize: 11,
-                      color: token.colorTextSecondary,
-                      lineHeight: 1.2,
-                    }}
-                  >
-                    {status === "loading" ? "..." : "Admin"}
-                  </div>
-                </div>
-                <Avatar
-                  size="default"
-                  src={session?.user?.image}
-                  style={{
-                    background: "#e0e7ff",
-                    color: "#4f46e5",
-                    verticalAlign: "middle",
-                    border: "2px solid #fff",
-                    boxShadow: "0 0 0 1px #e2e8f0",
-                  }}
+              <Button
+                type="text"
+                aria-label="Open profile menu"
+                style={{ paddingInline: 8, height: 40 }}
+              >
+                <span
+                  style={{ display: "flex", alignItems: "center", gap: 12 }}
                 >
-                  {userInitials}
-                </Avatar>
-              </span>
-            </Button>
-          </Dropdown>
+                  <div className="text-right hidden sm:block">
+                    <div
+                      style={{
+                        fontWeight: 600,
+                        color: token.colorText,
+                        fontSize: 13,
+                        lineHeight: 1.2,
+                      }}
+                    >
+                      {status === "loading"
+                        ? "Loading..."
+                        : session?.user?.name || "Guest"}
+                    </div>
+                    <div
+                      style={{
+                        fontSize: 11,
+                        color: token.colorTextSecondary,
+                        lineHeight: 1.2,
+                      }}
+                    >
+                      {status === "loading" ? "..." : "Admin"}
+                    </div>
+                  </div>
+                  <Avatar
+                    size="default"
+                    src={session?.user?.image}
+                    style={{
+                      background: "#e0e7ff",
+                      color: "#4f46e5",
+                      verticalAlign: "middle",
+                      border: "2px solid #fff",
+                      boxShadow: "0 0 0 1px #e2e8f0",
+                    }}
+                  >
+                    {userInitials}
+                  </Avatar>
+                </span>
+              </Button>
+            </Dropdown>
           </div>
         </Header>
 

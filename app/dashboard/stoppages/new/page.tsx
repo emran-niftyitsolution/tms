@@ -10,7 +10,9 @@ export default function NewStoppagePage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
-  const [companies, setCompanies] = useState<{ label: string; value: string }[]>([]);
+  const [companies, setCompanies] = useState<
+    { label: string; value: string }[]
+  >([]);
   const [cities, setCities] = useState<{ label: string; value: string }[]>([]);
 
   useEffect(() => {
@@ -61,7 +63,7 @@ export default function NewStoppagePage() {
         dropping: Boolean(values.dropping ?? true),
         counter: Boolean(values.counter ?? false),
       };
-      
+
       const res = await fetch("/api/stoppages", {
         method: "POST",
         headers: {
@@ -100,9 +102,12 @@ export default function NewStoppagePage() {
           <div className="grid gap-6 md:grid-cols-2">
             <Form.Item
               name="company"
-              label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Company</span>}
+              label={
+                <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
+                  Company
+                </span>
+              }
               rules={[{ required: true, message: "Company is required" }]}
-              className="md:col-span-2"
             >
               <Select
                 size="large"
@@ -115,23 +120,13 @@ export default function NewStoppagePage() {
             </Form.Item>
 
             <Form.Item
-              name="name"
-              label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Stoppage Name</span>}
-              rules={[{ required: true, message: "Stoppage name is required" }]}
-              className="md:col-span-2"
-            >
-              <Input
-                size="large"
-                placeholder="e.g. Gulshan Bus Stop"
-                className="rounded-lg"
-              />
-            </Form.Item>
-
-            <Form.Item
               name="city"
-              label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">City</span>}
+              label={
+                <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
+                  City
+                </span>
+              }
               rules={[{ required: true, message: "City is required" }]}
-              className="md:col-span-2"
             >
               <Select
                 size="large"
@@ -144,8 +139,29 @@ export default function NewStoppagePage() {
             </Form.Item>
 
             <Form.Item
+              name="name"
+              label={
+                <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
+                  Stoppage Name
+                </span>
+              }
+              rules={[{ required: true, message: "Stoppage name is required" }]}
+              className="md:col-span-2"
+            >
+              <Input
+                size="large"
+                placeholder="e.g. Gulshan Bus Stop"
+                className="rounded-lg"
+              />
+            </Form.Item>
+
+            <Form.Item
               name="code"
-              label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Stoppage Code</span>}
+              label={
+                <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
+                  Stoppage Code
+                </span>
+              }
             >
               <Input
                 size="large"
@@ -157,7 +173,11 @@ export default function NewStoppagePage() {
 
             <Form.Item
               name="status"
-              label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Status</span>}
+              label={
+                <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
+                  Status
+                </span>
+              }
               initialValue="Active"
             >
               <Select
@@ -227,4 +247,3 @@ export default function NewStoppagePage() {
     </div>
   );
 }
-

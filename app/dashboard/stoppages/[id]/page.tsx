@@ -124,7 +124,6 @@ export default function EditStoppagePage({ params }: { params: Promise<{ id: str
               name="company"
               label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">Company</span>}
               rules={[{ required: true, message: "Company is required" }]}
-              className="md:col-span-2"
             >
               <Select
                 size="large"
@@ -133,6 +132,21 @@ export default function EditStoppagePage({ params }: { params: Promise<{ id: str
                 showSearch
                 optionFilterProp="label"
                 options={companies}
+              />
+            </Form.Item>
+
+            <Form.Item
+              name="city"
+              label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">City</span>}
+              rules={[{ required: true, message: "City is required" }]}
+            >
+              <Select
+                size="large"
+                placeholder="Select city"
+                className="rounded-lg"
+                showSearch
+                optionFilterProp="label"
+                options={cities}
               />
             </Form.Item>
 
@@ -146,22 +160,6 @@ export default function EditStoppagePage({ params }: { params: Promise<{ id: str
                 size="large"
                 placeholder="e.g. Gulshan Bus Stop"
                 className="rounded-lg"
-              />
-            </Form.Item>
-
-            <Form.Item
-              name="city"
-              label={<span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">City</span>}
-              rules={[{ required: true, message: "City is required" }]}
-              className="md:col-span-2"
-            >
-              <Select
-                size="large"
-                placeholder="Select city"
-                className="rounded-lg"
-                showSearch
-                optionFilterProp="label"
-                options={cities}
               />
             </Form.Item>
 

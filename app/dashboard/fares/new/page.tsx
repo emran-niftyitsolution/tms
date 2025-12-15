@@ -207,8 +207,11 @@ export default function NewFarePage() {
                   size="large"
                   placeholder="Enter fare amount"
                   className="rounded-lg w-full"
+                  style={{ width: "100%" }}
                   min={0}
-                  formatter={(value) => `৳ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                  formatter={(value) =>
+                    `৳ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                  }
                   parser={(value) => value!.replace(/৳\s?|(,*)/g, "")}
                 />
               </Form.Item>
