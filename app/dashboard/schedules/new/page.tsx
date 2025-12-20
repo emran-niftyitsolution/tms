@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, DatePicker, Form, InputNumber, Select } from "antd";
+import { Button, DatePicker, Form, Input, InputNumber, Select } from "antd";
 import dayjs from "dayjs";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
@@ -290,6 +290,25 @@ function NewScheduleForm() {
               </h3>
               <div className="grid gap-6 md:grid-cols-2">
                 <Form.Item
+                  name="number"
+                  label={
+                    <span className="font-medium text-slate-600 dark:text-slate-300">
+                      Schedule Number
+                    </span>
+                  }
+                  rules={[
+                    { required: true, message: "Schedule number is required" },
+                  ]}
+                  className="md:col-span-2"
+                >
+                  <Input
+                    size="large"
+                    placeholder="e.g. SCH-2024-001"
+                    className="rounded-lg"
+                  />
+                </Form.Item>
+
+                <Form.Item
                   name="company"
                   label={
                     <span className="font-medium text-slate-600 dark:text-slate-300">
@@ -460,7 +479,8 @@ function NewScheduleForm() {
                   <InputNumber
                     size="large"
                     placeholder="e.g. 500"
-                    className="rounded-lg w-full"
+                    className="rounded-lg"
+                    style={{ width: "100%" }}
                     min={0}
                   />
                 </Form.Item>
@@ -616,7 +636,8 @@ function NewScheduleForm() {
                   <InputNumber
                     size="large"
                     placeholder="Enter default fare"
-                    className="rounded-lg w-full"
+                    className="rounded-lg"
+                    style={{ width: "100%" }}
                     min={0}
                     onChange={(value) => {
                       if (value && value > 0) {
