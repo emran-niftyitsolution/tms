@@ -618,6 +618,15 @@ export default function BusDetailPage({
                 }}
               />
             </Form.Item>
+            {/* Hidden field to track aisleColumns */}
+            <Form.Item
+              name="aisleColumns"
+              preserve
+              initialValue={[]}
+              style={{ display: "none" }}
+            >
+              <Input type="hidden" />
+            </Form.Item>
           </div>
         </div>
       </Form>

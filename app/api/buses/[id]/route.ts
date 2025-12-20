@@ -103,12 +103,17 @@ export async function PUT(
             ? seatPlan.seats
             : [];
 
+        // Use aisleColumns from body if provided, otherwise from seat plan
+        const aisleColumns = Array.isArray(body.aisleColumns) && body.aisleColumns.length > 0
+          ? body.aisleColumns.filter((ac: any) => typeof ac === 'number').sort((a: number, b: number) => a - b)
+          : Array.isArray(seatPlan.aisleColumns)
+          ? seatPlan.aisleColumns
+          : [];
+
         updateData.seatPlanLayout = {
-          rows: seatPlan.rows || 0,
-          columns: seatPlan.columns || 0,
-          aisleColumns: Array.isArray(seatPlan.aisleColumns)
-            ? seatPlan.aisleColumns
-            : [],
+          rows: body.rows || seatPlan.rows || 0,
+          columns: body.columns || seatPlan.columns || 0,
+          aisleColumns: aisleColumns,
           seats: seats,
         };
 
@@ -124,11 +129,36 @@ export async function PUT(
       updateData.seatPlan = null;
       updateData.seatPlanLayout = null;
       updateData.seats = [];
+    } else {
+      // If no seatPlan but seats/rows/columns/aisleColumns are provided, update seatPlanLayout
+      if (body.seats !== undefined || body.rows !== undefined || body.columns !== undefined || body.aisleColumns !== undefined) {
+        updateData.seatPlanLayout = {
+          rows: body.rows || updateData.seatPlanLayout?.rows || 0,
+          columns: body.columns || updateData.seatPlanLayout?.columns || 0,
+          aisleColumns: Array.isArray(body.aisleColumns)
+            ? body.aisleColumns.filter((ac: any) => typeof ac === 'number').sort((a: number, b: number) => a - b)
+            : updateData.seatPlanLayout?.aisleColumns || [],
+          seats: Array.isArray(body.seats) ? body.seats : updateData.seatPlanLayout?.seats || [],
+        };
+      }
     }
 
     // Ensure seats is an array if provided
     if (body.seats !== undefined) {
       updateData.seats = Array.isArray(body.seats) ? body.seats : [];
+    }
+
+    // Ensure rows, columns, and aisleColumns are saved if provided
+    if (body.rows !== undefined) {
+      updateData.rows = Number(body.rows) || 0;
+    }
+    if (body.columns !== undefined) {
+      updateData.columns = Number(body.columns) || 0;
+    }
+    if (body.aisleColumns !== undefined) {
+      updateData.aisleColumns = Array.isArray(body.aisleColumns)
+        ? body.aisleColumns.filter((ac: any) => typeof ac === 'number').sort((a: number, b: number) => a - b)
+        : [];
     }
 
     // Remove old fields

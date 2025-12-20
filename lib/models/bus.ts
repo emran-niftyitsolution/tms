@@ -25,6 +25,18 @@ const BusSchema = new Schema(
       required: [true, "Capacity is required"],
       min: 1,
     },
+    rows: {
+      type: Number,
+      default: 10,
+    },
+    columns: {
+      type: Number,
+      default: 5,
+    },
+    aisleColumns: {
+      type: [Number], // Column indices that are aisles (0-based)
+      default: [],
+    },
     seatPlan: {
       type: Schema.Types.ObjectId,
       ref: "SeatPlan",
