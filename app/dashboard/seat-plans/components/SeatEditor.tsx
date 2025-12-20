@@ -25,6 +25,10 @@ interface SeatEditorProps {
   onAisleColumnsChange?: (aisleColumns: number[]) => void;
   readOnly?: boolean; // If true, disable all editing controls
   allowRowRemoval?: boolean; // If false, hide row removal buttons (default: true)
+  selectionMode?: boolean; // If true, enable seat selection mode (for ticket booking)
+  selectedSeat?: { row: number; column: number } | { row: number; column: number }[] | null; // Currently selected seat(s) - can be single or array
+  onSeatSelect?: (seat: Seat | null) => void; // Callback when seat is selected
+  bookedSeats?: { row: number; column: number }[]; // List of booked seats
 }
 
 export function SeatEditor({
@@ -38,6 +42,10 @@ export function SeatEditor({
   onAisleColumnsChange,
   readOnly = false,
   allowRowRemoval = true,
+  selectionMode = false,
+  selectedSeat = null,
+  onSeatSelect,
+  bookedSeats = [],
 }: SeatEditorProps) {
   const [seats, setSeats] = useState<Seat[]>(value);
   const [rows, setRows] = useState(initialRows);
@@ -610,6 +618,87 @@ export function SeatEditor({
     }
 
     if (seat) {
+      // Check if seat is booked
+      const isBooked = bookedSeats.some(
+        (bs) => bs.row === row && bs.column === column
+      );
+      // Check if seat is selected (handle both single and array)
+      const isSelected = selectedSeat
+        ? Array.isArray(selectedSeat)
+          ? selectedSeat.some((s) => s.row === row && s.column === column)
+          : selectedSeat.row === row && selectedSeat.column === column
+        : false;
+
+      // Selection mode - simple click to select (read-only means seats can't be edited, but can still be selected)
+      if (selectionMode) {
+        if (seat.isAisle || seat.isBroken || isBooked) {
+          return (
+            <div
+              key={`${row}-${column}`}
+              className={`flex h-16 w-16 items-center justify-center rounded border text-base font-medium ${
+                seat.isAisle
+                  ? "border-2 border-dashed border-slate-400 bg-slate-200 dark:border-slate-600 dark:bg-slate-700"
+                  : seat.isBroken
+                  ? "border-red-400 bg-red-100 text-red-700 line-through dark:border-red-600 dark:bg-red-900/30 dark:text-red-400"
+                  : isBooked
+                  ? "border-orange-400 bg-orange-100 text-orange-700 dark:border-orange-600 dark:bg-orange-900/30 dark:text-orange-400"
+                  : ""
+              }`}
+              title={
+                seat.isAisle
+                  ? "Road"
+                  : seat.isBroken
+                  ? "Broken Seat"
+                  : isBooked
+                  ? "Booked"
+                  : ""
+              }
+            >
+              {seat.isAisle ? (
+                <span className="text-base text-slate-500 dark:text-slate-400">
+                  🚶
+                </span>
+              ) : (
+                <>
+                  {seat.seatName || seat.seatNumber}
+                  {(seat.isBroken || isBooked) && (
+                    <span className="absolute -top-1 -right-1 text-red-500">
+                      ⚠️
+                    </span>
+                  )}
+                </>
+              )}
+            </div>
+          );
+        }
+
+        return (
+          <div
+            key={`${row}-${column}`}
+            onClick={() => {
+              if (onSeatSelect) {
+                // Always pass the seat, let the parent handle toggle logic
+                // This way the parent knows which seat was clicked
+                onSeatSelect(seat);
+              }
+            }}
+            className={`group relative flex h-16 w-16 cursor-pointer items-center justify-center rounded border text-base font-medium shadow-sm transition-all ${
+              isSelected
+                ? "border-indigo-600 bg-indigo-100 text-indigo-700 ring-2 ring-indigo-500 dark:border-indigo-500 dark:bg-indigo-900/40 dark:text-indigo-300"
+                : "border-slate-300 bg-slate-50 text-slate-700 hover:border-indigo-400 hover:bg-indigo-50 hover:text-indigo-700 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-indigo-500 dark:hover:bg-indigo-900/20"
+            }`}
+            title={`Seat ${seat.seatName || seat.seatNumber} - Click to select`}
+          >
+            {seat.seatName || seat.seatNumber}
+            {isSelected && (
+              <span className="absolute -top-1 -right-1 text-indigo-600">
+                ✓
+              </span>
+            )}
+          </div>
+        );
+      }
+
       const menuItems: MenuProps["items"] = [
         {
           key: "toggleBroken",
@@ -652,12 +741,14 @@ export function SeatEditor({
             className={`group relative flex h-16 w-16 items-center justify-center rounded border text-base font-medium shadow-sm ${
               seat.isBroken
                 ? "border-red-400 bg-red-100 text-red-700 line-through dark:border-red-600 dark:bg-red-900/30 dark:text-red-400"
+                : isBooked
+                ? "border-orange-400 bg-orange-100 text-orange-700 dark:border-orange-600 dark:bg-orange-900/30 dark:text-orange-400"
                 : "border-slate-300 bg-slate-50 text-slate-700 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
             }`}
-            title={`Seat ${seat.seatName || seat.seatNumber}${seat.isBroken ? " (Broken)" : ""}`}
+            title={`Seat ${seat.seatName || seat.seatNumber}${seat.isBroken ? " (Broken)" : ""}${isBooked ? " (Booked)" : ""}`}
           >
             {seat.seatName || seat.seatNumber}
-            {seat.isBroken && (
+            {(seat.isBroken || isBooked) && (
               <span className="absolute -top-1 -right-1 text-red-500">⚠️</span>
             )}
           </div>
@@ -674,13 +765,15 @@ export function SeatEditor({
             className={`group relative flex h-16 w-16 cursor-pointer items-center justify-center rounded border text-base font-medium shadow-sm transition-all ${
               seat.isBroken
                 ? "border-red-400 bg-red-100 text-red-700 line-through dark:border-red-600 dark:bg-red-900/30 dark:text-red-400"
+                : isBooked
+                ? "border-orange-400 bg-orange-100 text-orange-700 dark:border-orange-600 dark:bg-orange-900/30 dark:text-orange-400"
                 : "border-slate-300 bg-slate-50 text-slate-700 hover:border-indigo-400 hover:bg-indigo-50 hover:text-indigo-700 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-indigo-500 dark:hover:bg-indigo-900/20"
             }`}
             onDoubleClick={() => handleDoubleClick(row, column, seat)}
-            title={`Seat ${seat.seatName || seat.seatNumber}${seat.isBroken ? " (Broken)" : ""} - Double-click to edit, right-click for menu`}
+            title={`Seat ${seat.seatName || seat.seatNumber}${seat.isBroken ? " (Broken)" : ""}${isBooked ? " (Booked)" : ""} - Double-click to edit, right-click for menu`}
           >
             {seat.seatName || seat.seatNumber}
-            {seat.isBroken && (
+            {(seat.isBroken || isBooked) && (
               <span className="absolute -top-1 -right-1 text-red-500">⚠️</span>
             )}
           </div>

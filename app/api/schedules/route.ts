@@ -15,13 +15,17 @@ export async function GET(req: Request) {
     
     const schedules = await Schedule.find(query)
       .populate("company", "name")
-      .populate("bus", "number type")
+      .populate("bus", "number type rows columns aisleColumns seats")
       .populate({
         path: "route",
-        select: "name from to",
+        select: "name from to stoppages",
         populate: [
           { path: "from", select: "name code" },
           { path: "to", select: "name code" },
+          {
+            path: "stoppages.place",
+            select: "name code",
+          },
         ],
       })
       .sort({ departureTime: 1 });

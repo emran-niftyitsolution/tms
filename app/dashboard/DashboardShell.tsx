@@ -36,6 +36,7 @@ type MenuKey =
   | "buses"
   | "routes"
   | "schedules"
+  | "tickets"
   | "employees"
   | "seat-classes"
   | "fares"
@@ -55,6 +56,7 @@ function getActiveKey(pathname: string): MenuKey {
   if (pathname.startsWith("/dashboard/buses")) return "buses";
   if (pathname.startsWith("/dashboard/routes")) return "routes";
   if (pathname.startsWith("/dashboard/schedules")) return "schedules";
+  if (pathname.startsWith("/dashboard/tickets")) return "tickets";
   if (pathname.startsWith("/dashboard/employees")) return "employees";
   if (pathname.startsWith("/dashboard/seat-classes")) return "seat-classes";
   if (pathname.startsWith("/dashboard/fares")) return "fares";
@@ -243,6 +245,10 @@ export default function DashboardShell({
                   label: (
                     <Link href="/dashboard/schedules">Schedules (Trips)</Link>
                   ),
+                },
+                {
+                  key: "tickets",
+                  label: <Link href="/dashboard/tickets">Tickets</Link>,
                 },
                 {
                   key: "employees",
