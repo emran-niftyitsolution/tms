@@ -480,20 +480,16 @@ export function SeatEditor({
       const roadMenuItems: MenuProps["items"] = [
         {
           key: "removeRoad",
-          label: "Remove Road",
+          label: "Remove Road Column",
+          danger: true,
           onClick: () => {
-            // Remove road from this specific seat
-            const updatedSeats = seats.filter((s) => !(s.row === row && s.column === column));
+            // Remove all roads from this column (since roads are typically entire columns)
+            const updatedSeats = seats.filter((s) => !(s.column === column && s.isAisle === true));
             setSeats(updatedSeats);
             onChange?.(updatedSeats);
             
-            // Check if this was the last road in this column
-            const remainingRoadsInColumn = updatedSeats.filter(
-              (s) => s.column === column && s.isAisle === true
-            );
-            
-            // If no roads left in this column, remove from aisleColumns
-            if (remainingRoadsInColumn.length === 0 && aisleColumns.includes(column)) {
+            // Remove column from aisleColumns if it's there
+            if (aisleColumns.includes(column)) {
               const newRoadColumns = aisleColumns.filter((ac) => ac !== column);
               setAisleColumns(newRoadColumns);
               onAisleColumnsChange?.(newRoadColumns);
@@ -502,14 +498,31 @@ export function SeatEditor({
         },
       ];
 
+      if (readOnly) {
+        return (
+          <div
+            key={`${row}-${column}`}
+            className="flex h-16 w-16 items-center justify-center border-2 border-dashed border-slate-400 bg-slate-200 dark:border-slate-600 dark:bg-slate-700"
+            title="Road"
+          >
+            <span className="text-base text-slate-500 dark:text-slate-400">🚶</span>
+          </div>
+        );
+      }
+
       return (
-        <div
+        <Dropdown
           key={`${row}-${column}`}
-          className="flex h-16 w-16 items-center justify-center border-2 border-dashed border-slate-400 bg-slate-200 dark:border-slate-600 dark:bg-slate-700"
-          title="Road"
+          menu={{ items: roadMenuItems }}
+          trigger={["contextMenu"]}
         >
-          <span className="text-base text-slate-500 dark:text-slate-400">🚶</span>
-        </div>
+          <div
+            className="flex h-16 w-16 cursor-pointer items-center justify-center border-2 border-dashed border-slate-400 bg-slate-200 dark:border-slate-600 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600"
+            title="Road - Right-click to remove"
+          >
+            <span className="text-base text-slate-500 dark:text-slate-400">🚶</span>
+          </div>
+        </Dropdown>
       );
     }
 
@@ -702,17 +715,22 @@ export function SeatEditor({
                 Road Columns:
               </label>
               <div className="flex gap-1">
-                {Array.from({ length: columns }, (_, i) => (
-                  <Button
-                    key={i}
-                    size="small"
-                    type={aisleColumns.includes(i) ? "primary" : "default"}
-                    onClick={() => toggleRoadColumn(i)}
-                    className="h-7 w-7 p-0"
-                  >
-                    {i + 1}
-                  </Button>
-                ))}
+                {Array.from({ length: columns }, (_, i) => {
+                  const isRoad = aisleColumns.includes(i);
+                  return (
+                    <Button
+                      key={i}
+                      size="small"
+                      type={isRoad ? "primary" : "default"}
+                      danger={isRoad}
+                      onClick={() => toggleRoadColumn(i)}
+                      className="h-7 w-7 p-0"
+                      title={isRoad ? `Column ${i + 1} is a road - Click to remove` : `Column ${i + 1} - Click to make it a road`}
+                    >
+                      {i + 1}
+                    </Button>
+                  );
+                })}
               </div>
             </div>
           )}
