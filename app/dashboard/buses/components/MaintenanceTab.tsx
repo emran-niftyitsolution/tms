@@ -37,7 +37,7 @@ export function MaintenanceTab({ maintenance, onAdd }: MaintenanceTabProps) {
       </div>
       <Table columns={columns} dataSource={maintenance} rowKey="_id" pagination={{ pageSize: 10 }} />
 
-      <Modal title="Add Maintenance Record" open={modalOpen} onCancel={() => setModalOpen(false)} footer={null} width={600}>
+      <Modal title="Add Maintenance Record" open={modalOpen} onCancel={() => setModalOpen(false)} footer={null} width={600} style={{ top: 20 }}>
         <Form form={form} layout="vertical" onFinish={handleSubmit}>
           <Form.Item name="type" label="Type" rules={[{ required: true }]}>
             <Select options={[

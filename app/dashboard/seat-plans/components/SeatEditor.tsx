@@ -852,6 +852,7 @@ export function SeatEditor({
           setNewRowInputs({});
         }}
         width={800}
+        style={{ top: 20 }}
       >
         <div className="py-4">
           <div className="mb-4 text-sm text-slate-600 dark:text-white dark:text-slate-300">

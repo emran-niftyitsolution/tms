@@ -39,7 +39,7 @@ export function AssignmentTab({ assignments, staff, routes, onAdd }: AssignmentT
       </div>
       <Table columns={columns} dataSource={assignments} rowKey="_id" pagination={{ pageSize: 10 }} />
 
-      <Modal title="New Assignment" open={modalOpen} onCancel={() => setModalOpen(false)} footer={null} width={600}>
+      <Modal title="New Assignment" open={modalOpen} onCancel={() => setModalOpen(false)} footer={null} width={600} style={{ top: 20 }}>
         <Form form={form} layout="vertical" onFinish={handleSubmit}>
           <Form.Item name="driver" label="Driver" rules={[{ required: true }]}>
             <Select options={staff.filter(s => s.role === "Driver").map(s => ({ label: s.name, value: s._id }))} />

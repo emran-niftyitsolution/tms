@@ -41,7 +41,7 @@ export function ExpenseTab({ expenses, onAdd }: ExpenseTabProps) {
       </div>
       <Table columns={columns} dataSource={expenses} rowKey="_id" pagination={{ pageSize: 10 }} />
 
-      <Modal title="Add Expense" open={modalOpen} onCancel={() => setModalOpen(false)} footer={null} width={600}>
+      <Modal title="Add Expense" open={modalOpen} onCancel={() => setModalOpen(false)} footer={null} width={600} style={{ top: 20 }}>
         <Form form={form} layout="vertical" onFinish={handleSubmit}>
           <Form.Item name="type" label="Type" rules={[{ required: true }]}>
             <Select options={[
