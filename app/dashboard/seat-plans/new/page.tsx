@@ -299,6 +299,10 @@ export default function NewSeatPlanPage() {
                 }
               />
             </Form.Item>
+            {/* Hidden field to track aisleColumns */}
+            <Form.Item name="aisleColumns" preserve initialValue={[]} style={{ display: 'none' }}>
+              <Input type="hidden" />
+            </Form.Item>
           </Form>
         </div>
       </div>

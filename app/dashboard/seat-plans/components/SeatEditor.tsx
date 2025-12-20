@@ -77,7 +77,19 @@ export function SeatEditor({
   }, [initialColumns]);
 
   useEffect(() => {
-    if (initialAisleColumns) setAisleColumns(initialAisleColumns);
+    // Sync aisleColumns with prop changes
+    if (Array.isArray(initialAisleColumns)) {
+      setAisleColumns((prev) => {
+        const prevSorted = [...prev].sort((a, b) => a - b);
+        const newSorted = [...initialAisleColumns].sort((a, b) => a - b);
+        const prevStr = JSON.stringify(prevSorted);
+        const newStr = JSON.stringify(newSorted);
+        if (prevStr !== newStr) {
+          return initialAisleColumns;
+        }
+        return prev;
+      });
+    }
   }, [initialAisleColumns]);
 
   // Generate grid layout
@@ -119,28 +131,23 @@ export function SeatEditor({
   };
 
   const toggleRoadColumn = (column: number) => {
-    const isCurrentlyRoad = aisleColumns.includes(column);
+    // Use current state to determine if it's a road column
+    const currentAisleColumns = [...aisleColumns];
+    const isCurrentlyRoad = currentAisleColumns.includes(column);
 
     if (isCurrentlyRoad) {
       // Turn road column back into normal seats: remove from aisleColumns and clear road flags
-      const newRoadColumns = aisleColumns.filter((ac) => ac !== column);
+      const newRoadColumns = currentAisleColumns.filter((ac) => ac !== column);
       setAisleColumns(newRoadColumns);
       onAisleColumnsChange?.(newRoadColumns);
 
-      const updatedSeats = seats
-        .map((s) =>
-          s.column === column
-            ? {
-                ...s,
-                isAisle: false,
-              }
-            : s,
-        );
+      // Remove road seats from this column
+      const updatedSeats = seats.filter((s) => !(s.column === column && s.isAisle));
       setSeats(updatedSeats);
       onChange?.(updatedSeats);
     } else {
       // Make this entire column a road
-      const newRoadColumns = [...aisleColumns, column].sort((a, b) => a - b);
+      const newRoadColumns = [...currentAisleColumns, column].sort((a, b) => a - b);
       setAisleColumns(newRoadColumns);
       onAisleColumnsChange?.(newRoadColumns);
 

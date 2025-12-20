@@ -38,6 +38,15 @@ export async function POST(req: Request) {
     } else {
       body.seats = [];
     }
+
+    // Ensure aisleColumns is properly formatted (array of numbers)
+    if (body.aisleColumns === undefined) {
+      body.aisleColumns = [];
+    } else if (Array.isArray(body.aisleColumns)) {
+      body.aisleColumns = body.aisleColumns.filter((ac: any) => typeof ac === 'number').sort((a: number, b: number) => a - b);
+    } else {
+      body.aisleColumns = [];
+    }
     
     const newSeatPlan = await SeatPlan.create(body);
     const populatedSeatPlan = await SeatPlan.findById(newSeatPlan._id)
