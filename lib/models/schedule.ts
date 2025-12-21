@@ -49,6 +49,10 @@ const ScheduleSchema = new Schema(
       ],
       default: [],
     },
+    showOnWeb: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

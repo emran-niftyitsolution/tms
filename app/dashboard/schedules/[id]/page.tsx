@@ -1,8 +1,8 @@
 "use client";
 
 import {
-  Breadcrumb,
   Button,
+  Checkbox,
   DatePicker,
   Form,
   Input,
@@ -10,7 +10,6 @@ import {
   Select,
 } from "antd";
 import dayjs from "dayjs";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { use, useEffect, useState } from "react";
 import { FiSave } from "react-icons/fi";
@@ -94,6 +93,7 @@ export default function ScheduleDetailPage({
             : null,
           price: scheduleData.price,
           status: scheduleData.status || "Scheduled",
+          showOnWeb: scheduleData.showOnWeb || false,
           seats: scheduleData.seats || [],
         });
       }
@@ -336,21 +336,6 @@ export default function ScheduleDetailPage({
 
   return (
     <div className="max-w-7xl mx-auto">
-      <Breadcrumb
-        items={[
-          { title: <Link href="/dashboard">Dashboard</Link> },
-          { title: <Link href="/dashboard/schedules">Schedules</Link> },
-          {
-            title: schedule
-              ? `Edit Trip ${dayjs(schedule.departureTime).format(
-                  "MMM D, YYYY"
-                )}`
-              : "Loading...",
-          },
-        ]}
-        className="mb-4"
-      />
-
       <div className="mb-8">
         <h2 className="text-xl font-bold text-slate-900 dark:text-white">
           Edit Schedule
@@ -592,6 +577,17 @@ export default function ScheduleDetailPage({
                       { label: "Cancelled", value: "Cancelled" },
                     ]}
                   />
+                </Form.Item>
+              </div>
+              <div className="mt-4">
+                <Form.Item
+                  name="showOnWeb"
+                  valuePropName="checked"
+                  initialValue={false}
+                >
+                  <Checkbox className="text-slate-700 dark:text-slate-300">
+                    Show on web (Public search)
+                  </Checkbox>
                 </Form.Item>
               </div>
             </div>
