@@ -19,7 +19,7 @@ export function SiteHeader({ transparent = false }: { transparent?: boolean }) {
           : "sticky top-0 border-b border-white/10 bg-white/60 backdrop-blur-xl dark:bg-black/40"
       )}
     >
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
         <Link href="/" className="group inline-flex items-center gap-2">
           <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-indigo-500 to-cyan-400 text-white shadow-sm">
             T

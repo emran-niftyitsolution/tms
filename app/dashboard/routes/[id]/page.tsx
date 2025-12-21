@@ -1,10 +1,11 @@
 "use client";
 
+import type { FormListFieldData } from "antd";
 import { Button, Checkbox, Form, Input, Select, Table, TimePicker } from "antd";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
 import { use, useEffect, useRef, useState } from "react";
-import { FiInfo, FiMove, FiPlus, FiSave, FiTrash2 } from "react-icons/fi";
+import { FiMove, FiPlus, FiSave, FiTrash2 } from "react-icons/fi";
 import { toast } from "sonner";
 import { FormLoader } from "../../components/Loader";
 
@@ -148,18 +149,14 @@ export default function RouteDetailPage({
         </p>
       </div>
 
-      <div className="rounded-2xl bg-white dark:bg-slate-800 p-6 shadow-sm ring-1 ring-slate-100 dark:bg-slate-800 dark:ring-slate-700">
-        <div className="mb-6 flex items-center gap-2 text-slate-900 dark:text-white">
-          <FiInfo />
-          <h2 className="text-lg font-semibold">Route Information</h2>
-        </div>
+      <div className="rounded-2xl bg-white dark:bg-slate-800 p-6 shadow-sm ring-1 ring-slate-100 dark:ring-slate-700">
         <FormLoader loading={pageLoading}>
           <Form form={form} layout="vertical" onFinish={onRouteUpdate}>
             <div className="grid gap-6 md:grid-cols-2">
               <Form.Item
                 name="company"
                 label={
-                  <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
+                  <span className="font-medium text-slate-600 dark:text-white">
                     Company
                   </span>
                 }
@@ -179,7 +176,7 @@ export default function RouteDetailPage({
               <Form.Item
                 name="name"
                 label={
-                  <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
+                  <span className="font-medium text-slate-600 dark:text-white">
                     Route Name
                   </span>
                 }
@@ -196,7 +193,7 @@ export default function RouteDetailPage({
               <Form.Item
                 name="from"
                 label={
-                  <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
+                  <span className="font-medium text-slate-600 dark:text-white">
                     From
                   </span>
                 }
@@ -220,7 +217,7 @@ export default function RouteDetailPage({
               <Form.Item
                 name="to"
                 label={
-                  <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
+                  <span className="font-medium text-slate-600 dark:text-white">
                     To
                   </span>
                 }
@@ -243,7 +240,7 @@ export default function RouteDetailPage({
                   {(fields, { add, remove, move }) => (
                     <div className="flex flex-col gap-4">
                       <div className="flex items-center justify-between">
-                        <label className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
+                        <label className="font-medium text-slate-600 dark:text-white">
                           Stoppages (Intermediate Stops)
                         </label>
                         <Button
@@ -276,7 +273,10 @@ export default function RouteDetailPage({
                               title: "Enable",
                               key: "enable",
                               width: 80,
-                              render: (_: any, field: any) => (
+                              render: (
+                                _: unknown,
+                                field: FormListFieldData
+                              ) => (
                                 <Form.Item
                                   {...field}
                                   name={[field.name, "enable"]}
@@ -292,7 +292,10 @@ export default function RouteDetailPage({
                               title: "Stoppage",
                               key: "place",
                               width: 200,
-                              render: (_: any, field: any) => (
+                              render: (
+                                _: unknown,
+                                field: FormListFieldData
+                              ) => (
                                 <Form.Item
                                   {...field}
                                   name={[field.name, "place"]}
@@ -319,7 +322,10 @@ export default function RouteDetailPage({
                               title: "Boarding",
                               key: "boarding",
                               width: 100,
-                              render: (_: any, field: any) => (
+                              render: (
+                                _: unknown,
+                                field: FormListFieldData
+                              ) => (
                                 <Form.Item
                                   {...field}
                                   name={[field.name, "boarding"]}
@@ -335,7 +341,10 @@ export default function RouteDetailPage({
                               title: "Boarding Time",
                               key: "boardingTime",
                               width: 150,
-                              render: (_: any, field: any) => (
+                              render: (
+                                _: unknown,
+                                field: FormListFieldData
+                              ) => (
                                 <Form.Item
                                   {...field}
                                   name={[field.name, "boardingTime"]}
@@ -353,7 +362,10 @@ export default function RouteDetailPage({
                               title: "Dropping",
                               key: "dropping",
                               width: 100,
-                              render: (_: any, field: any) => (
+                              render: (
+                                _: unknown,
+                                field: FormListFieldData
+                              ) => (
                                 <Form.Item
                                   {...field}
                                   name={[field.name, "dropping"]}
@@ -369,7 +381,10 @@ export default function RouteDetailPage({
                               title: "Dropping Time",
                               key: "droppingTime",
                               width: 150,
-                              render: (_: any, field: any) => (
+                              render: (
+                                _: unknown,
+                                field: FormListFieldData
+                              ) => (
                                 <Form.Item
                                   {...field}
                                   name={[field.name, "droppingTime"]}
@@ -390,7 +405,10 @@ export default function RouteDetailPage({
                               onCell: () => ({
                                 style: { verticalAlign: "top" },
                               }),
-                              render: (_: any, field: any) => (
+                              render: (
+                                _: unknown,
+                                field: FormListFieldData
+                              ) => (
                                 <div
                                   style={{
                                     display: "flex",
@@ -443,7 +461,7 @@ export default function RouteDetailPage({
               <Form.Item
                 name="status"
                 label={
-                  <span className="font-medium text-slate-600 dark:text-white dark:text-slate-300">
+                  <span className="font-medium text-slate-600 dark:text-white">
                     Status
                   </span>
                 }

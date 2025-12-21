@@ -2,8 +2,10 @@
 
 import { motion } from "framer-motion";
 import { FiTrendingUp, FiTrendingDown, FiActivity, FiClock } from "react-icons/fi";
+import { useEffect, useState } from "react";
+import dayjs from "dayjs";
 
-type BookingStatus = "Paid" | "Pending" | "Cancelled";
+type BookingStatus = "Paid" | "Pending" | "Cancelled" | "Confirmed";
 
 type Booking = {
   id: string;
@@ -13,46 +15,9 @@ type Booking = {
   date: string;
   amount: string;
   status: BookingStatus;
+  phone?: string;
+  email?: string;
 };
-
-const bookings: Booking[] = [
-  {
-    id: "BK-10294",
-    customer: "Arif Hasan",
-    route: "Dhaka → Chittagong",
-    mode: "Air",
-    date: "Dec 20, 2025",
-    amount: "$249",
-    status: "Paid",
-  },
-  {
-    id: "BK-10293",
-    customer: "Nusrat Jahan",
-    route: "Dhaka → Sylhet",
-    mode: "Train",
-    date: "Dec 18, 2025",
-    amount: "$8",
-    status: "Pending",
-  },
-  {
-    id: "BK-10292",
-    customer: "Rahim Uddin",
-    route: "Dhaka → Cox’s Bazar",
-    mode: "Bus",
-    date: "Dec 17, 2025",
-    amount: "$14",
-    status: "Paid",
-  },
-  {
-    id: "BK-10291",
-    customer: "Tania Akter",
-    route: "Chittagong → Saint Martin",
-    mode: "Ship",
-    date: "Dec 22, 2025",
-    amount: "$19",
-    status: "Cancelled",
-  },
-];
 
 const demandTrend = [
   { day: "D1", height: 18 },
@@ -73,7 +38,7 @@ const demandTrend = [
 
 function StatusPill({ status }: { status: BookingStatus }) {
   const cls =
-    status === "Paid"
+    status === "Paid" || status === "Confirmed"
       ? "bg-emerald-500/10 text-emerald-700 ring-emerald-500/20 dark:text-emerald-300"
       : status === "Pending"
       ? "bg-amber-500/10 text-amber-700 ring-amber-500/20 dark:text-amber-300"
@@ -152,6 +117,72 @@ const item = {
 };
 
 export default function DashboardPage() {
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState({
+    totalBookings: 0,
+    totalRevenue: 0,
+    avgOrderValue: 0,
+    pendingRequests: 0,
+  });
+
+  useEffect(() => {
+    const fetchTickets = async () => {
+      try {
+        const res = await fetch("/api/tickets");
+        if (res.ok) {
+          const tickets = await res.json();
+          
+          // Transform tickets to bookings
+          const transformedBookings: Booking[] = tickets
+            .slice(0, 10) // Show only recent 10
+            .map((ticket: any) => {
+              const routeName = ticket.schedule?.route?.name || "Unknown Route";
+              const fromName = typeof ticket.schedule?.route?.from === "object" 
+                ? ticket.schedule.route.from.name 
+                : "Unknown";
+              const toName = typeof ticket.schedule?.route?.to === "object" 
+                ? ticket.schedule.route.to.name 
+                : "Unknown";
+              
+              return {
+                id: ticket.ticketNumber || ticket._id,
+                customer: ticket.passengerName || "Unknown",
+                route: `${fromName} → ${toName}`,
+                mode: "Bus" as const,
+                date: dayjs(ticket.bookingDate || ticket.createdAt).format("MMM D, YYYY"),
+                amount: `৳${ticket.finalAmount || ticket.totalFare || 0}`,
+                status: (ticket.status === "Confirmed" ? "Confirmed" : ticket.status === "Cancelled" ? "Cancelled" : "Pending") as BookingStatus,
+                phone: ticket.passengerPhone,
+                email: ticket.passengerEmail,
+              };
+            });
+
+          setBookings(transformedBookings);
+
+          // Calculate stats
+          const totalBookings = tickets.length;
+          const totalRevenue = tickets.reduce((sum: number, t: any) => sum + (t.finalAmount || t.totalFare || 0), 0);
+          const avgOrderValue = totalBookings > 0 ? totalRevenue / totalBookings : 0;
+          const pendingRequests = tickets.filter((t: any) => t.status === "Pending").length;
+
+          setStats({
+            totalBookings,
+            totalRevenue,
+            avgOrderValue,
+            pendingRequests,
+          });
+        }
+      } catch (error) {
+        console.error("Failed to fetch tickets:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTickets();
+  }, []);
+
   return (
     <motion.div
       variants={container}
@@ -163,32 +194,32 @@ export default function DashboardPage() {
       <motion.div variants={item} className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard
           label="Total Bookings"
-          value="1,284"
-          delta="12%"
+          value={loading ? "..." : stats.totalBookings.toLocaleString()}
+          delta=""
           trend="up"
-          hint="Compared to last week"
+          hint="Total tickets booked"
           icon={FiActivity}
         />
         <StatCard
           label="Total Revenue"
-          value="$38,420"
-          delta="8%"
+          value={loading ? "..." : `৳${stats.totalRevenue.toLocaleString()}`}
+          delta=""
           trend="up"
-          hint="Compared to last week"
+          hint="Total revenue from tickets"
           icon={FiTrendingUp}
         />
         <StatCard
           label="Avg. Order Value"
-          value="$142"
-          delta="2%"
-          trend="down"
-          hint="Compared to last week"
+          value={loading ? "..." : `৳${Math.round(stats.avgOrderValue).toLocaleString()}`}
+          delta=""
+          trend="up"
+          hint="Average ticket price"
           icon={FiTrendingDown}
         />
         <StatCard
           label="Pending Requests"
-          value="18"
-          delta="5%"
+          value={loading ? "..." : stats.pendingRequests.toString()}
+          delta=""
           trend="up"
           hint="Requires attention"
           icon={FiClock}
@@ -281,43 +312,58 @@ export default function DashboardPage() {
           <table className="w-full text-left text-sm">
             <thead className="bg-slate-50 text-xs uppercase font-medium text-slate-500 dark:bg-slate-800/50 dark:text-slate-400">
               <tr>
-                <th className="px-6 py-3">Booking ID</th>
-                <th className="px-6 py-3">Customer</th>
+                <th className="px-6 py-3">Ticket Number</th>
+                <th className="px-6 py-3">Passenger</th>
+                <th className="px-6 py-3">Contact</th>
                 <th className="px-6 py-3">Route</th>
-                <th className="px-6 py-3">Mode</th>
                 <th className="px-6 py-3">Date</th>
                 <th className="px-6 py-3">Amount</th>
                 <th className="px-6 py-3">Status</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-              {bookings.map((b) => (
-                <tr key={b.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
-                  <td className="px-6 py-4 font-medium text-indigo-600 dark:text-indigo-400">
-                    {b.id}
-                  </td>
-                  <td className="px-6 py-4 font-medium text-slate-900 dark:text-white">
-                    {b.customer}
-                  </td>
-                  <td className="px-6 py-4 text-slate-600 dark:text-slate-400">
-                    {b.route}
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className="inline-flex items-center rounded-md bg-slate-100 px-2 py-1 text-xs font-medium text-slate-600 dark:bg-slate-800 dark:text-slate-300">
-                      {b.mode}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 text-slate-600 dark:text-slate-400">
-                    {b.date}
-                  </td>
-                  <td className="px-6 py-4 font-medium text-slate-900 dark:text-white">
-                    {b.amount}
-                  </td>
-                  <td className="px-6 py-4">
-                    <StatusPill status={b.status} />
+              {loading ? (
+                <tr>
+                  <td colSpan={7} className="px-6 py-8 text-center text-slate-500">
+                    Loading...
                   </td>
                 </tr>
-              ))}
+              ) : bookings.length === 0 ? (
+                <tr>
+                  <td colSpan={7} className="px-6 py-8 text-center text-slate-500">
+                    No bookings found
+                  </td>
+                </tr>
+              ) : (
+                bookings.map((b) => (
+                  <tr key={b.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td className="px-6 py-4 font-medium text-indigo-600 dark:text-indigo-400">
+                      {b.id}
+                    </td>
+                    <td className="px-6 py-4 font-medium text-slate-900 dark:text-white">
+                      {b.customer}
+                    </td>
+                    <td className="px-6 py-4 text-slate-600 dark:text-slate-400">
+                      <div className="text-xs">
+                        {b.phone && <div>{b.phone}</div>}
+                        {b.email && <div className="text-slate-400">{b.email}</div>}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-slate-600 dark:text-slate-400">
+                      {b.route}
+                    </td>
+                    <td className="px-6 py-4 text-slate-600 dark:text-slate-400">
+                      {b.date}
+                    </td>
+                    <td className="px-6 py-4 font-medium text-slate-900 dark:text-white">
+                      {b.amount}
+                    </td>
+                    <td className="px-6 py-4">
+                      <StatusPill status={b.status} />
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>

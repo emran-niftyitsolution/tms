@@ -1,6 +1,6 @@
 "use client";
 
-import { Input, InputNumber, Modal, Button, Dropdown, Select } from "antd";
+import { Input, InputNumber, Modal, Button, Dropdown, Select, Tooltip } from "antd";
 import { useState, useMemo, useEffect, useRef } from "react";
 import { FiEdit2, FiX, FiPlus } from "react-icons/fi";
 import type { MenuProps } from "antd";
@@ -29,6 +29,7 @@ interface SeatEditorProps {
   selectedSeat?: { row: number; column: number } | { row: number; column: number }[] | null; // Currently selected seat(s) - can be single or array
   onSeatSelect?: (seat: Seat | null) => void; // Callback when seat is selected
   bookedSeats?: { row: number; column: number }[]; // List of booked seats
+  bookedSeatsInfo?: { [key: string]: { passengerName: string; passengerPhone: string; ticketNumber: string } }; // Passenger info for booked seats (key: "row-column")
 }
 
 export function SeatEditor({
@@ -46,6 +47,7 @@ export function SeatEditor({
   selectedSeat = null,
   onSeatSelect,
   bookedSeats = [],
+  bookedSeatsInfo = {},
 }: SeatEditorProps) {
   const [seats, setSeats] = useState<Seat[]>(value);
   const [rows, setRows] = useState(initialRows);
@@ -488,16 +490,19 @@ export function SeatEditor({
       const roadMenuItems: MenuProps["items"] = [
         {
           key: "removeRoad",
-          label: "Remove Road Column",
+          label: "Remove Road Seat",
           danger: true,
           onClick: () => {
-            // Remove all roads from this column (since roads are typically entire columns)
-            const updatedSeats = seats.filter((s) => !(s.column === column && s.isAisle === true));
+            // Remove only this specific road seat
+            const updatedSeats = seats.filter((s) => !(s.row === row && s.column === column && s.isAisle === true));
             setSeats(updatedSeats);
             onChange?.(updatedSeats);
             
-            // Remove column from aisleColumns if it's there
-            if (aisleColumns.includes(column)) {
+            // Check if there are any remaining road seats in this column
+            const remainingRoadSeatsInColumn = updatedSeats.filter((s) => s.column === column && s.isAisle === true);
+            
+            // If no road seats remain in this column, remove column from aisleColumns
+            if (remainingRoadSeatsInColumn.length === 0 && aisleColumns.includes(column)) {
               const newRoadColumns = aisleColumns.filter((ac) => ac !== column);
               setAisleColumns(newRoadColumns);
               onAisleColumnsChange?.(newRoadColumns);
@@ -632,7 +637,10 @@ export function SeatEditor({
       // Selection mode - simple click to select (read-only means seats can't be edited, but can still be selected)
       if (selectionMode) {
         if (seat.isAisle || seat.isBroken || isBooked) {
-          return (
+          const seatKey = `${row}-${column}`;
+          const passengerInfo = isBooked ? bookedSeatsInfo[seatKey] : null;
+          
+          const seatContent = (
             <div
               key={`${row}-${column}`}
               className={`flex h-16 w-16 items-center justify-center rounded border text-base font-medium ${
@@ -644,15 +652,6 @@ export function SeatEditor({
                   ? "border-orange-400 bg-orange-100 text-orange-700 dark:border-orange-600 dark:bg-orange-900/30 dark:text-orange-400"
                   : ""
               }`}
-              title={
-                seat.isAisle
-                  ? "Road"
-                  : seat.isBroken
-                  ? "Broken Seat"
-                  : isBooked
-                  ? "Booked"
-                  : ""
-              }
             >
               {seat.isAisle ? (
                 <span className="text-base text-slate-500 dark:text-slate-400">
@@ -670,6 +669,27 @@ export function SeatEditor({
               )}
             </div>
           );
+
+          if (isBooked && passengerInfo) {
+            return (
+              <Tooltip
+                key={`${row}-${column}`}
+                title={
+                  <div className="text-sm">
+                    <div className="font-semibold mb-1">Sold</div>
+                    <div>Passenger: {passengerInfo.passengerName}</div>
+                    <div>Phone: {passengerInfo.passengerPhone}</div>
+                    <div>Ticket: {passengerInfo.ticketNumber}</div>
+                  </div>
+                }
+                placement="top"
+              >
+                {seatContent}
+              </Tooltip>
+            );
+          }
+
+          return seatContent;
         }
 
         return (

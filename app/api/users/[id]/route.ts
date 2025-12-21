@@ -10,7 +10,9 @@ export async function GET(
   const params = await props.params;
   try {
     await connectToDatabase();
-    const user = await User.findById(params.id).select("-password");
+    const user = await User.findById(params.id)
+      .select("-password")
+      .populate("company", "name");
 
     if (!user) {
       return NextResponse.json(
@@ -53,7 +55,9 @@ export async function PUT(
     const updatedUser = await User.findByIdAndUpdate(params.id, body, {
       new: true,
       runValidators: true,
-    }).select("-password");
+    })
+      .select("-password")
+      .populate("company", "name");
 
     if (!updatedUser) {
       return NextResponse.json(

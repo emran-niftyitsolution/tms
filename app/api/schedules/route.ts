@@ -1,10 +1,17 @@
 import { NextResponse } from "next/server";
 import connectToDatabase from "@/lib/db";
 import { Schedule } from "@/lib/models/schedule";
+import { Route } from "@/lib/models/route";
+import { Stoppage } from "@/lib/models/stoppage";
 
 export async function GET(req: Request) {
   try {
     await connectToDatabase();
+    
+    // Ensure models are registered
+    Route;
+    Stoppage;
+    
     const { searchParams } = new URL(req.url);
     const busId = searchParams.get("busId");
     const routeId = searchParams.get("routeId");
@@ -42,6 +49,11 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   try {
     await connectToDatabase();
+    
+    // Ensure models are registered
+    Route;
+    Stoppage;
+    
     const body = await req.json();
     const newSchedule = await Schedule.create(body);
     const populatedSchedule = await Schedule.findById(newSchedule._id)

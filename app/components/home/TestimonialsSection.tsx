@@ -35,7 +35,7 @@ export function TestimonialsSection() {
        <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl" />
        <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
 
-       <div className="container mx-auto px-4 relative z-10">
+       <div className="max-w-7xl mx-auto px-4 relative z-10">
           <div className="text-center max-w-2xl mx-auto mb-16">
             <h2 className="text-3xl md:text-5xl font-bold mb-4 text-zinc-900 dark:text-white">Loved by Travelers</h2>
             <p className="text-zinc-600 dark:text-zinc-400 text-lg">Don&apos;t just take our word for it. Here&apos;s what our users have to say about their experience.</p>

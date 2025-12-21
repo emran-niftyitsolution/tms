@@ -41,7 +41,7 @@ export default function Home() {
           {/* Header Inside Hero */}
           <SiteHeader transparent />
 
-          <div className="container relative mx-auto px-4 z-10 flex-1 flex items-center">
+          <div className="max-w-7xl relative mx-auto px-4 z-10 flex-1 flex items-center">
             <div className="grid lg:grid-cols-2 gap-12 items-center w-full pt-12 lg:pt-0">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -142,7 +142,7 @@ export default function Home() {
 
         {/* Features Bento Grid */}
         <section className="py-24 bg-white dark:bg-slate-800 relative">
-          <div className="container mx-auto px-4 mb-16 text-center">
+          <div className="max-w-7xl mx-auto px-4 mb-16 text-center">
             <h2 className="text-3xl md:text-5xl font-bold mb-4 text-zinc-900 dark:text-white">
               Why Choose TMS?
             </h2>
@@ -162,7 +162,7 @@ export default function Home() {
 
         {/* Popular Routes Parallax/Grid */}
         <section className="py-24 bg-zinc-50 dark:bg-zinc-900">
-          <div className="container mx-auto px-4">
+          <div className="max-w-7xl mx-auto px-4">
             <div className="flex justify-between items-end mb-12">
               <div>
                 <h2 className="text-3xl md:text-4xl font-bold text-zinc-900 dark:text-white mb-2">
@@ -261,7 +261,7 @@ export default function Home() {
 
         {/* CTA Section */}
         <section className="py-24 bg-white dark:bg-slate-800">
-          <div className="container mx-auto px-4">
+          <div className="max-w-7xl mx-auto px-4">
             <div className="relative rounded-[3rem] bg-zinc-900 dark:bg-zinc-900 overflow-hidden px-6 py-20 text-center">
               <div className="absolute top-0 left-0 w-full h-full opacity-30">
                 <div className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-[radial-gradient(circle,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-size-[20px_20px]"></div>

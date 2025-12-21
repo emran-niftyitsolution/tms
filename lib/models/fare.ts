@@ -35,3 +35,7 @@ const FareSchema = new Schema(
 
 export const Fare = models.Fare || model("Fare", FareSchema);
 
+
+
+
+

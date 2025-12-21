@@ -358,7 +358,10 @@ export default function DashboardShell({
             <Dropdown
               menu={{
                 items: [
-                  { key: "profile", label: "Profile" },
+                  {
+                    key: "profile",
+                    label: <Link href="/dashboard/profile">Profile</Link>,
+                  },
                   { key: "settings", label: "Settings" },
                   { type: "divider" },
                   {

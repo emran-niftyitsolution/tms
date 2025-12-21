@@ -15,6 +15,8 @@ import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { SeatEditor } from "../seat-plans/components/SeatEditor";
+import { FiClock } from "react-icons/fi";
+import { useRouter } from "next/navigation";
 
 type Schedule = {
   _id: string;
@@ -50,6 +52,7 @@ type Schedule = {
 };
 
 export default function TicketsPage() {
+  const router = useRouter();
   const [schedules, setSchedules] = useState<Schedule[]>([]);
   const [filteredSchedules, setFilteredSchedules] = useState<Schedule[]>([]);
   const [loading, setLoading] = useState(true);
@@ -68,6 +71,15 @@ export default function TicketsPage() {
   }>({});
   const [bookedSeats, setBookedSeats] = useState<{
     [scheduleId: string]: { row: number; column: number }[];
+  }>({});
+  const [bookedSeatsInfo, setBookedSeatsInfo] = useState<{
+    [scheduleId: string]: {
+      [key: string]: { // key: "row-column"
+        passengerName: string;
+        passengerPhone: string;
+        ticketNumber: string;
+      };
+    };
   }>({});
   const [expandedScheduleDetails, setExpandedScheduleDetails] = useState<{
     [scheduleId: string]: Schedule;
@@ -95,21 +107,99 @@ export default function TicketsPage() {
     fetchCompanies();
   }, []);
 
+  // Function to fetch booked seats for a specific schedule
+  const fetchBookedSeatsForSchedule = async (scheduleId: string, boardingPoint?: string, droppingPoint?: string) => {
+    try {
+      let url = `/api/tickets?scheduleId=${scheduleId}`;
+      if (boardingPoint) url += `&boardingPoint=${boardingPoint}`;
+      if (droppingPoint) url += `&droppingPoint=${droppingPoint}`;
+      
+      const res = await fetch(url);
+      if (res.ok) {
+        const tickets = await res.json();
+        if (Array.isArray(tickets)) {
+          const seats: { row: number; column: number }[] = [];
+          const seatsInfo: {
+            [key: string]: { passengerName: string; passengerPhone: string; ticketNumber: string };
+          } = {};
+          
+          tickets.forEach((ticket: any) => {
+            const seatsList = ticket.seats || (ticket.seat ? [ticket.seat] : []);
+            seatsList.forEach((seat: any) => {
+              if (seat.row !== undefined && seat.column !== undefined) {
+                seats.push({ row: seat.row, column: seat.column });
+                const key = `${seat.row}-${seat.column}`;
+                seatsInfo[key] = {
+                  passengerName: ticket.passengerName || "Unknown",
+                  passengerPhone: ticket.passengerPhone || "",
+                  ticketNumber: ticket.ticketNumber || "",
+                };
+              }
+            });
+          });
+          
+          setBookedSeats((prev) => ({
+            ...prev,
+            [scheduleId]: seats,
+          }));
+          setBookedSeatsInfo((prev) => ({
+            ...prev,
+            [scheduleId]: seatsInfo,
+          }));
+        }
+      }
+    } catch {
+      // Silently fail
+    }
+  };
+
   // Fetch booked seats for each schedule
   useEffect(() => {
     const fetchBookedSeats = async () => {
       const bookedSeatsMap: { [scheduleId: string]: { row: number; column: number }[] } = {};
+      const bookedSeatsInfoMap: {
+        [scheduleId: string]: {
+          [key: string]: { passengerName: string; passengerPhone: string; ticketNumber: string };
+        };
+      } = {};
       
       for (const schedule of filteredSchedules) {
         try {
-          const res = await fetch(`/api/tickets?scheduleId=${schedule._id}`);
+          // Get default boarding/dropping from passenger form if available
+          const passengerData = passengerForms[schedule._id];
+          const boardingPoint = passengerData?.boardingPoint;
+          const droppingPoint = passengerData?.droppingPoint;
+          
+          let url = `/api/tickets?scheduleId=${schedule._id}`;
+          if (boardingPoint) url += `&boardingPoint=${boardingPoint}`;
+          if (droppingPoint) url += `&droppingPoint=${droppingPoint}`;
+          
+          const res = await fetch(url);
           if (res.ok) {
             const tickets = await res.json();
             if (Array.isArray(tickets)) {
-              bookedSeatsMap[schedule._id] = tickets.map((t: any) => ({
-                row: t.seat.row,
-                column: t.seat.column,
-              }));
+              const seats: { row: number; column: number }[] = [];
+              const seatsInfo: {
+                [key: string]: { passengerName: string; passengerPhone: string; ticketNumber: string };
+              } = {};
+              
+              tickets.forEach((ticket: any) => {
+                const seatsList = ticket.seats || (ticket.seat ? [ticket.seat] : []);
+                seatsList.forEach((seat: any) => {
+                  if (seat.row !== undefined && seat.column !== undefined) {
+                    seats.push({ row: seat.row, column: seat.column });
+                    const key = `${seat.row}-${seat.column}`;
+                    seatsInfo[key] = {
+                      passengerName: ticket.passengerName || "Unknown",
+                      passengerPhone: ticket.passengerPhone || "",
+                      ticketNumber: ticket.ticketNumber || "",
+                    };
+                  }
+                });
+              });
+              
+              bookedSeatsMap[schedule._id] = seats;
+              bookedSeatsInfoMap[schedule._id] = seatsInfo;
             }
           }
         } catch {
@@ -118,12 +208,39 @@ export default function TicketsPage() {
       }
       
       setBookedSeats(bookedSeatsMap);
+      setBookedSeatsInfo(bookedSeatsInfoMap);
     };
 
     if (filteredSchedules.length > 0) {
       fetchBookedSeats();
     }
   }, [filteredSchedules]);
+
+  // Set default boarding and dropping points when schedule is expanded
+  useEffect(() => {
+    expandedRowKeys.forEach((scheduleId) => {
+      const schedule = expandedScheduleDetails[scheduleId] || schedules.find(s => s._id === scheduleId);
+      if (schedule && !passengerForms[scheduleId]?.boardingPoint) {
+        const routeFrom = typeof schedule.route?.from === "object" 
+          ? schedule.route.from._id 
+          : schedule.route?.from;
+        const routeTo = typeof schedule.route?.to === "object" 
+          ? schedule.route.to._id 
+          : schedule.route?.to;
+        
+        if (routeFrom || routeTo) {
+          setPassengerForms((prev) => ({
+            ...prev,
+            [scheduleId]: {
+              ...prev[scheduleId],
+              boardingPoint: routeFrom || prev[scheduleId]?.boardingPoint,
+              droppingPoint: routeTo || prev[scheduleId]?.droppingPoint,
+            },
+          }));
+        }
+      }
+    });
+  }, [expandedRowKeys, expandedScheduleDetails, schedules]);
 
   const fetchCompanies = async () => {
     try {
@@ -401,6 +518,20 @@ export default function TicketsPage() {
         return <Tag color={color}>{status}</Tag>;
       },
     },
+    {
+      title: "Actions",
+      key: "actions",
+      width: 150,
+      render: (_: unknown, record: Schedule) => (
+        <Button
+          type="link"
+          icon={<FiClock />}
+          onClick={() => router.push(`/dashboard/tickets/history?scheduleId=${record._id}`)}
+        >
+          Ticket History
+        </Button>
+      ),
+    },
   ];
 
   const renderExpandedRow = (schedule: Schedule) => {
@@ -423,18 +554,56 @@ export default function TicketsPage() {
 
     // Get route stoppages for boarding/dropping points
     const routeStoppages = fullSchedule.route?.stoppages || [];
+    
+    // Get default boarding and dropping points (route's from and to)
+    const routeFrom = typeof fullSchedule.route?.from === "object" 
+      ? fullSchedule.route.from 
+      : null;
+    const routeTo = typeof fullSchedule.route?.to === "object" 
+      ? fullSchedule.route.to 
+      : null;
+    
+    const defaultBoardingPointId = routeFrom?._id || fullSchedule.route?.from;
+    const defaultDroppingPointId = routeTo?._id || fullSchedule.route?.to;
+
+    // Build boarding points list - include route's from if not already in stoppages
     const boardingPoints = routeStoppages
       .filter((s: any) => s.boarding)
       .map((s: any) => ({
         label: typeof s.place === "object" ? s.place.name : s.place,
         value: typeof s.place === "object" ? s.place._id : s.place,
       }));
+    
+    // Add route's from location if it's not in the boarding points list
+    if (routeFrom && !boardingPoints.some((bp: any) => bp.value === defaultBoardingPointId)) {
+      boardingPoints.unshift({
+        label: routeFrom.name,
+        value: defaultBoardingPointId,
+      });
+    }
+
+    // Build dropping points list - include route's to if not already in stoppages
     const droppingPoints = routeStoppages
       .filter((s: any) => s.dropping)
       .map((s: any) => ({
         label: typeof s.place === "object" ? s.place.name : s.place,
         value: typeof s.place === "object" ? s.place._id : s.place,
       }));
+    
+    // Add route's to location if it's not in the dropping points list
+    if (routeTo && !droppingPoints.some((dp: any) => dp.value === defaultDroppingPointId)) {
+      droppingPoints.push({
+        label: routeTo.name,
+        value: defaultDroppingPointId,
+      });
+    }
+
+    // Merge passenger data with defaults if not already set
+    const formInitialValues = {
+      ...passengerData,
+      boardingPoint: passengerData.boardingPoint || defaultBoardingPointId || (boardingPoints.length > 0 ? boardingPoints[0].value : undefined),
+      droppingPoint: passengerData.droppingPoint || defaultDroppingPointId || (droppingPoints.length > 0 ? droppingPoints[droppingPoints.length - 1].value : undefined),
+    };
 
     // Calculate totals - ensure selectedSeatsList is an array before using reduce
     const totalFare = Array.isArray(selectedSeatsList) && selectedSeatsList.length > 0
@@ -501,6 +670,7 @@ export default function TicketsPage() {
                 }
               }}
               bookedSeats={bookedSeats[schedule._id] || []}
+              bookedSeatsInfo={bookedSeatsInfo[schedule._id] || {}}
               onChange={() => {}}
               onRowsChange={() => {}}
               onColumnsChange={() => {}}
@@ -515,12 +685,21 @@ export default function TicketsPage() {
             </h4>
             <Form
               layout="vertical"
-              initialValues={passengerData}
-              onValuesChange={(_, allValues) => {
+              initialValues={formInitialValues}
+              onValuesChange={(changedValues, allValues) => {
                 setPassengerForms((prev) => ({
                   ...prev,
                   [schedule._id]: allValues,
                 }));
+                
+                // Refresh booked seats when boarding or dropping point changes
+                if (changedValues.boardingPoint || changedValues.droppingPoint) {
+                  fetchBookedSeatsForSchedule(
+                    schedule._id,
+                    allValues.boardingPoint,
+                    allValues.droppingPoint
+                  );
+                }
               }}
             >
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
